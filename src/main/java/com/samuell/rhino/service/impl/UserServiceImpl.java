@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+@Service
 public class UserServiceImpl implements UserService {
-//    @Autowired
-//    UserRepository userRepository;
+
+    @Autowired
+    UserRepository userRepository;
 //
 //    public List<User> getAllUsers(){
 //        return userRepository.findAll();
