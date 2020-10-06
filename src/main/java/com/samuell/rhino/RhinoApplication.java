@@ -10,6 +10,7 @@ public class RhinoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RhinoApplication.class, args);
+		System.out.println("som debil");
 	}
 
 }
