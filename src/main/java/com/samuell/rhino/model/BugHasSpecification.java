@@ -10,7 +10,7 @@ import java.util.Objects;
 public class BugHasSpecification {
     //Atributes
     @EmbeddedId
-    BugHasVersionKey id;
+    private BugHasVersionKey id;
 
     @ManyToOne
     @MapsId("bug_id")

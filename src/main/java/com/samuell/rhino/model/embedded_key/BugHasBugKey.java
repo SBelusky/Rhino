@@ -9,10 +9,10 @@ import java.util.Objects;
 public class BugHasBugKey implements Serializable {
     //Atributes
     @Column(name = "bug_id1")
-    int contains;
+    private int contains;
 
     @Column(name = "bug_id2")
-    int included;
+    private int included;
 
     //Constructors
     public BugHasBugKey() {
@@ -24,6 +24,7 @@ public class BugHasBugKey implements Serializable {
     }
 
     //Getters & setters
+
     public int getContains() {
         return contains;
     }

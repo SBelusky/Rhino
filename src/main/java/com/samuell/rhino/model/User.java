@@ -33,7 +33,7 @@ public class User {
     private Set<Attachment> attachments;
 
     @OneToMany(mappedBy = "user")
-    Set<UserHasProject> user_has_projects;
+    private Set<UserHasProject> user_has_projects;
 
     //Constructors
     public User() {

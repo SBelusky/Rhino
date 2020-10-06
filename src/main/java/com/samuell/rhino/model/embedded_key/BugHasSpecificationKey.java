@@ -9,10 +9,10 @@ import java.util.Objects;
 public class BugHasSpecificationKey implements Serializable {
     //Atributes
     @Column(name = "bug_id")
-    int bug_id;
+    private int bug_id;
 
     @Column(name = "specification_id")
-    int specification_id;
+    private int specification_id;
 
     //Constructors
     public BugHasSpecificationKey() {

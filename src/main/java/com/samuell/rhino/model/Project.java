@@ -20,16 +20,16 @@ public class Project {
     private boolean was_deleted;
 
     @OneToMany(mappedBy = "project")
-    Set<Version> versions;
+    private Set<Version> versions;
 
     @OneToMany(mappedBy = "project")
-    Set<UserHasProject> user_has_projects;
+    private Set<UserHasProject> user_has_projects;
 
     @OneToMany(mappedBy = "project")
-    Set<Category> categories;
+    private Set<Category> categories;
 
     @OneToMany(mappedBy = "project")
-    Set<Bug> bugs;
+    private Set<Bug> bugs;
 
     //Constructors
     public Project() {

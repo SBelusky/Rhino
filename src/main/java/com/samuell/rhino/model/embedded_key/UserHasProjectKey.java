@@ -8,10 +8,10 @@ import java.util.Objects;
 @Embeddable
 public class UserHasProjectKey implements Serializable {
     @Column(name = "user_id")
-    int user_id;
+    private int user_id;
 
     @Column(name = "project_id")
-    int project_id;
+    private int project_id;
 
     //Constructors
     public UserHasProjectKey() {

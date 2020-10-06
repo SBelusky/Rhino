@@ -10,7 +10,7 @@ import java.util.Objects;
 public class BugHasVersion {
     //Atributes
     @EmbeddedId
-    BugHasVersionKey id;
+    private BugHasVersionKey id;
 
     private String type; // found/repared
 

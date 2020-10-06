@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "user_has_project")
 public class UserHasProject {
     @EmbeddedId
-    UserHasProjectKey id;
+    private UserHasProjectKey id;
 
     @ManyToOne
     @MapsId("user_id")

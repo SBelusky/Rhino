@@ -9,10 +9,10 @@ import java.util.Objects;
 public class BugHasVersionKey implements Serializable {
     //Atributes
     @Column(name = "bug_id")
-    int bug_id;
+    private int bug_id;
 
     @Column(name = "version_id")
-    int version_id;
+    private int version_id;
 
     //Constructors
     public BugHasVersionKey() {
