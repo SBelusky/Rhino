@@ -1,5 +1,7 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -21,6 +23,7 @@ public class Specification {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="specification")
     private Set<BugHasSpecification> bugHasSpecifications;
 
@@ -111,27 +114,5 @@ public class Specification {
 
     public void setBugHasSpecifications(Set<BugHasSpecification> bugHasSpecifications) {
         this.bugHasSpecifications = bugHasSpecifications;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Specification that = (Specification) o;
-        return id == that.id &&
-                was_deleted == that.was_deleted &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(color, that.color) &&
-                Objects.equals(created_at, that.created_at) &&
-                Objects.equals(edited_at, that.edited_at) &&
-                Objects.equals(bugHasSpecifications, that.bugHasSpecifications);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, type, color, created_at, edited_at, was_deleted, bugHasSpecifications);
     }
 }

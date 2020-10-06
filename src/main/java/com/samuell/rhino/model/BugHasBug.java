@@ -1,5 +1,6 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
 
 import javax.persistence.*;
@@ -14,11 +15,13 @@ public class BugHasBug {
 
     private String status;
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("contains")
     @JoinColumn(name = "bug_id1")
     private Bug contains;
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("included")
     @JoinColumn(name = "bug_id2")
@@ -66,22 +69,5 @@ public class BugHasBug {
 
     public void setIncluded(Bug included) {
         this.included = included;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BugHasBug bugHasBug = (BugHasBug) o;
-        return Objects.equals(id, bugHasBug.id) &&
-                Objects.equals(status, bugHasBug.status) &&
-                Objects.equals(contains, bugHasBug.contains) &&
-                Objects.equals(included, bugHasBug.included);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, status, contains, included);
     }
 }

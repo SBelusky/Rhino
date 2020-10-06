@@ -1,10 +1,15 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Entity
 @Table(name = "user")
 public class User {
@@ -23,15 +28,19 @@ public class User {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="user")
     private Set<Log> logs;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="user")
     private Set<Comment> comments;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="user")
     private Set<Attachment> attachments;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user")
     private Set<UserHasProject> user_has_projects;
 
@@ -167,32 +176,5 @@ public class User {
 
     public void setUser_has_projects(Set<UserHasProject> user_has_projects) {
         this.user_has_projects = user_has_projects;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id &&
-                was_deleted == user.was_deleted &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(telephone_number, user.telephone_number) &&
-                Objects.equals(login_name, user.login_name) &&
-                Objects.equals(login_password, user.login_password) &&
-                Objects.equals(role, user.role) &&
-                Objects.equals(created_at, user.created_at) &&
-                Objects.equals(edited_at, user.edited_at) &&
-                Objects.equals(logs, user.logs) &&
-                Objects.equals(comments, user.comments) &&
-                Objects.equals(attachments, user.attachments) &&
-                Objects.equals(user_has_projects, user.user_has_projects);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, email, telephone_number, login_name, login_password, role, created_at, edited_at, was_deleted, logs, comments, attachments, user_has_projects);
     }
 }

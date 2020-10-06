@@ -1,5 +1,7 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -16,10 +18,12 @@ public class Log {
     private String status;
     private Timestamp created_at;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="bug_id", nullable=false)
     private Bug bug;
@@ -84,24 +88,5 @@ public class Log {
 
     public void setBug(Bug bug) {
         this.bug = bug;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Log log = (Log) o;
-        return Objects.equals(id, log.id) &&
-                Objects.equals(message, log.message) &&
-                Objects.equals(status, log.status) &&
-                Objects.equals(created_at, log.created_at) &&
-                Objects.equals(user, log.user) &&
-                Objects.equals(bug, log.bug);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, message, status, created_at, user, bug);
     }
 }

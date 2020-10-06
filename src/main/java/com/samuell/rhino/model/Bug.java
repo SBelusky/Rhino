@@ -1,5 +1,8 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -21,31 +24,40 @@ public class Bug {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="bug")
     private Set<Attachment> attachments;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="bug")
     private Set<Log> logs;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="bug")
     private Set<Comment> comments;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="bug")
     private Set<BugHasVersion> bugHasVersions;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="bug")
     private Set<BugHasSpecification> bugHasSpecifications;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="contains")
     private Set<BugHasBug> bugHasBugsContains; //bug contains bugs
 
+    @JsonManagedReference
     @OneToMany(mappedBy="included")
     private Set<BugHasBug> bugHasBugsIncluded;// bug is included in bugs
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="project_id", nullable=false)
     private Project project;
@@ -209,36 +221,5 @@ public class Bug {
 
     public void setProject(Project project) {
         this.project = project;
-    }
-
-    //equals() and hashCode()
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bug bug = (Bug) o;
-        return id == bug.id &&
-                seek_time == bug.seek_time &&
-                was_deleted == bug.was_deleted &&
-                Objects.equals(summarize, bug.summarize) &&
-                Objects.equals(description, bug.description) &&
-                Objects.equals(additional_info, bug.additional_info) &&
-                Objects.equals(created_at, bug.created_at) &&
-                Objects.equals(edited_at, bug.edited_at) &&
-                Objects.equals(attachments, bug.attachments) &&
-                Objects.equals(logs, bug.logs) &&
-                Objects.equals(comments, bug.comments) &&
-                Objects.equals(bugHasVersions, bug.bugHasVersions) &&
-                Objects.equals(bugHasSpecifications, bug.bugHasSpecifications) &&
-                Objects.equals(bugHasBugsContains, bug.bugHasBugsContains) &&
-                Objects.equals(bugHasBugsIncluded, bug.bugHasBugsIncluded) &&
-                Objects.equals(category, bug.category) &&
-                Objects.equals(project, bug.project);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, summarize, description, additional_info, seek_time, created_at, edited_at, was_deleted, attachments, logs, comments, bugHasVersions, bugHasSpecifications, bugHasBugsContains, bugHasBugsIncluded, category, project);
     }
 }

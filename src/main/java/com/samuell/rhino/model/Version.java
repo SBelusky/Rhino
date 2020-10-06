@@ -1,5 +1,8 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -19,9 +22,11 @@ public class Version {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="version")
     private Set<BugHasVersion> bug_has_versions;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="project_id", nullable=false)
     private Project project;
@@ -104,26 +109,5 @@ public class Version {
 
     public void setProject(Project project) {
         this.project = project;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Version version = (Version) o;
-        return id == version.id &&
-                was_deleted == version.was_deleted &&
-                Objects.equals(name, version.name) &&
-                Objects.equals(description, version.description) &&
-                Objects.equals(created_at, version.created_at) &&
-                Objects.equals(edited_at, version.edited_at) &&
-                Objects.equals(bug_has_versions, version.bug_has_versions) &&
-                Objects.equals(project, version.project);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, created_at, edited_at, was_deleted, bug_has_versions, project);
     }
 }

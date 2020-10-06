@@ -1,5 +1,7 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -18,10 +20,12 @@ public class Comment {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="bug_id", nullable=false)
     private Bug bug;
@@ -104,26 +108,5 @@ public class Comment {
 
     public void setBug(Bug bug) {
         this.bug = bug;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Comment comment = (Comment) o;
-        return id == comment.id &&
-                spend_time == comment.spend_time &&
-                was_deleted == comment.was_deleted &&
-                Objects.equals(description, comment.description) &&
-                Objects.equals(created_at, comment.created_at) &&
-                Objects.equals(edited_at, comment.edited_at) &&
-                Objects.equals(user, comment.user) &&
-                Objects.equals(bug, comment.bug);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, description, spend_time, created_at, edited_at, was_deleted, user, bug);
     }
 }

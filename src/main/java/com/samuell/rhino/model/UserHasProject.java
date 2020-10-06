@@ -1,5 +1,6 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.UserHasProjectKey;
 
 import javax.persistence.*;
@@ -11,11 +12,13 @@ public class UserHasProject {
     @EmbeddedId
     private UserHasProjectKey id;
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("project_id")
     @JoinColumn(name = "project_id")
@@ -54,21 +57,5 @@ public class UserHasProject {
 
     public void setProject(Project project) {
         this.project = project;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserHasProject that = (UserHasProject) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(project, that.project);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user, project);
     }
 }

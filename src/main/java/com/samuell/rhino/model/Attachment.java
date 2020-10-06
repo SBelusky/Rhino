@@ -1,5 +1,7 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -20,10 +22,12 @@ public class Attachment {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name="bug_id", nullable=false)
     private Bug bug;
@@ -106,26 +110,5 @@ public class Attachment {
 
     public void setBug(Bug bug) {
         this.bug = bug;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Attachment that = (Attachment) o;
-        return id == that.id &&
-                was_deleted == that.was_deleted &&
-                Objects.equals(file, that.file) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(created_at, that.created_at) &&
-                Objects.equals(edited_at, that.edited_at) &&
-                Objects.equals(user, that.user) &&
-                Objects.equals(bug, that.bug);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, file, name, created_at, edited_at, was_deleted, user, bug);
     }
 }

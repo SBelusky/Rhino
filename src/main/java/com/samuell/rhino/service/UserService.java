@@ -1,8 +1,9 @@
 package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.User;
-import org.springframework.stereotype.Component;
 
+import java.util.List;
 
 public interface UserService{
+    List<User> getAllUsers();
 }

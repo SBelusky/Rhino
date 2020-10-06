@@ -1,5 +1,6 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 
 import javax.persistence.*;
@@ -14,11 +15,13 @@ public class BugHasVersion {
 
     private String type; // found/repared
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
     private Bug bug;
 
+    @JsonBackReference
     @ManyToOne
     @MapsId("version_id")
     @JoinColumn(name = "version_id")
@@ -66,22 +69,5 @@ public class BugHasVersion {
 
     public void setVersion(Version version) {
         this.version = version;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BugHasVersion that = (BugHasVersion) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(type, that.type) &&
-                Objects.equals(bug, that.bug) &&
-                Objects.equals(version, that.version);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, type, bug, version);
     }
 }

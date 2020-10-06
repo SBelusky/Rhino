@@ -1,5 +1,7 @@
 package com.samuell.rhino.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -19,15 +21,19 @@ public class Project {
     private Timestamp edited_at;
     private boolean was_deleted;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "project")
     private Set<Version> versions;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "project")
     private Set<UserHasProject> user_has_projects;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "project")
     private Set<Category> categories;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "project")
     private Set<Bug> bugs;
 
@@ -127,28 +133,5 @@ public class Project {
 
     public void setBugs(Set<Bug> bugs) {
         this.bugs = bugs;
-    }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return id == project.id &&
-                was_deleted == project.was_deleted &&
-                Objects.equals(name, project.name) &&
-                Objects.equals(description, project.description) &&
-                Objects.equals(created_at, project.created_at) &&
-                Objects.equals(edited_at, project.edited_at) &&
-                Objects.equals(versions, project.versions) &&
-                Objects.equals(user_has_projects, project.user_has_projects) &&
-                Objects.equals(categories, project.categories) &&
-                Objects.equals(bugs, project.bugs);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, created_at, edited_at, was_deleted, versions, user_has_projects, categories, bugs);
     }
 }

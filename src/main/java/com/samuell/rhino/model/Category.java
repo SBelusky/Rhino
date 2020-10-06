@@ -105,25 +105,4 @@ public class Category {
     public void setBugs(Set<Bug> bugs) {
         this.bugs = bugs;
     }
-
-    //equals() and hashCode()
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return id == category.id &&
-                was_deleted == category.was_deleted &&
-                Objects.equals(name, category.name) &&
-                Objects.equals(description, category.description) &&
-                Objects.equals(created_at, category.created_at) &&
-                Objects.equals(edited_at, category.edited_at) &&
-                Objects.equals(project, category.project) &&
-                Objects.equals(bugs, category.bugs);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, created_at, edited_at, was_deleted, project, bugs);
-    }
 }
