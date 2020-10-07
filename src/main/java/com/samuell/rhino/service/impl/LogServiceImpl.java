@@ -14,6 +14,20 @@ public class LogServiceImpl implements LogService {
     @Autowired
     LogRepository logRepository;
 
+    @Override
+    public List<Log> getAllLogs() {
+        return null;
+    }
+
+    @Override
+    public Log getLogById(int id) {
+        return null;
+    }
+
+    @Override
+    public Log addLog(Log log) {
+        return null;
+    }
 //    public List<Log> getAllLogs(){
 //        return logRepository.findAll();
 //    }

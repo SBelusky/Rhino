@@ -1,17 +1,17 @@
 package com.samuell.rhino.service;
 
-import com.samuell.rhino.model.Log;
+import com.samuell.rhino.model.Bug;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
-public interface LogService {
+public interface BugService {
     @Nullable
-    List<Log> getAllLogs();
+    List<Bug> getAllBugs();
 
     @Nullable
-    Log getLogById(int id);
+    Bug getBugById(int id);
 
     @Nullable
-    Log addLog(Log log);
+    Bug addBug(Bug bug);
 }
