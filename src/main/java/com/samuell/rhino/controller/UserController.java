@@ -40,7 +40,6 @@ public class UserController {
         else {
             return new ResponseEntity<>(userDto, HttpStatus.OK);
         }
-
     }
 
     @PostMapping

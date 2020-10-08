@@ -1,17 +1,24 @@
 package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.Project;
+import com.samuell.rhino.model.dto.ProjectDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 public interface ProjectService {
     @Nullable
-    List<Project> getAllProjects();
+    List<ProjectDto> getAllProjects();
 
     @Nullable
-    Project getProjectById(int id);
+    ProjectDto getProjectById(Integer id);
 
     @Nullable
-    Project addProject(Project project);
+    Project addProject(ProjectDto projectDto);
+
+    @Nullable
+    Project updateProject(Integer id, ProjectDto projectDto);
+
+    @Nullable
+    Project deleteProject(Integer id);
 }

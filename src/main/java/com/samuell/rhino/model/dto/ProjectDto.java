@@ -16,12 +16,11 @@ public class ProjectDto {
     public ProjectDto() {
     }
 
-    public ProjectDto(Integer id, String name, String description, Set<UserHasProjectDto> user_has_projects, Timestamp created_at) {
+    public ProjectDto(Integer id, String name, String description, Set<UserHasProjectDto> user_has_projects) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.user_has_projects = user_has_projects;
-        this.created_at = created_at;
     }
 
     //Getters & setters
