@@ -2,26 +2,29 @@ package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.UserHasProjectKey;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "user_has_project")
 public class UserHasProject {
+    //Attributes
     @EmbeddedId
     private UserHasProjectKey id;
 
-    @JsonBackReference
+    @JsonBackReference(value = "user-user_has_projects")
     @ManyToOne
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
+    @NonNull
     private User user;
 
-    @JsonBackReference
+    @JsonBackReference(value = "project-user_has_projects")
     @ManyToOne
     @MapsId("project_id")
     @JoinColumn(name = "project_id")
+    @NonNull
     private Project project;
 
     //Constructors

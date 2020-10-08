@@ -1,17 +1,26 @@
 package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.Category;
+import com.samuell.rhino.model.User;
+import com.samuell.rhino.model.dto.CategoryDto;
+import com.samuell.rhino.model.dto.UserDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 public interface CategoryService {
     @Nullable
-    List<Category> getAllCategories();
+    List<CategoryDto> getAllCategories();
 
     @Nullable
-    Category getCategoryById(int id);
+    CategoryDto getCategoryById(Integer id);
 
     @Nullable
-    Category addCategory(Category category);
+    Category addCategory(CategoryDto categoryDto);
+
+    @Nullable
+    Category updateCategory(Integer id, CategoryDto categoryDto);
+
+    @Nullable
+    Category deleteCategory(Integer id);
 }

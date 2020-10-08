@@ -9,19 +9,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "bug_has_version")
 public class BugHasVersion {
-    //Atributes
+    //Attributes
     @EmbeddedId
     private BugHasVersionKey id;
 
     private String type; // found/repared
 
-    @JsonBackReference
+    @JsonBackReference(value = "bug-bugHasVersions")
     @ManyToOne
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
     private Bug bug;
 
-    @JsonBackReference
+    @JsonBackReference(value = "version-bugHasVersions")
     @ManyToOne
     @MapsId("version_id")
     @JoinColumn(name = "version_id")

@@ -2,6 +2,7 @@ package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -9,20 +10,22 @@ import java.util.Objects;
 @Entity
 @Table(name = "bug_has_specification")
 public class BugHasSpecification {
-    //Atributes
+    //Attributes
     @EmbeddedId
     private BugHasVersionKey id;
 
-    @JsonBackReference
+    @JsonBackReference(value = "bug-bugHasSpecifications")
     @ManyToOne
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
+    @NonNull
     private Bug bug;
 
-    @JsonBackReference
+    @JsonBackReference(value = "specification-bugHasSpecifications")
     @ManyToOne
     @MapsId("specification_id")
     @JoinColumn(name = "specification_id")
+    @NonNull
     private Specification specification;
 
     //Constructors

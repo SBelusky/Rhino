@@ -1,54 +1,65 @@
 package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.*;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Set;
 
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 @Entity
 @Table(name = "user")
 public class User {
-    //Atributes
+    //Attributes
     @Id
-    @GeneratedValue
-    private int id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Nullable
+    private Integer id;
+    @NonNull
     private String name;
+    @NonNull
     private String email;
+    @Nullable
     private String telephone_number;
+    @NonNull
     private String login_name;
+    @NonNull
     private String login_password;
+    @NonNull
     private String role;
+    @Nullable
     private Timestamp created_at;
+    @Nullable
     private Timestamp edited_at;
+    @NonNull
     private boolean was_deleted;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-logs")
     @OneToMany(mappedBy="user")
+    @Nullable
     private Set<Log> logs;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-comments")
     @OneToMany(mappedBy="user")
+    @Nullable
     private Set<Comment> comments;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-attachments")
     @OneToMany(mappedBy="user")
+    @Nullable
     private Set<Attachment> attachments;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-user_has_projects")
     @OneToMany(mappedBy = "user")
+    @Nullable
     private Set<UserHasProject> user_has_projects;
 
     //Constructors
     public User() {
     }
 
-    public User(int id, String name, String email, String telephone_number, String login_name, String login_password, String role, Timestamp created_at, Timestamp edited_at, boolean was_deleted, Set<Log> logs, Set<Comment> comments, Set<Attachment> attachments, Set<UserHasProject> user_has_projects) {
+    public User(Integer id, @NonNull String name, @NonNull String email, @Nullable String telephone_number, @NonNull String login_name, @NonNull String login_password, @NonNull String role, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<Attachment> attachments, @Nullable Set<UserHasProject> user_has_projects) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -66,75 +77,83 @@ public class User {
     }
 
     //Getters & setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 
+    @NonNull
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NonNull String email) {
         this.email = email;
     }
 
+    @Nullable
     public String getTelephone_number() {
         return telephone_number;
     }
 
-    public void setTelephone_number(String telephone_number) {
+    public void setTelephone_number(@Nullable String telephone_number) {
         this.telephone_number = telephone_number;
     }
 
+    @NonNull
     public String getLogin_name() {
         return login_name;
     }
 
-    public void setLogin_name(String login_name) {
+    public void setLogin_name(@NonNull String login_name) {
         this.login_name = login_name;
     }
 
+    @NonNull
     public String getLogin_password() {
         return login_password;
     }
 
-    public void setLogin_password(String login_password) {
+    public void setLogin_password(@NonNull String login_password) {
         this.login_password = login_password;
     }
 
+    @NonNull
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(@NonNull String role) {
         this.role = role;
     }
 
+    @Nullable
     public Timestamp getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Timestamp created_at) {
+    public void setCreated_at(@Nullable Timestamp created_at) {
         this.created_at = created_at;
     }
 
+    @Nullable
     public Timestamp getEdited_at() {
         return edited_at;
     }
 
-    public void setEdited_at(Timestamp edited_at) {
+    public void setEdited_at(@Nullable Timestamp edited_at) {
         this.edited_at = edited_at;
     }
 
@@ -146,35 +165,39 @@ public class User {
         this.was_deleted = was_deleted;
     }
 
+    @Nullable
     public Set<Log> getLogs() {
         return logs;
     }
 
-    public void setLogs(Set<Log> logs) {
+    public void setLogs(@Nullable Set<Log> logs) {
         this.logs = logs;
     }
 
+    @Nullable
     public Set<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(@Nullable Set<Comment> comments) {
         this.comments = comments;
     }
 
+    @Nullable
     public Set<Attachment> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(Set<Attachment> attachments) {
+    public void setAttachments(@Nullable Set<Attachment> attachments) {
         this.attachments = attachments;
     }
 
+    @Nullable
     public Set<UserHasProject> getUser_has_projects() {
         return user_has_projects;
     }
 
-    public void setUser_has_projects(Set<UserHasProject> user_has_projects) {
+    public void setUser_has_projects(@Nullable Set<UserHasProject> user_has_projects) {
         this.user_has_projects = user_has_projects;
     }
 }

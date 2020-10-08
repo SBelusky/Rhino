@@ -1,6 +1,8 @@
 package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,21 +12,29 @@ import java.util.Set;
 @Entity
 @Table(name = "specification")
 public class Specification {
-    //Atributes
+    //Attributes
     @Id
-    @GeneratedValue
-    private int id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Nullable
+    private Integer id;
+    @NonNull
     private String name;
+    @Nullable
     private String description;
+    @NonNull
     private String type;
+    @Nullable
     private String color;
+    @Nullable
     private Timestamp created_at;
+    @Nullable
     private Timestamp edited_at;
+    @NonNull
     private boolean was_deleted;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "specification-bugHasSpecifications")
     @OneToMany(mappedBy="specification")
+    @Nullable
     private Set<BugHasSpecification> bugHasSpecifications;
 
     //Constructors
@@ -44,11 +54,11 @@ public class Specification {
     }
 
     //Getters & setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

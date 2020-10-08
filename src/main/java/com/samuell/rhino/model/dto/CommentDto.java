@@ -1,55 +1,27 @@
-package com.samuell.rhino.model;
+package com.samuell.rhino.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
-import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
-@Entity
-@Table(name = "comment")
-public class Comment {
+public class CommentDto {
     //Attributes
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Nullable
     private Integer id;
-
     private String description;
-    @Nullable
     private Integer spend_time;
-    @Nullable
     private Timestamp created_at;
-    @Nullable
     private Timestamp edited_at;
-    @NonNull
-    private boolean was_deleted;
-
-    @JsonBackReference(value = "user-comments")
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    @Nullable
-    private User user;
-
-    @JsonBackReference(value = "bug-comments")
-    @ManyToOne
-    @JoinColumn(name="bug_id", nullable=false)
-    @Nullable
-    private Bug bug;
+    private UserDto user;
+    private BugDto bug;
 
     //Constructors
-    public Comment() {
+    public CommentDto() {
     }
 
-    public Comment(Integer id, String description, Integer spend_time, Timestamp created_at, Timestamp edited_at, boolean was_deleted, User user, Bug bug) {
+    public CommentDto(Integer id, String description, Integer spend_time, Timestamp created_at, Timestamp edited_at, UserDto user, BugDto bug) {
         this.id = id;
         this.description = description;
         this.spend_time = spend_time;
         this.created_at = created_at;
         this.edited_at = edited_at;
-        this.was_deleted = was_deleted;
         this.user = user;
         this.bug = bug;
     }
@@ -95,27 +67,19 @@ public class Comment {
         this.edited_at = edited_at;
     }
 
-    public boolean isWas_deleted() {
-        return was_deleted;
-    }
-
-    public void setWas_deleted(boolean was_deleted) {
-        this.was_deleted = was_deleted;
-    }
-
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 
-    public Bug getBug() {
+    public BugDto getBug() {
         return bug;
     }
 
-    public void setBug(Bug bug) {
+    public void setBug(BugDto bug) {
         this.bug = bug;
     }
 }

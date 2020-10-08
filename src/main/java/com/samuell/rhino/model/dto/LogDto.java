@@ -1,44 +1,21 @@
-package com.samuell.rhino.model;
+package com.samuell.rhino.model.dto;
 
-import com.fasterxml.jackson.annotation.*;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
-import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "log")
-public class Log {
+public class LogDto {
     //Attributes
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Nullable
     private Integer id;
-    @NonNull
     private String message;
-    @NonNull
     private String status;
-    @Nullable
     private Timestamp created_at;
-
-    @JsonBackReference(value = "user-logs")
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    @NonNull
-    private User user;
-
-    @JsonBackReference(value = "bug-logs")
-    @ManyToOne
-    @JoinColumn(name="bug_id", nullable=false)
-    @NonNull
-    private Bug bug;
+    private UserDto user;
+    private BugDto bug;
 
     //Constructors
-    public Log() {
+    public LogDto() {
     }
 
-    public Log(Integer id, String message, String status, Timestamp created_at, User user, Bug bug) {
+    public LogDto(Integer id, String message, String status, Timestamp created_at, UserDto user, BugDto bug) {
         this.id = id;
         this.message = message;
         this.status = status;
@@ -80,19 +57,19 @@ public class Log {
         this.created_at = created_at;
     }
 
-    public User getUser() {
+    public UserDto getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDto user) {
         this.user = user;
     }
 
-    public Bug getBug() {
+    public BugDto getBug() {
         return bug;
     }
 
-    public void setBug(Bug bug) {
+    public void setBug(BugDto bug) {
         this.bug = bug;
     }
 }

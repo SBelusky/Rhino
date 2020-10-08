@@ -2,6 +2,8 @@ package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,20 +13,22 @@ import java.util.Objects;
 public class BugHasBug {
     //Atributes
     @EmbeddedId
-    BugHasBugKey id;
-
+    private BugHasBugKey id;
+    @NonNull
     private String status;
 
-    @JsonBackReference
+    @JsonBackReference(value = "bug-bugHasBugsContains")
     @ManyToOne
     @MapsId("contains")
     @JoinColumn(name = "bug_id1")
+    @NonNull
     private Bug contains;
 
-    @JsonBackReference
+    @JsonBackReference(value = "bug-bugHasBugsIncluded")
     @ManyToOne
     @MapsId("included")
     @JoinColumn(name = "bug_id2")
+    @NonNull
     private Bug included;
 
     //Constructors

@@ -2,10 +2,11 @@ package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -13,60 +14,76 @@ import java.util.Set;
 public class Bug {
     //Atributes
     @Id
-    @GeneratedValue
-    private int id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Nullable
+    private Integer id;
+    @NonNull
     private String summarize;
+    @NonNull
     private String description;
+    @Nullable
     private String additional_info;
-    private int seek_time;
+    @Nullable
+    private Integer seek_time;
+    @Nullable
     private Timestamp created_at;
+    @Nullable
     private Timestamp edited_at;
+    @NonNull
     private boolean was_deleted;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-attachments")
     @OneToMany(mappedBy="bug")
+    @Nullable
     private Set<Attachment> attachments;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-logs")
     @OneToMany(mappedBy="bug")
+    @Nullable
     private Set<Log> logs;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-comments")
     @OneToMany(mappedBy="bug")
+    @Nullable
     private Set<Comment> comments;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-bugHasVersions")
     @OneToMany(mappedBy="bug")
+    @Nullable
     private Set<BugHasVersion> bugHasVersions;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-bugHasSpecifications")
     @OneToMany(mappedBy="bug")
+    @Nullable
     private Set<BugHasSpecification> bugHasSpecifications;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-bugHasBugsContains")
     @OneToMany(mappedBy="contains")
+    @Nullable
     private Set<BugHasBug> bugHasBugsContains; //bug contains bugs
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "bug-bugHasBugsIncluded")
     @OneToMany(mappedBy="included")
+    @Nullable
     private Set<BugHasBug> bugHasBugsIncluded;// bug is included in bugs
 
-    @JsonBackReference
+    @JsonBackReference(value = "category-bugs")
     @ManyToOne
     @JoinColumn(name="category_id", nullable=false)
+    @NonNull
     private Category category;
 
-    @JsonBackReference
+    @JsonBackReference(value = "project-bugs")
     @ManyToOne
     @JoinColumn(name="project_id", nullable=false)
+    @NonNull
     private Project project;
 
     //Constructors
     public Bug() {
     }
 
-    public Bug(int id, String summarize, String description, String additional_info, int seek_time, Timestamp created_at, Timestamp edited_at, boolean was_deleted, Set<Attachment> attachments, Set<Log> logs, Set<Comment> comments, Set<BugHasVersion> bugHasVersions, Set<BugHasSpecification> bugHasSpecifications, Set<BugHasBug> bugHasBugsContains, Set<BugHasBug> bugHasBugsIncluded, Category category, Project project) {
+    public Bug(@Nullable Integer id, @NonNull String summarize, @NonNull String description, @Nullable String additional_info, @Nullable Integer seek_time, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Attachment> attachments, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<BugHasVersion> bugHasVersions, @Nullable Set<BugHasSpecification> bugHasSpecifications, @Nullable Set<BugHasBug> bugHasBugsContains, @Nullable Set<BugHasBug> bugHasBugsIncluded, @NonNull Category category, @NonNull Project project) {
         this.id = id;
         this.summarize = summarize;
         this.description = description;
@@ -87,59 +104,66 @@ public class Bug {
     }
 
     //Getters & setters
-    public int getId() {
+    @Nullable
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(@Nullable Integer id) {
         this.id = id;
     }
 
+    @NonNull
     public String getSummarize() {
         return summarize;
     }
 
-    public void setSummarize(String summarize) {
+    public void setSummarize(@NonNull String summarize) {
         this.summarize = summarize;
     }
 
+    @NonNull
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(@NonNull String description) {
         this.description = description;
     }
 
+    @Nullable
     public String getAdditional_info() {
         return additional_info;
     }
 
-    public void setAdditional_info(String additional_info) {
+    public void setAdditional_info(@Nullable String additional_info) {
         this.additional_info = additional_info;
     }
 
-    public int getSeek_time() {
+    @Nullable
+    public Integer getSeek_time() {
         return seek_time;
     }
 
-    public void setSeek_time(int seek_time) {
+    public void setSeek_time(@Nullable Integer seek_time) {
         this.seek_time = seek_time;
     }
 
+    @Nullable
     public Timestamp getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(Timestamp created_at) {
+    public void setCreated_at(@Nullable Timestamp created_at) {
         this.created_at = created_at;
     }
 
+    @Nullable
     public Timestamp getEdited_at() {
         return edited_at;
     }
 
-    public void setEdited_at(Timestamp edited_at) {
+    public void setEdited_at(@Nullable Timestamp edited_at) {
         this.edited_at = edited_at;
     }
 
@@ -151,75 +175,84 @@ public class Bug {
         this.was_deleted = was_deleted;
     }
 
+    @Nullable
     public Set<Attachment> getAttachments() {
         return attachments;
     }
 
-    public void setAttachments(Set<Attachment> attachments) {
+    public void setAttachments(@Nullable Set<Attachment> attachments) {
         this.attachments = attachments;
     }
 
+    @Nullable
     public Set<Log> getLogs() {
         return logs;
     }
 
-    public void setLogs(Set<Log> logs) {
+    public void setLogs(@Nullable Set<Log> logs) {
         this.logs = logs;
     }
 
+    @Nullable
     public Set<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Set<Comment> comments) {
+    public void setComments(@Nullable Set<Comment> comments) {
         this.comments = comments;
     }
 
+    @Nullable
     public Set<BugHasVersion> getBugHasVersions() {
         return bugHasVersions;
     }
 
-    public void setBugHasVersions(Set<BugHasVersion> bugHasVersions) {
+    public void setBugHasVersions(@Nullable Set<BugHasVersion> bugHasVersions) {
         this.bugHasVersions = bugHasVersions;
     }
 
+    @Nullable
     public Set<BugHasSpecification> getBugHasSpecifications() {
         return bugHasSpecifications;
     }
 
-    public void setBugHasSpecifications(Set<BugHasSpecification> bugHasSpecifications) {
+    public void setBugHasSpecifications(@Nullable Set<BugHasSpecification> bugHasSpecifications) {
         this.bugHasSpecifications = bugHasSpecifications;
     }
 
+    @Nullable
     public Set<BugHasBug> getBugHasBugsContains() {
         return bugHasBugsContains;
     }
 
-    public void setBugHasBugsContains(Set<BugHasBug> bugHasBugsContains) {
+    public void setBugHasBugsContains(@Nullable Set<BugHasBug> bugHasBugsContains) {
         this.bugHasBugsContains = bugHasBugsContains;
     }
 
+    @Nullable
     public Set<BugHasBug> getBugHasBugsIncluded() {
         return bugHasBugsIncluded;
     }
 
-    public void setBugHasBugsIncluded(Set<BugHasBug> bugHasBugsIncluded) {
+    public void setBugHasBugsIncluded(@Nullable Set<BugHasBug> bugHasBugsIncluded) {
         this.bugHasBugsIncluded = bugHasBugsIncluded;
     }
 
+    @NonNull
     public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(@NonNull Category category) {
         this.category = category;
     }
 
+    @NonNull
     public Project getProject() {
         return project;
     }
 
-    public void setProject(Project project) {
+    public void setProject(@NonNull Project project) {
         this.project = project;
     }
 }

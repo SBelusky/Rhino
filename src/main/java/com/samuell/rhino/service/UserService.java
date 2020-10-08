@@ -1,17 +1,24 @@
 package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.User;
+import com.samuell.rhino.model.dto.UserDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 public interface UserService{
     @Nullable
-    List<User> getAllUsers();
+    List<UserDto> getAllUsers();
 
     @Nullable
-    User getUserById(int id);
+    UserDto getUserById(Integer id);
 
     @Nullable
-    User addUser(User user);
+    User addUser(UserDto userDto);
+
+    @Nullable
+    User updateUser(Integer id, UserDto userDto);
+
+    @Nullable
+    User deleteUser(Integer id);
 }

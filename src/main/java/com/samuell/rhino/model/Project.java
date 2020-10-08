@@ -1,10 +1,11 @@
 package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -12,36 +13,45 @@ import java.util.Set;
 public class Project {
     //Attributes
     @Id
-    @GeneratedValue
-    private int id;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Nullable
+    private Integer id;
+    @NonNull
     private String name;
+    @Nullable
     private String description;
+    @Nullable
     private Timestamp created_at;
+    @Nullable
     private Timestamp edited_at;
+    @NonNull
     private boolean was_deleted;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "project-versions")
     @OneToMany(mappedBy = "project")
+    @Nullable
     private Set<Version> versions;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "project-user_has_projects")
     @OneToMany(mappedBy = "project")
+    @Nullable
     private Set<UserHasProject> user_has_projects;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "project-categories")
     @OneToMany(mappedBy = "project")
+    @Nullable
     private Set<Category> categories;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "project-bugs")
     @OneToMany(mappedBy = "project")
+    @Nullable
     private Set<Bug> bugs;
 
     //Constructors
     public Project() {
     }
 
-    public Project(int id, String name, String description, Timestamp created_at, Timestamp edited_at, boolean was_deleted, Set<Version> versions, Set<UserHasProject> user_has_projects, Set<Category> categories, Set<Bug> bugs) {
+    public Project(Integer id, String name, String description, Timestamp created_at, Timestamp edited_at, boolean was_deleted, Set<Version> versions, Set<UserHasProject> user_has_projects, Set<Category> categories, Set<Bug> bugs) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -55,11 +65,11 @@ public class Project {
     }
 
     //Getters & setters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
