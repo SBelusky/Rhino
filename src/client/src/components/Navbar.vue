@@ -43,4 +43,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#nav-bar {
+    background-color: #323232;
+}
+#nav-bar .columns {
+    min-height: 0px !important;
+}
+</style>

@@ -4,7 +4,7 @@
             <div class="content has-text-centered is-vcentered">
                 <p>
                     <img src="../assets/img/rhino_logo_small.png" width="80" />
-                    <strong>Rhino</strong> bug tracking system, by <strong>Samuel Beluský</strong>.
+                    <strong>Rhino</strong> bug tracking system - by <strong>Samuel Beluský</strong>
                 </p>
             </div>
         </footer>
@@ -18,6 +18,14 @@ export default {};
 <style lang="scss" scoped>
 .footer {
     padding: 6rem 6rem 6rem;
+    background-color: #464646 !important;
+}
+.footer p,
+.footer strong {
+    color: white;
+}
+.footer strong {
+    text-decoration: underline;
 }
 #my-footer img {
     position: relative;

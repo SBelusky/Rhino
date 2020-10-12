@@ -1,11 +1,13 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.UserHasProjectKey;
 
 public class UserHasProjectDto {
     //Attributes
     private UserHasProjectKey id;
     private UserDto user;
+    @JsonBackReference
     private ProjectDto project;
 
     //Constructors
@@ -15,7 +17,7 @@ public class UserHasProjectDto {
     public UserHasProjectDto(UserHasProjectKey id, UserDto user, ProjectDto project) {
         this.id = id;
         this.user = user;
-        this.project = project;
+//        this.project = project;
     }
 
     //Getters & setters

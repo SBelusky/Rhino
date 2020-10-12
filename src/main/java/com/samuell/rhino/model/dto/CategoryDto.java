@@ -1,5 +1,7 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 public class CategoryDto {
@@ -8,6 +10,7 @@ public class CategoryDto {
     private String name;
     private String description;
     private ProjectDto project;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
 
 

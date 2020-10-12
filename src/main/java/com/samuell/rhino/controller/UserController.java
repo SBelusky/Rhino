@@ -24,6 +24,7 @@ public class UserController {
     }
 
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllUsers() {
         List<UserDto> usersDtoList = userService.getAllUsers();
 
@@ -31,6 +32,7 @@ public class UserController {
     }
 
     @GetMapping("{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getUserById(@PathVariable("id") Integer id) {
         UserDto userDto = userService.getUserById(id);
 
@@ -43,6 +45,7 @@ public class UserController {
     }
 
     @PostMapping
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addUser(@RequestBody UserDto userDto) {
         User user = userService.addUser(userDto);
 
@@ -55,6 +58,7 @@ public class UserController {
     }
 
     @PostMapping("edit/{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateUser(@PathVariable("id") Integer id, @RequestBody UserDto userDto) {
         if(userService.getUserById(id) == null){
             return new ResponseEntity<>("User not found",HttpStatus.PRECONDITION_FAILED);
@@ -67,6 +71,7 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
 
         if(userService.getUserById(id) == null){

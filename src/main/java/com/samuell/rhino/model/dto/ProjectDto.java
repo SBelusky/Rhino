@@ -1,5 +1,8 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -8,7 +11,9 @@ public class ProjectDto {
     private Integer id;
     private String name;
     private String description;
+    @JsonManagedReference
     private Set<UserHasProjectDto> user_has_projects;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
 
 

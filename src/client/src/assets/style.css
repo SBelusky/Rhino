@@ -19,3 +19,12 @@
     position: relative;
     top: 1px;
 }
+.title-under-navBar {
+    background-color: #323232;
+    color: white;
+    padding-left: 2em;
+}
+.padding-in-content {
+    padding-left: 2.5em;
+    padding-top: 1em;
+}

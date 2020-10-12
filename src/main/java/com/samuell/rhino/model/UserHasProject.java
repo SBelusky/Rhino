@@ -6,7 +6,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "user_has_project")
 @Table(name = "user_has_project")
 public class UserHasProject {
     //Attributes
@@ -14,14 +14,14 @@ public class UserHasProject {
     private UserHasProjectKey id;
 
     @JsonBackReference(value = "user-user_has_projects")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("user_id")
     @JoinColumn(name = "user_id")
     @NonNull
     private User user;
 
     @JsonBackReference(value = "project-user_has_projects")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("project_id")
     @JoinColumn(name = "project_id")
     @NonNull
@@ -33,6 +33,11 @@ public class UserHasProject {
 
     public UserHasProject(UserHasProjectKey id, User user, Project project) {
         this.id = id;
+        this.user = user;
+        this.project = project;
+    }
+
+    public UserHasProject(@NonNull User user, @NonNull Project project) {
         this.user = user;
         this.project = project;
     }

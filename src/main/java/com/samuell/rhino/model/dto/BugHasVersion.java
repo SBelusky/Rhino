@@ -1,23 +1,21 @@
 package com.samuell.rhino.model.dto;
 
-import com.samuell.rhino.model.Bug;
-import com.samuell.rhino.model.Specification;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 
-public class BugHasSpecificationDto {
+public class BugHasVersion {
     //Attributes
     private BugHasVersionKey id;
     private BugDto bug;
-    private SpecificationDto specification;
+    private VersionDto version;
 
     //Constructors
-    public BugHasSpecificationDto() {
+    public BugHasVersion() {
     }
 
-    public BugHasSpecificationDto(BugHasVersionKey id, BugDto bug, SpecificationDto specification) {
+    public BugHasVersion(BugHasVersionKey id, BugDto bug, VersionDto version) {
         this.id = id;
         this.bug = bug;
-        this.specification = specification;
+        this.version = version;
     }
 
     //Getters & setters
@@ -37,11 +35,11 @@ public class BugHasSpecificationDto {
         this.bug = bug;
     }
 
-    public SpecificationDto getSpecification() {
-        return specification;
+    public VersionDto getVersion() {
+        return version;
     }
 
-    public void setSpecification(SpecificationDto specification) {
-        this.specification = specification;
+    public void setVersion(VersionDto version) {
+        this.version = version;
     }
 }

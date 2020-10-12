@@ -3,6 +3,7 @@ package com.samuell.rhino.controller;
 import com.samuell.rhino.model.Project;
 import com.samuell.rhino.model.dto.ProjectDto;
 import com.samuell.rhino.model.mapper.ProjectMapper;
+import com.samuell.rhino.repository.ProjectRepository;
 import com.samuell.rhino.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,11 @@ public class ProjectController{
     ProjectMapper projectMapper;
 
     private final ProjectService projectService;
+    private final ProjectRepository projectRepository;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, ProjectRepository projectRepository) {
         this.projectService = projectService;
+        this.projectRepository = projectRepository;
     }
 
     @GetMapping
@@ -56,6 +59,8 @@ public class ProjectController{
 
     @PostMapping("edit/{id}")
     public ResponseEntity<?> updateProject(@PathVariable("id") Integer id, @RequestBody ProjectDto projectDto) {
+        projectRepository.deleteUsers(id);
+
         if(projectService.getProjectById(id) == null){
             return new ResponseEntity<>("Project not found",HttpStatus.PRECONDITION_FAILED);
         }

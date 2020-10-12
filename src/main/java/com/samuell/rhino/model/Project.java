@@ -6,6 +6,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,7 +34,7 @@ public class Project {
     private Set<Version> versions;
 
     @JsonManagedReference(value = "project-user_has_projects")
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
     private Set<UserHasProject> user_has_projects;
 
@@ -64,6 +65,9 @@ public class Project {
         this.bugs = bugs;
     }
 
+    public void deleleteUsers(){
+        this.user_has_projects = new HashSet<>();
+    }
     //Getters & setters
     public Integer getId() {
         return id;

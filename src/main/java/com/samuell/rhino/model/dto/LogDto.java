@@ -1,5 +1,7 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 public class LogDto {
@@ -7,6 +9,7 @@ public class LogDto {
     private Integer id;
     private String message;
     private String status;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
     private UserDto user;
     private BugDto bug;

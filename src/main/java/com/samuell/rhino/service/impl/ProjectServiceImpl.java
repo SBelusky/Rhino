@@ -1,19 +1,22 @@
 package com.samuell.rhino.service.impl;
 
 import com.samuell.rhino.model.Project;
+import com.samuell.rhino.model.User;
 import com.samuell.rhino.model.UserHasProject;
 import com.samuell.rhino.model.dto.ProjectDto;
-import com.samuell.rhino.model.dto.UserHasProjectDto;
+import com.samuell.rhino.model.embedded_key.UserHasProjectKey;
 import com.samuell.rhino.model.mapper.ProjectMapper;
-import com.samuell.rhino.model.mapper.UserHasProjectMapper;
 import com.samuell.rhino.repository.ProjectRepository;
+import com.samuell.rhino.repository.UserHasProjectRepository;
+import com.samuell.rhino.repository.UserRepository;
 import com.samuell.rhino.service.ProjectService;
+import com.samuell.rhino.service.UserService;
+import org.hibernate.SharedSessionContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,39 +27,34 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ProjectRepository projectRepository;
     @Autowired
-    ProjectMapper projectMapper;
+    UserRepository userRepository;
     @Autowired
-    UserHasProjectMapper userHasProjectMapper;
+    UserHasProjectRepository userHasProjectRepository;
+    @Autowired
+    ProjectMapper projectMapper;
 
     @Override
     public List<ProjectDto> getAllProjects() {
-        List<Project> projectList =  projectRepository.findAll();
-        List<ProjectDto> projectDtoList = new ArrayList<>();
-        System.out.println("a");
-        for (Project project : projectList)
-        {
-            projectDtoList.add(new ProjectDto(
-                    project.getId(),
-                    project.getName(),
-                    project.getDescription(),
-                    userHasProjectMapper.UserHasProjectToUserHasProjectDto(project.getUser_has_projects())));
-        }
-
-        return projectDtoList;
-
-//        return projectRepository.findAll().stream()
-//                .map(project -> projectMapper.projectToProjectDto(project))
-//                .collect(Collectors.toList());
+//        List<ProjectDto> list = new ArrayList<>();
+//        List<Project> listp = projectRepository.findAll();
+//
+//        BeanUtils.copyProperties(listp, list);
+//
+//        return list;
+        return projectRepository.findAll()
+                .stream()
+                .map(project -> projectMapper.toProjectDto(project))
+                .collect(Collectors.toList());
     }
 
     @Override
     public ProjectDto getProjectById(Integer id) {
-        return projectMapper.projectToProjectDto(projectRepository.findById(id).orElse(null));
+        return projectMapper.toProjectDto(projectRepository.findById(id).orElse(null));
     }
 
     @Override
     public Project addProject(ProjectDto projectDto) {
-        Project project = projectMapper.projectDtoToProject(projectDto);
+        Project project = projectMapper.toProject(projectDto);
         project.setCreated_at(Timestamp.from(Instant.now()));
 
         return projectRepository.save(project);
@@ -68,11 +66,21 @@ public class ProjectServiceImpl implements ProjectService {
 
         project.setName(projectDto.getName());
         project.setDescription(projectDto.getDescription());
-//        project.setUser_has_projects(
-//            projectDto.getUser_has_projects().stream()
-//                    .map(UserHasProjectDtoToUserHasProjectDto -> userHasProjectMapper.UserHasProjectDtoToUserHasProject(UserHasProjectDtoToUserHasProjectDto))
-//                    .collect(Collectors.toSet())
-//        );
+        project.setUser_has_projects(projectDto.getUser_has_projects()
+                .stream()
+                .map(userProject -> {
+                    User newuser = userRepository.findById(userProject.getId().getUser_id()).orElse(null);
+                    Project newproject = projectRepository.findById(id).orElse(null);
+                    UserHasProjectKey newuserHasProjectKey = new UserHasProjectKey(userProject.getId().getUser_id(),userProject.getId().getProject_id());
+                    UserHasProject newuserHasProject = new UserHasProject();
+
+                    newuserHasProject.setId(newuserHasProjectKey);
+                    newuserHasProject.setUser(newuser);
+                    newuserHasProject.setProject(newproject);
+
+                    return newuserHasProject;
+                })
+                .collect(Collectors.toSet()));
         project.setEdited_at(Timestamp.from(Instant.now()));
 
         return projectRepository.save(project);
@@ -86,3 +94,4 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.save(project);
     }
 }
+

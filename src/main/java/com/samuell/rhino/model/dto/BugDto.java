@@ -1,5 +1,7 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 import java.util.Set;
 
@@ -10,17 +12,18 @@ public class BugDto {
     private String description;
     private String additional_info;
     private Integer seek_time;
-    private Set<BugHasVersionDto> bugHasVersions;
-    private Set<BugHasSpecificationDto> bugHasSpecifications;
+    private Set<BugHasVersion> bugHasVersions;
+    private Set<BugHasSpecification> bugHasSpecifications;
     private ProjectDto project;
     private CategoryDto category;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
 
     //Constructors
     public BugDto() {
     }
 
-    public BugDto(Integer id, String summarize, String description, String additional_info, Integer seek_time, Set<BugHasVersionDto> bugHasVersions, Set<BugHasSpecificationDto> bugHasSpecifications, ProjectDto project, CategoryDto category, Timestamp created_at) {
+    public BugDto(Integer id, String summarize, String description, String additional_info, Integer seek_time, Set<BugHasVersion> bugHasVersions, Set<BugHasSpecification> bugHasSpecifications, ProjectDto project, CategoryDto category, Timestamp created_at) {
         this.id = id;
         this.summarize = summarize;
         this.description = description;
@@ -74,19 +77,19 @@ public class BugDto {
         this.seek_time = seek_time;
     }
 
-    public Set<BugHasVersionDto> getBugHasVersions() {
+    public Set<BugHasVersion> getBugHasVersions() {
         return bugHasVersions;
     }
 
-    public void setBugHasVersions(Set<BugHasVersionDto> bugHasVersions) {
+    public void setBugHasVersions(Set<BugHasVersion> bugHasVersions) {
         this.bugHasVersions = bugHasVersions;
     }
 
-    public Set<BugHasSpecificationDto> getBugHasSpecifications() {
+    public Set<BugHasSpecification> getBugHasSpecifications() {
         return bugHasSpecifications;
     }
 
-    public void setBugHasSpecifications(Set<BugHasSpecificationDto> bugHasSpecifications) {
+    public void setBugHasSpecifications(Set<BugHasSpecification> bugHasSpecifications) {
         this.bugHasSpecifications = bugHasSpecifications;
     }
 

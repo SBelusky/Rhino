@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTACE = Mappers.getMapper(UserMapper.class);
 
-    UserDto userToUserDto(User movie);
+    UserDto toUserDto(User movie);
 
-    User userDtoToUser(UserDto movieDto);
+    User toUser(UserDto movieDto);
 }

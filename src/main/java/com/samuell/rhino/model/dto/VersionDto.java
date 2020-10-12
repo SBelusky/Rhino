@@ -1,5 +1,6 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.samuell.rhino.model.Project;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -11,6 +12,7 @@ public class VersionDto {
     private Integer id;
     private String name;
     private String description;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
     private ProjectDto project;
 

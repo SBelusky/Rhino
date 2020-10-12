@@ -51,7 +51,7 @@ public class User {
     private Set<Attachment> attachments;
 
     @JsonManagedReference(value = "user-user_has_projects")
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
     private Set<UserHasProject> user_has_projects;
 
@@ -199,5 +199,25 @@ public class User {
 
     public void setUser_has_projects(@Nullable Set<UserHasProject> user_has_projects) {
         this.user_has_projects = user_has_projects;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone_number='" + telephone_number + '\'' +
+                ", login_name='" + login_name + '\'' +
+                ", login_password='" + login_password + '\'' +
+                ", role='" + role + '\'' +
+                ", created_at=" + created_at +
+                ", edited_at=" + edited_at +
+                ", was_deleted=" + was_deleted +
+                ", logs=" + logs +
+                ", comments=" + comments +
+                ", attachments=" + attachments +
+                ", user_has_projects=" + user_has_projects +
+                '}';
     }
 }

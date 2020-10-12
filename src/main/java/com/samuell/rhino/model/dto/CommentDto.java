@@ -1,5 +1,7 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 
 public class CommentDto {
@@ -7,7 +9,9 @@ public class CommentDto {
     private Integer id;
     private String description;
     private Integer spend_time;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp edited_at;
     private UserDto user;
     private BugDto bug;

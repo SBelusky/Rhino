@@ -25,7 +25,16 @@
                     <b-icon class="is-pulled-right" :icon="props.expanded ? 'menu-down' : 'menu-up'"></b-icon>
                 </template>
                 <b-menu-item icon="monitor-dashboard" label="Project"></b-menu-item>
-                <b-menu-item icon="account-network-outline" label="User"></b-menu-item>
+
+                <router-link id="pmzero" to="/user">
+                    <b-menu-item
+                        v-on:click="selected = 'user'"
+                        v-bind:class="{ rip: selected == 'user' }"
+                        icon="account-network-outline"
+                        label="User"
+                    ></b-menu-item>
+                </router-link>
+
                 <b-menu-list label="Project specification"> </b-menu-list>
                 <b-menu-item icon="alert-octagon-outline" label="Priority"></b-menu-item>
                 <b-menu-item icon="shape-outline" label="Type"></b-menu-item>
@@ -70,8 +79,10 @@ export default {
     justify-content: center;
 }
 #main-menu {
-    max-height: 750px;
-    padding: 2em 2em;
+    max-height: 100vh;
+    padding: 2em 2em !important;
+    margin-bottom: 10em;
+    background-color: rgba(50, 50, 50, 0.1) !important;
 }
 #main-menu .mdi::before,
 #main-menu .mdi-set {
