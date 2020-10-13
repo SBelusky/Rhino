@@ -12,7 +12,6 @@ import org.mapstruct.factory.Mappers;
 public interface ProjectMapper {
     ProjectMapper INSTANCE = Mappers.getMapper(ProjectMapper.class);
 
-//    @Mapping(target = "user_has_projects", ignore = true)
     ProjectDto toProjectDto(Project project);
 
     Project toProject(ProjectDto projectDto);

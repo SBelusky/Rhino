@@ -1,4 +1,5 @@
 package com.samuell.rhino;
+import com.samuell.rhino.model.status_enum.LogStatus;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

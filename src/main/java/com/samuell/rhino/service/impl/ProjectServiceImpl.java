@@ -7,19 +7,14 @@ import com.samuell.rhino.model.dto.ProjectDto;
 import com.samuell.rhino.model.embedded_key.UserHasProjectKey;
 import com.samuell.rhino.model.mapper.ProjectMapper;
 import com.samuell.rhino.repository.ProjectRepository;
-import com.samuell.rhino.repository.UserHasProjectRepository;
 import com.samuell.rhino.repository.UserRepository;
 import com.samuell.rhino.service.ProjectService;
-import com.samuell.rhino.service.UserService;
-import org.hibernate.SharedSessionContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,20 +24,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserHasProjectRepository userHasProjectRepository;
-    @Autowired
     ProjectMapper projectMapper;
 
     @Override
     public List<ProjectDto> getAllProjects() {
-//        List<ProjectDto> list = new ArrayList<>();
-//        List<Project> listp = projectRepository.findAll();
-//
-//        BeanUtils.copyProperties(listp, list);
-//
-//        return list;
         return projectRepository.findAll()
                 .stream()
+                .filter(project -> !project.isWas_deleted())
                 .map(project -> projectMapper.toProjectDto(project))
                 .collect(Collectors.toList());
     }

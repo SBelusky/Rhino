@@ -2,9 +2,7 @@ package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.User;
 import com.samuell.rhino.model.dto.UserDto;
-import com.samuell.rhino.model.mapper.UserMapper;
 import com.samuell.rhino.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("api/user")
 public class UserController {
-    @Autowired
-    UserMapper movieMapper;
 
     private final UserService userService;
 

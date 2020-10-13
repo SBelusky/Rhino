@@ -1,10 +1,6 @@
 package com.samuell.rhino.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.samuell.rhino.model.Project;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-
 import java.sql.Timestamp;
 
 public class VersionDto {

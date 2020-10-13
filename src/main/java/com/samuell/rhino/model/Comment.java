@@ -6,7 +6,6 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "comment")
@@ -29,14 +28,14 @@ public class Comment {
 
     @JsonBackReference(value = "user-comments")
     @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    @Nullable
+    @JoinColumn(name="user_id")
+    @NonNull
     private User user;
 
     @JsonBackReference(value = "bug-comments")
     @ManyToOne
-    @JoinColumn(name="bug_id", nullable=false)
-    @Nullable
+    @JoinColumn(name="bug_id")
+    @NonNull
     private Bug bug;
 
     //Constructors

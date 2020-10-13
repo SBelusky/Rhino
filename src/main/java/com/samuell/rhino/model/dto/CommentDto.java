@@ -14,20 +14,18 @@ public class CommentDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp edited_at;
     private UserDto user;
-    private BugDto bug;
 
     //Constructors
     public CommentDto() {
     }
 
-    public CommentDto(Integer id, String description, Integer spend_time, Timestamp created_at, Timestamp edited_at, UserDto user, BugDto bug) {
+    public CommentDto(Integer id, String description, Integer spend_time, Timestamp created_at, Timestamp edited_at, UserDto user) {
         this.id = id;
         this.description = description;
         this.spend_time = spend_time;
         this.created_at = created_at;
         this.edited_at = edited_at;
         this.user = user;
-        this.bug = bug;
     }
 
     //Getters & setters
@@ -77,13 +75,5 @@ public class CommentDto {
 
     public void setUser(UserDto user) {
         this.user = user;
-    }
-
-    public BugDto getBug() {
-        return bug;
-    }
-
-    public void setBug(BugDto bug) {
-        this.bug = bug;
     }
 }

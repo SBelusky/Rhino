@@ -17,7 +17,7 @@ public class UserHasProjectDto {
     public UserHasProjectDto(UserHasProjectKey id, UserDto user, ProjectDto project) {
         this.id = id;
         this.user = user;
-//        this.project = project;
+        this.project = project;
     }
 
     //Getters & setters

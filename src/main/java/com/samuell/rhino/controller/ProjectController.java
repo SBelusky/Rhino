@@ -74,7 +74,7 @@ public class ProjectController{
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteProject(@PathVariable("id") Integer id) {
         if(projectService.getProjectById(id) == null){
-            return new ResponseEntity<>("User not found",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Project not found",HttpStatus.NOT_FOUND);
         }
         else {
             Project project = projectService.deleteProject(id);

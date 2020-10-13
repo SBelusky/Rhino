@@ -1,17 +1,26 @@
 package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.Comment;
+import com.samuell.rhino.model.Project;
+import com.samuell.rhino.model.dto.CommentDto;
+import com.samuell.rhino.model.dto.ProjectDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
 public interface CommentService {
     @Nullable
-    List<Comment> getAllComments();
+    List<CommentDto> getAllCommentsByBugId(Integer bugId);
 
     @Nullable
-    Comment getCommentById(int id);
+    CommentDto getCommentById(Integer bugId, Integer commentId);
 
     @Nullable
-    Comment addComment(Comment comment);
+    Comment addComment(Integer bugId, CommentDto commentDto);
+
+    @Nullable
+    Comment updateComment(Integer bugId, Integer commentId, CommentDto commentDto);
+
+    @Nullable
+    Comment deleteComment(Integer id);
 }

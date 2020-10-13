@@ -10,17 +10,17 @@ import java.util.List;
 
 public interface CategoryService {
     @Nullable
-    List<CategoryDto> getAllCategories();
+    List<CategoryDto> getAllCategoriesByProjectId(Integer projectId);
 
     @Nullable
-    CategoryDto getCategoryById(Integer id);
+    CategoryDto getCategoryById(Integer projectId, Integer categoryId);
 
     @Nullable
-    Category addCategory(CategoryDto categoryDto);
+    Category addCategory(Integer projectId, CategoryDto categoryDto);
 
     @Nullable
-    Category updateCategory(Integer id, CategoryDto categoryDto);
+    Category updateCategory(Integer projectId, Integer categoryId, CategoryDto categoryDto);
 
     @Nullable
-    Category deleteCategory(Integer id);
+    Category deleteCategory(Integer categoryId);
 }
