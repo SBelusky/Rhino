@@ -1,19 +1,23 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
 
 public class BugHasBugDto {
     //Attributes
     private BugHasBugKey id;
     private String status;
-    private BugDto contains;
+
+    private BugContainsDto contains;
+
+    @JsonBackReference
     private BugDto included;
 
     //Constructors
     public BugHasBugDto() {
     }
 
-    public BugHasBugDto(BugHasBugKey id, BugDto contains, BugDto included, String status) {
+    public BugHasBugDto(BugHasBugKey id, BugContainsDto contains, BugDto included, String status) {
         this.id = id;
         this.contains = contains;
         this.included = included;
@@ -29,11 +33,11 @@ public class BugHasBugDto {
         this.id = id;
     }
 
-    public BugDto getContains() {
+    public BugContainsDto getContains() {
         return contains;
     }
 
-    public void setContains(BugDto contains) {
+    public void setContains(BugContainsDto contains) {
         this.contains = contains;
     }
 

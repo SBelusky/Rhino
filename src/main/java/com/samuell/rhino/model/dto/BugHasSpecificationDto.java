@@ -1,20 +1,23 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.Bug;
 import com.samuell.rhino.model.Specification;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 
-public class BugHasSpecification {
+public class BugHasSpecificationDto {
     //Attributes
     private BugHasVersionKey id;
-    private BugDto bug;
     private SpecificationDto specification;
 
+    @JsonBackReference
+    private BugDto bug;
+
     //Constructors
-    public BugHasSpecification() {
+    public BugHasSpecificationDto() {
     }
 
-    public BugHasSpecification(BugHasVersionKey id, BugDto bug, SpecificationDto specification) {
+    public BugHasSpecificationDto(BugHasVersionKey id, BugDto bug, SpecificationDto specification) {
         this.id = id;
         this.bug = bug;
         this.specification = specification;

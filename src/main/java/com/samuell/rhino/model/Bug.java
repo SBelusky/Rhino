@@ -79,6 +79,12 @@ public class Bug {
     @NonNull
     private Project project;
 
+    @JsonBackReference(value = "user-bugs")
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    @NonNull
+    private User user;
+
     //Constructors
     public Bug() {
     }
@@ -254,5 +260,14 @@ public class Bug {
 
     public void setProject(@NonNull Project project) {
         this.project = project;
+    }
+
+    @NonNull
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(@NonNull User user) {
+        this.user = user;
     }
 }

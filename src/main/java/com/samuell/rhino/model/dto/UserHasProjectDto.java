@@ -7,6 +7,7 @@ public class UserHasProjectDto {
     //Attributes
     private UserHasProjectKey id;
     private UserDto user;
+
     @JsonBackReference
     private ProjectDto project;
 

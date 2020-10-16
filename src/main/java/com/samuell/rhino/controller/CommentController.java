@@ -1,9 +1,14 @@
 package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.Comment;
+import com.samuell.rhino.model.Log;
 import com.samuell.rhino.model.dto.CommentDto;
+import com.samuell.rhino.model.status_enum.LogStatus;
+import com.samuell.rhino.repository.BugRepository;
 import com.samuell.rhino.repository.CommentRepository;
+import com.samuell.rhino.repository.LogRepository;
 import com.samuell.rhino.service.CommentService;
+import com.samuell.rhino.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +20,17 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+    private final LogService logService;
     private final CommentRepository commentRepository;
+    private final LogRepository logRepository;
+    private final BugRepository bugRepository;
 
-    public CommentController(CommentService commentService, CommentRepository commentRepository) {
+    public CommentController(CommentService commentService, LogService logService, CommentRepository commentRepository, LogRepository logRepository, BugRepository bugRepository) {
         this.commentService = commentService;
+        this.logService = logService;
         this.commentRepository = commentRepository;
+        this.logRepository = logRepository;
+        this.bugRepository = bugRepository;
     }
 
     @GetMapping("/{bugId}/comment")
@@ -49,6 +60,9 @@ public class CommentController {
             return new ResponseEntity<>("Error while creating comment",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
+            String logMessage = "Comment with id: " + comment.getId();
+
+            logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_CREATE);
             return ResponseEntity.status(HttpStatus.CREATED).body("Comment created with ID: "+ comment.getId());
         }
     }
@@ -60,6 +74,9 @@ public class CommentController {
         }
         else {
             Comment comment = commentService.updateComment(bugId, commentId ,commentDto);
+            String logMessage = "Comment with id: " + comment.getId();
+
+            logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_EDIT);
 
             return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was updated");
         }
@@ -72,7 +89,9 @@ public class CommentController {
         }
         else {
             Comment comment = commentService.deleteComment(commentId);
+            String logMessage = "Comment with id: " + comment.getId();
 
+            logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_DELETE);
             return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was deleted");
         }
     }

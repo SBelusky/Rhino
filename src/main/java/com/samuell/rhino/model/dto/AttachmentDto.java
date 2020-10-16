@@ -2,13 +2,16 @@ package com.samuell.rhino.model.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import javax.persistence.Lob;
 import java.sql.Timestamp;
 
 public class AttachmentDto {
     //Attributes
     private Integer id;
-    private String file;
+    @Lob
+    private byte[] file;
+    private String type;
+    private String size;
     private String name;
     private UserDto user;
     private BugDto bug;
@@ -20,9 +23,8 @@ public class AttachmentDto {
     public AttachmentDto() {
     }
 
-    public AttachmentDto(Integer id, String file, String name, UserDto user, BugDto bug, Timestamp created_at) {
+    public AttachmentDto(Integer id, String name, UserDto user, BugDto bug, Timestamp created_at) {
         this.id = id;
-        this.file = file;
         this.name = name;
         this.user = user;
         this.bug = bug;
@@ -38,12 +40,28 @@ public class AttachmentDto {
         this.id = id;
     }
 
-    public String getFile() {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile(String file) {
+    public void setFile(byte[] file) {
         this.file = file;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     public String getName() {

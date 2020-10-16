@@ -50,6 +50,11 @@ public class User {
     @Nullable
     private Set<Attachment> attachments;
 
+    @JsonManagedReference(value = "user-bugs")
+    @OneToMany(mappedBy="user")
+    @Nullable
+    private Set<Bug> bugs;
+
     @JsonManagedReference(value = "user-user_has_projects")
     @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
@@ -199,6 +204,15 @@ public class User {
 
     public void setUser_has_projects(@Nullable Set<UserHasProject> user_has_projects) {
         this.user_has_projects = user_has_projects;
+    }
+
+    @Nullable
+    public Set<Bug> getBugs() {
+        return bugs;
+    }
+
+    public void setBugs(@Nullable Set<Bug> bugs) {
+        this.bugs = bugs;
     }
 
     @Override

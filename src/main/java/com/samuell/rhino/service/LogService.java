@@ -12,5 +12,5 @@ public interface LogService {
     List<LogDto> getAllLogsByBugId(Integer projectId, Integer bugId);
 
     @Nullable
-    Log addLog(Integer bugId, Integer userId, String message, LogStatus status);
+    void addLog(Integer bugId, Integer userId, String message, LogStatus status);
 }

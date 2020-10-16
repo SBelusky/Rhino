@@ -16,13 +16,13 @@ public class BugHasVersion {
     private String type; // found/repared
 
     @JsonBackReference(value = "bug-bugHasVersions")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
     private Bug bug;
 
     @JsonBackReference(value = "version-bugHasVersions")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("version_id")
     @JoinColumn(name = "version_id")
     private Version version;

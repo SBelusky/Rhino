@@ -4,7 +4,7 @@
 .rhino {
     background-color: #f8ac01;
 }
-#pmzero {
+#pm-zero {
     margin: 0;
     padding: 0;
 }
@@ -20,11 +20,21 @@
     top: 1px;
 }
 .title-under-navBar {
-    background-color: #323232;
-    color: white;
-    padding-left: 2em;
+    /* background-color: #323232; */
+    /*  color: white; */
+    color: black;
+    /* padding-left: 2em; */
 }
 .padding-in-content {
-    padding-left: 2.5em;
     padding-top: 1em;
+}
+.vl {
+    border-left: 0.1em solid #c2c7d0;
+    margin-right: 0.8em;
+    height: 3em;
+}
+.pagination-previous:focus,
+.pagination-next:focus,
+.pagination-link:focus {
+    border-color: #494e53;
 }

@@ -15,14 +15,14 @@ public class BugHasSpecification {
     private BugHasVersionKey id;
 
     @JsonBackReference(value = "bug-bugHasSpecifications")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
     @NonNull
     private Bug bug;
 
     @JsonBackReference(value = "specification-bugHasSpecifications")
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("specification_id")
     @JoinColumn(name = "specification_id")
     @NonNull

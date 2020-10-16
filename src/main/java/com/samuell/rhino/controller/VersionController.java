@@ -2,7 +2,6 @@ package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.Version;
 import com.samuell.rhino.model.dto.VersionDto;
-import com.samuell.rhino.repository.VersionRepository;
 import com.samuell.rhino.service.VersionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +14,9 @@ import java.util.List;
 public class VersionController {
 
     private final VersionService versionService;
-    private final VersionRepository versionRepository;
 
-    public VersionController(VersionService versionService, VersionRepository versionRepository) {
+    public VersionController(VersionService versionService) {
         this.versionService = versionService;
-        this.versionRepository = versionRepository;
     }
 
     @GetMapping("/{projectId}/version")

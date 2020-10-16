@@ -1,8 +1,8 @@
 package com.samuell.rhino.model.mapper;
 
-import com.samuell.rhino.model.Log;
+import com.samuell.rhino.model.Attachment;
 import com.samuell.rhino.model.User;
-import com.samuell.rhino.model.dto.LogDto;
+import com.samuell.rhino.model.dto.AttachmentDto;
 import com.samuell.rhino.model.dto.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,12 +10,14 @@ import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface LogMapper {
-    LogMapper INSTANCE = Mappers.getMapper(LogMapper.class);
+public interface AttachmentMapper {
+    AttachmentMapper INSTANCE = Mappers.getMapper(AttachmentMapper.class);
 
 
     @Mapping(target = "bug", ignore=true)
-    LogDto toLogDto(Log log);
+    AttachmentDto toAttachmentDto(Attachment attachment);
+
+    Attachment toAttachment(AttachmentDto attachmentDto);
 
     @Mappings({
             @Mapping(target = "email", ignore=true),

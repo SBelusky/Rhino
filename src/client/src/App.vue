@@ -1,7 +1,9 @@
 <template>
     <div id="app">
-        <div class="columns is-gapless content-div">
-            <main-menu class="column is-2 menu-min-height" />
+        <div class="columns is-8 content-div">
+            <div class="column is-2 menu-div">
+                <main-menu class="menu-min-height" />
+            </div>
             <div class="column is-10">
                 <navbar class="pt-3 pr-3" />
                 <router-view class="testa" />
@@ -9,15 +11,6 @@
         </div>
         <my-footer />
     </div>
-
-    <!--div id="app" class="columns">
-        <main-menu class="column is-2" />
-        <div class="column is-10 px-6">
-            <navbar class="mt-3" />
-            <router-view class="mt-5" />
-        </div>
-        <my-footer />
-    </div-->
 </template>
 
 <script>
@@ -45,9 +38,9 @@ body {
 #app {
     background-color: #f8f8f8;
 }
-#app .menu-min-height {
+/* #app .menu-min-height {
     min-height: 80vh !important;
-}
+} */
 #app .columns {
     margin-bottom: 0 !important;
 }

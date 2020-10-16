@@ -3,6 +3,7 @@ package com.samuell.rhino.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,13 +18,15 @@ public class Attachment {
     private Integer id;
     @Lob
     @NonNull
-    private String file;
+    private byte[] file;
+    @NonNull
+    private String type;
+    @NonNull
+    private String size;
     @NonNull
     private String name;
     @Nullable
     private Timestamp created_at;
-    @Nullable
-    private Timestamp edited_at;
     @NonNull
     private boolean was_deleted;
 
@@ -43,12 +46,10 @@ public class Attachment {
     public Attachment() {
     }
 
-    public Attachment(@Nullable Integer id, @NonNull String file, @NonNull String name, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @NonNull User user, @NonNull Bug bug) {
+    public Attachment(@Nullable Integer id, @NonNull MultipartFile file, @NonNull String name, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @NonNull User user, @NonNull Bug bug) {
         this.id = id;
-        this.file = file;
         this.name = name;
         this.created_at = created_at;
-        this.edited_at = edited_at;
         this.was_deleted = was_deleted;
         this.user = user;
         this.bug = bug;
@@ -65,12 +66,30 @@ public class Attachment {
     }
 
     @NonNull
-    public String getFile() {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile(@NonNull String file) {
+    public void setFile(@NonNull byte[] file) {
         this.file = file;
+    }
+
+    @NonNull
+    public String getType() {
+        return type;
+    }
+
+    public void setType(@NonNull String type) {
+        this.type = type;
+    }
+
+    @NonNull
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(@NonNull String size) {
+        this.size = size;
     }
 
     @NonNull
@@ -89,15 +108,6 @@ public class Attachment {
 
     public void setCreated_at(@Nullable Timestamp created_at) {
         this.created_at = created_at;
-    }
-
-    @Nullable
-    public Timestamp getEdited_at() {
-        return edited_at;
-    }
-
-    public void setEdited_at(@Nullable Timestamp edited_at) {
-        this.edited_at = edited_at;
     }
 
     public boolean isWas_deleted() {

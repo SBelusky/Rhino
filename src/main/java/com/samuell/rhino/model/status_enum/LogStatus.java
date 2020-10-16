@@ -9,9 +9,9 @@ public enum LogStatus {
     ATTACHMENT_UPLOAD("Attachment uploaded"),
     ATTACHMENT_DELETE("Attachment deleted"),
     //Comment status
-    COMMENT_CREATE("Comment created"),
-    COMMENT_EDIT("Comment edited"),
-    COMMENT_DELETE("Comment deleted"),
+    COMMENT_CREATE("Comment created"), //
+    COMMENT_EDIT("Comment edited"), //
+    COMMENT_DELETE("Comment deleted"), //
     //Specification status
     TYPE_CHANGE("Type changed"),
     PRIORITY_CHANGE("Priority changed"),

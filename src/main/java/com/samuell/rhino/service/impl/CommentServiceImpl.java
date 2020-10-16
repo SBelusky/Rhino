@@ -1,6 +1,7 @@
 package com.samuell.rhino.service.impl;
 
 import com.samuell.rhino.model.Comment;
+import com.samuell.rhino.model.Log;
 import com.samuell.rhino.model.dto.CommentDto;
 import com.samuell.rhino.model.mapper.CommentMapper;
 import com.samuell.rhino.repository.BugRepository;
@@ -49,7 +50,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentMapper.toComment(commentDto);
 
         comment.setBug(bugRepository.findById(bugId).orElse(null));
-        comment.setUser(userRepository.findById(1).orElse(null));
+        comment.setUser(userRepository.findById(commentDto.getUser().getId()).orElse(null));
         comment.setCreated_at(Timestamp.from(Instant.now()));
 
         return commentRepository.save(comment);

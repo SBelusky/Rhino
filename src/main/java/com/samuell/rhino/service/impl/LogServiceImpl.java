@@ -39,7 +39,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public Log addLog(Integer bugId, Integer userId, String message, LogStatus status) {
+    public void addLog(Integer bugId, Integer userId, String message, LogStatus status) {
         Log log = new Log();
 
         log.setMessage(message);
@@ -48,6 +48,6 @@ public class LogServiceImpl implements LogService {
         log.setBug(bugRepository.findById(bugId).orElse(null));
         log.setCreated_at(Timestamp.from(Instant.now()));
 
-        return logRepository.save(log);
+        logRepository.save(log);
     }
 }

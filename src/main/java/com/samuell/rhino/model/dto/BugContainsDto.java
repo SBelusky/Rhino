@@ -5,17 +5,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
 import java.util.Set;
 
-public class BugDto {
+public class BugContainsDto {
     //Atributes
     private Integer id;
     private String summarize;
-    private String description;
-    private String additional_info;
-    private Integer seek_time;
-    private Set<BugHasVersionDto> bugHasVersions;
     private Set<BugHasSpecificationDto> bugHasSpecifications;
-    private Set<BugHasBugDto> bugHasBugsContains;
-    private ProjectDto project;
     private CategoryDto category;
     private UserDto user;
 
@@ -26,9 +20,18 @@ public class BugDto {
     private Timestamp edited_at;
 
     //Constructors
-    public BugDto() {
+    public BugContainsDto() {
     }
 
+    public BugContainsDto(Integer id, String summarize, Set<BugHasSpecificationDto> bugHasSpecifications, CategoryDto category, UserDto user, Timestamp created_at, Timestamp edited_at) {
+        this.id = id;
+        this.summarize = summarize;
+        this.bugHasSpecifications = bugHasSpecifications;
+        this.category = category;
+        this.user = user;
+        this.created_at = created_at;
+        this.edited_at = edited_at;
+    }
 
     //Getters & setters
     public Integer getId() {
@@ -47,60 +50,12 @@ public class BugDto {
         this.summarize = summarize;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAdditional_info() {
-        return additional_info;
-    }
-
-    public void setAdditional_info(String additional_info) {
-        this.additional_info = additional_info;
-    }
-
-    public Integer getSeek_time() {
-        return seek_time;
-    }
-
-    public void setSeek_time(Integer seek_time) {
-        this.seek_time = seek_time;
-    }
-
-    public Set<BugHasVersionDto> getBugHasVersions() {
-        return bugHasVersions;
-    }
-
-    public void setBugHasVersions(Set<BugHasVersionDto> bugHasVersions) {
-        this.bugHasVersions = bugHasVersions;
-    }
-
     public Set<BugHasSpecificationDto> getBugHasSpecifications() {
         return bugHasSpecifications;
     }
 
     public void setBugHasSpecifications(Set<BugHasSpecificationDto> bugHasSpecifications) {
         this.bugHasSpecifications = bugHasSpecifications;
-    }
-
-    public Set<BugHasBugDto> getBugHasBugsContains() {
-        return bugHasBugsContains;
-    }
-
-    public void setBugHasBugsContains(Set<BugHasBugDto> bugHasBugsContains) {
-        this.bugHasBugsContains = bugHasBugsContains;
-    }
-
-    public ProjectDto getProject() {
-        return project;
-    }
-
-    public void setProject(ProjectDto project) {
-        this.project = project;
     }
 
     public CategoryDto getCategory() {
