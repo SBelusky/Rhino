@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -48,22 +49,22 @@ public class Bug {
     private Set<Comment> comments;
 
     @JsonManagedReference(value = "bug-bugHasVersions")
-    @OneToMany(mappedBy="bug")
+    @OneToMany(mappedBy="bug",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
     private Set<BugHasVersion> bugHasVersions;
 
     @JsonManagedReference(value = "bug-bugHasSpecifications")
-    @OneToMany(mappedBy="bug")
+    @OneToMany(mappedBy="bug",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
     private Set<BugHasSpecification> bugHasSpecifications;
 
     @JsonManagedReference(value = "bug-bugHasBugsContains")
-    @OneToMany(mappedBy="contains")
+    @OneToMany(mappedBy="contains",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
     private Set<BugHasBug> bugHasBugsContains; //bug contains bugs
 
     @JsonManagedReference(value = "bug-bugHasBugsIncluded")
-    @OneToMany(mappedBy="included")
+    @OneToMany(mappedBy="included",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
     private Set<BugHasBug> bugHasBugsIncluded;// bug is included in bugs
 
@@ -103,7 +104,6 @@ public class Bug {
         this.comments = comments;
         this.bugHasVersions = bugHasVersions;
         this.bugHasSpecifications = bugHasSpecifications;
-        this.bugHasBugsContains = bugHasBugsContains;
         this.bugHasBugsIncluded = bugHasBugsIncluded;
         this.category = category;
         this.project = project;
@@ -126,6 +126,15 @@ public class Bug {
 
     public void setSummarize(@NonNull String summarize) {
         this.summarize = summarize;
+    }
+
+    @Nullable
+    public Set<BugHasBug> getBugHasBugsContains() {
+        return bugHasBugsContains;
+    }
+
+    public void setBugHasBugsContains(@Nullable Set<BugHasBug> bugHasBugsContains) {
+        this.bugHasBugsContains = bugHasBugsContains;
     }
 
     @NonNull
@@ -227,15 +236,6 @@ public class Bug {
     }
 
     @Nullable
-    public Set<BugHasBug> getBugHasBugsContains() {
-        return bugHasBugsContains;
-    }
-
-    public void setBugHasBugsContains(@Nullable Set<BugHasBug> bugHasBugsContains) {
-        this.bugHasBugsContains = bugHasBugsContains;
-    }
-
-    @Nullable
     public Set<BugHasBug> getBugHasBugsIncluded() {
         return bugHasBugsIncluded;
     }
@@ -269,5 +269,35 @@ public class Bug {
 
     public void setUser(@NonNull User user) {
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bug bug = (Bug) o;
+        return was_deleted == bug.was_deleted &&
+                Objects.equals(id, bug.id) &&
+                summarize.equals(bug.summarize) &&
+                description.equals(bug.description) &&
+                Objects.equals(additional_info, bug.additional_info) &&
+                Objects.equals(seek_time, bug.seek_time) &&
+                Objects.equals(created_at, bug.created_at) &&
+                Objects.equals(edited_at, bug.edited_at) &&
+                Objects.equals(attachments, bug.attachments) &&
+                Objects.equals(logs, bug.logs) &&
+                Objects.equals(comments, bug.comments) &&
+                Objects.equals(bugHasVersions, bug.bugHasVersions) &&
+                Objects.equals(bugHasSpecifications, bug.bugHasSpecifications) &&
+                Objects.equals(bugHasBugsContains, bug.bugHasBugsContains) &&
+                Objects.equals(bugHasBugsIncluded, bug.bugHasBugsIncluded) &&
+                category.equals(bug.category) &&
+                project.equals(bug.project) &&
+                user.equals(bug.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, summarize, description, additional_info, seek_time, created_at, edited_at, was_deleted, attachments, logs, comments, bugHasVersions, bugHasSpecifications, bugHasBugsContains, bugHasBugsIncluded, category, project, user);
     }
 }

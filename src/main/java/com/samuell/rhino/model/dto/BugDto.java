@@ -1,8 +1,10 @@
 package com.samuell.rhino.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
 public class BugDto {
@@ -14,10 +16,12 @@ public class BugDto {
     private Integer seek_time;
     private Set<BugHasVersionDto> bugHasVersions;
     private Set<BugHasSpecificationDto> bugHasSpecifications;
-    private Set<BugHasBugDto> bugHasBugsContains;
     private ProjectDto project;
     private CategoryDto category;
     private UserDto user;
+    private Integer idOfLastEditingUser;
+    private Set<BugHasBugDto> bugHasBugsContains;
+    private Set<BugHasBugDto> bugHasBugsIncluded;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
@@ -29,14 +33,30 @@ public class BugDto {
     public BugDto() {
     }
 
-
     //Getters & setters
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<BugHasBugDto> getBugHasBugsContains() {
+        return bugHasBugsContains;
+    }
+
+    public void setBugHasBugsContains(Set<BugHasBugDto> bugHasBugsContains) {
+        this.bugHasBugsContains = bugHasBugsContains;
+    }
+
+    public Set<BugHasBugDto> getBugHasBugsIncluded() {
+        return bugHasBugsIncluded;
+    }
+
+    public void setBugHasBugsIncluded(Set<BugHasBugDto> bugHasBugsIncluded) {
+        this.bugHasBugsIncluded = bugHasBugsIncluded;
     }
 
     public String getSummarize() {
@@ -87,12 +107,12 @@ public class BugDto {
         this.bugHasSpecifications = bugHasSpecifications;
     }
 
-    public Set<BugHasBugDto> getBugHasBugsContains() {
-        return bugHasBugsContains;
+    public Integer getIdOfLastEditingUser() {
+        return idOfLastEditingUser;
     }
 
-    public void setBugHasBugsContains(Set<BugHasBugDto> bugHasBugsContains) {
-        this.bugHasBugsContains = bugHasBugsContains;
+    public void setIdOfLastEditingUser(Integer idOfLastEditingUser) {
+        this.idOfLastEditingUser = idOfLastEditingUser;
     }
 
     public ProjectDto getProject() {
@@ -133,5 +153,33 @@ public class BugDto {
 
     public void setEdited_at(Timestamp edited_at) {
         this.edited_at = edited_at;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BugDto bugDto = (BugDto) o;
+        return Objects.equals(id, bugDto.id) &&
+                Objects.equals(summarize, bugDto.summarize) &&
+                Objects.equals(description, bugDto.description) &&
+                Objects.equals(additional_info, bugDto.additional_info) &&
+                Objects.equals(seek_time, bugDto.seek_time) &&
+                Objects.equals(bugHasVersions, bugDto.bugHasVersions) &&
+                Objects.equals(bugHasSpecifications, bugDto.bugHasSpecifications) &&
+                Objects.equals(project, bugDto.project) &&
+                Objects.equals(category, bugDto.category) &&
+                Objects.equals(user, bugDto.user) &&
+                Objects.equals(idOfLastEditingUser, bugDto.idOfLastEditingUser) &&
+                Objects.equals(bugHasBugsContains, bugDto.bugHasBugsContains) &&
+                Objects.equals(bugHasBugsIncluded, bugDto.bugHasBugsIncluded) &&
+                Objects.equals(created_at, bugDto.created_at) &&
+                Objects.equals(edited_at, bugDto.edited_at);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, summarize, description, additional_info, seek_time, bugHasVersions, bugHasSpecifications, project, category, user, idOfLastEditingUser, bugHasBugsContains, bugHasBugsIncluded, created_at, edited_at);
     }
 }

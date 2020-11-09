@@ -9,9 +9,9 @@ public enum LogStatus {
     ATTACHMENT_UPLOAD("Attachment uploaded"),
     ATTACHMENT_DELETE("Attachment deleted"),
     //Comment status
-    COMMENT_CREATE("Comment created"), //
-    COMMENT_EDIT("Comment edited"), //
-    COMMENT_DELETE("Comment deleted"), //
+    COMMENT_CREATE("Comment created"),
+    COMMENT_EDIT("Comment edited"),
+    COMMENT_DELETE("Comment deleted"),
     //Specification status
     TYPE_CHANGE("Type changed"),
     PRIORITY_CHANGE("Priority changed"),
@@ -20,15 +20,16 @@ public enum LogStatus {
     RELATION_CREATE("Relation created"),
     RELATION_DELETE("Relation deleted"),
     //Version status
-    FOUND_VERSION_CHANGE("Found version changed"),
-    REPAIRED_VERSION_CHANGE("Repaired version changed"),
+    FOUND_IN_VERSION_CHANGE("Found in version changed"),
+    REPAIRED_IN_VERSION_CHANGE("Repaired in version changed"),
     //Category status
-    CATEGORY_CHANGE("Category changed");
-
+    CATEGORY_CHANGE("Category changed"),
+    //Default if we dont choose from previous attributes
+    DEFAULT("DEFAULT");
 
     public final String label;
 
-    private LogStatus(String label) {
+    LogStatus(String label) {
         this.label = label;
     }
 }

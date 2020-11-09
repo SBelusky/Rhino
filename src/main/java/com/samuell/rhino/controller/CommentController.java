@@ -76,14 +76,14 @@ public class CommentController {
             Comment comment = commentService.updateComment(bugId, commentId ,commentDto);
             String logMessage = "Comment with id: " + comment.getId();
 
-            logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_EDIT);
+            logService.addLog(bugId,commentDto.getIdOfLastEditingUser(),logMessage, LogStatus.COMMENT_EDIT);
 
             return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was updated");
         }
     }
 
     @DeleteMapping("/{bugId}/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId) {
+    public ResponseEntity<?> deleteComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId, @RequestBody CommentDto commentDto) {
         if(commentService.getCommentById(bugId, commentId) == null){
             return new ResponseEntity<>("Comment not found",HttpStatus.NOT_FOUND);
         }
@@ -91,7 +91,7 @@ public class CommentController {
             Comment comment = commentService.deleteComment(commentId);
             String logMessage = "Comment with id: " + comment.getId();
 
-            logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_DELETE);
+            logService.addLog(bugId,commentDto.getIdOfLastEditingUser(),logMessage, LogStatus.COMMENT_DELETE);
             return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was deleted");
         }
     }

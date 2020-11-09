@@ -41,7 +41,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentDto getCommentById(Integer bugId, Integer commentId) {
         return commentMapper.toCommentDto(commentRepository.findById(commentId)
-                .filter(bug -> bug.getBug().getId().equals(bugId))
+                .filter(comment -> comment.getBug().getId().equals(bugId))
                 .orElse(null));
     }
 

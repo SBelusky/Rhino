@@ -3,6 +3,8 @@ package com.samuell.rhino.model.dto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 
+import java.util.Objects;
+
 public class BugHasVersionDto {
     //Attributes
     private BugHasVersionKey id;

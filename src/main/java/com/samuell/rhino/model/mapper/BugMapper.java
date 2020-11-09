@@ -10,11 +10,12 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface BugMapper {
     BugMapper INSTANCE = Mappers.getMapper(BugMapper.class);
-    //Bug - clear
+    //Bug
+    @Mapping(target = "bugHasBugsIncluded", ignore = true)
     BugDto toBugDto(Bug bug);
     Bug toBug(BugDto bugDto);
 
-    //Project - clear
+    //Project
     @Mappings({
             @Mapping(target = "description", ignore=true),
             @Mapping(target = "user_has_projects", ignore=true),
@@ -23,7 +24,7 @@ public interface BugMapper {
     ProjectDto toProjectDto(Project project);
     Project toProject(ProjectDto projectDto);
 
-    //Category - clear
+    //Category
     @Mappings({
             @Mapping(target = "description", ignore=true),
             @Mapping(target = "project", ignore=true),
@@ -32,7 +33,7 @@ public interface BugMapper {
     CategoryDto toCategoryDto(Category category);
     Category toCategory(CategoryDto categoryDto);
 
-    //User - clear
+    //User
     @Mappings({
             @Mapping(target = "telephone_number", ignore=true),
             @Mapping(target = "login_name", ignore=true),
@@ -43,14 +44,13 @@ public interface BugMapper {
     UserDto toUserDto(User user);
     User toUser(UserDto userDto);
 
-    //BugHasVersion - clear
+    //BugHasVersion
     @Mapping(target="bug", ignore=true)
     BugHasVersionDto toBugHasVersionDto(BugHasVersion bugHasVersion);
-
     @Mapping(target="bug", ignore=true)
     BugHasVersion toBugHasVersion(BugHasVersionDto bugHasVersionDto);
 
-            //Version - clear
+            //Version
             @Mappings({
                     @Mapping(target = "description", ignore=true),
                     @Mapping(target = "created_at", ignore=true),
@@ -62,11 +62,9 @@ public interface BugMapper {
     //BugHasSpecification
     @Mapping(target="bug", ignore=true)
     BugHasSpecificationDto toBugHasSpecificationDto(BugHasSpecification bugHasSpecification);
-
-    @Mapping(target="bug", ignore=true)
     BugHasSpecification toBugHasSpecification(BugHasSpecificationDto bugHasSpecificationDto);
 
-            //Specification - clear
+            //Specification
             @Mappings({
                     @Mapping(target = "description", ignore=true),
                     @Mapping(target = "created_at", ignore=true)
@@ -75,18 +73,8 @@ public interface BugMapper {
             Specification toSpecification(SpecificationDto specificationDto);
 
     //BugHasBug
+    @Mapping(target="contains", ignore=true)
     @Mapping(target="included", ignore=true)
     BugHasBugDto toBugHasBugDto(BugHasBug bugHasBug);
-
-    @Mapping(target="included", ignore=true)
     BugHasBug toBugHasBug(BugHasBugDto bugHasBugDto);
-
-            //BugContains - clear
-            @Mappings({
-                    @Mapping(target = "description", ignore=true),
-                    @Mapping(target = "created_at", ignore=true)
-            })
-            BugContainsDto toBugContainsDto(Specification specification);
-            //Specification toSpecification(SpecificationDto specificationDto);
-
 }

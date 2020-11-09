@@ -1,18 +1,19 @@
 package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.samuell.rhino.model.embedded_key.BugHasSpecificationKey;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "bug_has_specification")
 @Table(name = "bug_has_specification")
 public class BugHasSpecification {
     //Attributes
     @EmbeddedId
-    private BugHasVersionKey id;
+    private BugHasSpecificationKey id;
 
     @JsonBackReference(value = "bug-bugHasSpecifications")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -32,18 +33,18 @@ public class BugHasSpecification {
     public BugHasSpecification() {
     }
 
-    public BugHasSpecification(BugHasVersionKey id, Bug bug, Specification specification) {
+    public BugHasSpecification(BugHasSpecificationKey id, Bug bug, Specification specification) {
         this.id = id;
         this.bug = bug;
         this.specification = specification;
     }
 
     //Getters & setters
-    public BugHasVersionKey getId() {
+    public BugHasSpecificationKey getId() {
         return id;
     }
 
-    public void setId(BugHasVersionKey id) {
+    public void setId(BugHasSpecificationKey id) {
         this.id = id;
     }
 

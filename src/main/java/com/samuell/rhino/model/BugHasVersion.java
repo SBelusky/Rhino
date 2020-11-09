@@ -2,11 +2,12 @@ package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "bug_has_version")
 @Table(name = "bug_has_version")
 public class BugHasVersion {
     //Attributes
@@ -19,12 +20,14 @@ public class BugHasVersion {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
+    @NonNull
     private Bug bug;
 
     @JsonBackReference(value = "version-bugHasVersions")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("version_id")
     @JoinColumn(name = "version_id")
+    @NonNull
     private Version version;
 
     //Constructors

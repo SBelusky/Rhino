@@ -17,7 +17,7 @@ public class AttachmentDto {
     private BugDto bug;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
-
+    private Integer idOfLastEditingUser;
 
     //Constructors
     public AttachmentDto() {
@@ -32,6 +32,15 @@ public class AttachmentDto {
     }
 
     //Getters & setters
+
+    public Integer getIdOfLastEditingUser() {
+        return idOfLastEditingUser;
+    }
+
+    public void setIdOfLastEditingUser(Integer idOfLastEditingUser) {
+        this.idOfLastEditingUser = idOfLastEditingUser;
+    }
+
     public Integer getId() {
         return id;
     }

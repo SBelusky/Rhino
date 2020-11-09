@@ -8,10 +8,10 @@ import java.util.Objects;
 @Embeddable
 public class BugHasBugKey implements Serializable {
     //Atributes
-    @Column(name = "bug_id1")
+    @Column(name = "contains")
     private int contains;
 
-    @Column(name = "bug_id2")
+    @Column(name = "included")
     private int included;
 
     //Constructors

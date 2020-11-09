@@ -10,5 +10,5 @@ public interface ProjectRepository extends JpaRepository<Project,Integer> {
     @Transactional
     @Modifying
     @Query("delete from user_has_project where project_id = ?1")
-    void deleteUsers(int id);
+    void deleteUsers(Integer id);
 }

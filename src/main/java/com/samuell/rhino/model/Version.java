@@ -7,6 +7,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -117,5 +118,25 @@ public class Version {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version = (Version) o;
+        return was_deleted == version.was_deleted &&
+                Objects.equals(id, version.id) &&
+                name.equals(version.name) &&
+                Objects.equals(description, version.description) &&
+                Objects.equals(created_at, version.created_at) &&
+                Objects.equals(edited_at, version.edited_at) &&
+                Objects.equals(bug_has_versions, version.bug_has_versions) &&
+                project.equals(version.project);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, created_at, edited_at, was_deleted, bug_has_versions, project);
     }
 }

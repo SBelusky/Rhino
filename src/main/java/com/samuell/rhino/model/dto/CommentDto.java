@@ -14,6 +14,7 @@ public class CommentDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp edited_at;
     private UserDto user;
+    private Integer idOfLastEditingUser;
 
     //Constructors
     public CommentDto() {
@@ -29,6 +30,15 @@ public class CommentDto {
     }
 
     //Getters & setters
+
+    public Integer getIdOfLastEditingUser() {
+        return idOfLastEditingUser;
+    }
+
+    public void setIdOfLastEditingUser(Integer idOfLastEditingUser) {
+        this.idOfLastEditingUser = idOfLastEditingUser;
+    }
+
     public Integer getId() {
         return id;
     }

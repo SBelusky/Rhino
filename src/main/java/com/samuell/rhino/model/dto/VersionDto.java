@@ -2,6 +2,7 @@ package com.samuell.rhino.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class VersionDto {
     //Attributes
@@ -63,5 +64,22 @@ public class VersionDto {
 
     public void setProject(ProjectDto project) {
         this.project = project;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VersionDto that = (VersionDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(created_at, that.created_at) &&
+                Objects.equals(project, that.project);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, created_at, project);
     }
 }

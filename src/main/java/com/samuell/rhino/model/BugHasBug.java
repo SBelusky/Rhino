@@ -8,7 +8,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
+@Entity(name = "bug_has_bug")
 @Table(name = "bug_has_bug")
 public class BugHasBug {
     //Atributes
@@ -20,14 +20,14 @@ public class BugHasBug {
     @JsonBackReference(value = "bug-bugHasBugsContains")
     @ManyToOne
     @MapsId("contains")
-    @JoinColumn(name = "bug_id1")
+    @JoinColumn(name = "contains")
     @NonNull
     private Bug contains;
 
     @JsonBackReference(value = "bug-bugHasBugsIncluded")
     @ManyToOne
     @MapsId("included")
-    @JoinColumn(name = "bug_id2")
+    @JoinColumn(name = "included")
     @NonNull
     private Bug included;
 
