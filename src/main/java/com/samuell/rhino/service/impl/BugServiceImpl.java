@@ -123,7 +123,7 @@ public class BugServiceImpl implements BugService {
     }
 
     @Override
-    public Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto/*, Set<BugHasVersion> newbugHasVersionSet*/) {
+    public Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto, Set<BugHasVersion> oldBugHasVersionSet, Set<BugHasSpecification> oldBugHasSpecificationSet, Set<BugHasBug> oldBugHasBugSet) {
         Bug bug = bugRepository.findById(bugId).orElse(new Bug());
         HashMap<String, LogStatus> atributesChanges = new HashMap<>();
         LogStatus logStatus;
@@ -135,7 +135,20 @@ public class BugServiceImpl implements BugService {
         bug.setProject(projectRepository.findById(projectId).orElse(null));
         bug.setEdited_at(Timestamp.from(Instant.now()));
 
+        bug.setBugHasBugsContains(bugDto.getBugHasBugsContains()
+                .stream()
+                .map(bugHasBug -> {
+                    Bug newBugContains = bugRepository.findById(bug.getId()).orElse(null);
+                    Bug newBugIncluded = bugRepository.findById(bugHasBug.getIncluded().getId()).orElse(null);
+                    BugHasBugKey newBugHasBugKey = new BugHasBugKey(newBugContains.getId(), newBugIncluded.getId());
+                    BugHasBug newBugHasBug = new BugHasBug(newBugHasBugKey, bugHasBug.getStatus(), newBugContains, newBugIncluded);
+
+                    return newBugHasBug;
+                })
+                .collect(Collectors.toSet()));
+
         //Atributes with loging changes:
+        //-> Category
         if (!bug.getCategory().getId().equals(bugDto.getCategory().getId())) {
             atributesChanges.put(
                     bug.getCategory().getName() + " -> " + bugDto.getCategory().getName(),
@@ -143,7 +156,7 @@ public class BugServiceImpl implements BugService {
         }
         bug.setCategory(categoryRepository.findById(bugDto.getCategory().getId()).orElse(null));
 
-
+        //-> Versions
         bug.setBugHasVersions(bugDto.getBugHasVersions()
                 .stream()
                 .map(bugVersion -> {
@@ -157,19 +170,20 @@ public class BugServiceImpl implements BugService {
                     newBugHasVersion.setVersion(newVersion);
                     newBugHasVersion.setType(bugVersion.getType());
 
-//                    for (Iterator<BugHasVersion> it = bugHasVersionSet.iterator(); it.hasNext();) {
-//                        BugHasVersion bugHasVersionIt = it.next();
-//                        if (!bugHasVersionIt.getVersion().getId().equals(bugVersion.getVersion().getId()) && bugHasVersionIt.getType().equals(bugVersion.getType())){
-//                            atributesChanges.put(
-//                                    bugHasVersionIt.getVersion().getName()+ " -> " + bugVersion.getVersion().getName(),
-//                                    setLogStatusFromString(bugVersion.getType())
-//                            );
-//                        }
-//                    }
+                    for (Iterator<BugHasVersion> it = oldBugHasVersionSet.iterator(); it.hasNext();) {
+                        BugHasVersion bugHasVersionIt = it.next();
+                        if (!bugHasVersionIt.getVersion().getId().equals(bugVersion.getVersion().getId()) && bugHasVersionIt.getType().equals(bugVersion.getType())){
+                            atributesChanges.put(
+                                    bugHasVersionIt.getVersion().getName()+ " -> " + bugVersion.getVersion().getName(),
+                                    setLogStatusFromString(bugVersion.getType())
+                            );
+                        }
+                    }
                     return newBugHasVersion;
                 })
                 .collect(Collectors.toSet()));
 
+        //-> Specifications
         bug.setBugHasSpecifications(bugDto.getBugHasSpecifications()
                 .stream()
                 .map(bugSpecification -> {
@@ -182,36 +196,15 @@ public class BugServiceImpl implements BugService {
                     newBugHasSpecification.setBug(newBug);
                     newBugHasSpecification.setSpecification(newSpecification);
 
-//                    for (Iterator<BugHasSpecification> it = bug.getBugHasSpecifications().iterator(); it.hasNext(); ) {
-//                        BugHasSpecification bugSpecificationIt = it.next();
-//                        if (!bugSpecificationIt.getSpecification().getId().equals(bugSpecification.getSpecification().getId()) && bugSpecificationIt.getSpecification().getType().equals(bugSpecification.getSpecification().getType()))
-//                        atributesChanges.put(
-//                                bugSpecificationIt.getSpecification().getName() + " ->" + bugSpecification.getSpecification().getName(),
-//                                setLogStatusFromString(bugSpecification.getSpecification().getType()));
-//                    }
+                    for (Iterator<BugHasSpecification> it = oldBugHasSpecificationSet.iterator(); it.hasNext(); ) {
+                        BugHasSpecification bugSpecificationIt = it.next();
+                        if (!bugSpecificationIt.getSpecification().getId().equals(bugSpecification.getSpecification().getId()) && bugSpecificationIt.getSpecification().getType().equals(bugSpecification.getSpecification().getType()))
+                        atributesChanges.put(
+                                bugSpecificationIt.getSpecification().getName() + " ->" + bugSpecification.getSpecification().getName(),
+                                setLogStatusFromString(bugSpecification.getSpecification().getType()));
+                    }
 
                     return newBugHasSpecification;
-                })
-                .collect(Collectors.toSet()));
-
-//        BugHasBug not need here:
-        bug.setBugHasBugsContains(bugDto.getBugHasBugsContains()
-                .stream()
-                .map(bugHasBug -> {
-                    Bug newBugContains = bugRepository.findById(bug.getId()).orElse(null);
-                    Bug newBugIncluded = bugRepository.findById(bugHasBug.getIncluded().getId()).orElse(null);
-                    BugHasBugKey newBugHasBugKey = new BugHasBugKey(newBugContains.getId(), newBugIncluded.getId());
-                    BugHasBug newBugHasBug = new BugHasBug(newBugHasBugKey, bugHasBug.getStatus(), newBugContains, newBugIncluded);
-
-//                    for (Iterator<BugHasBug> it = bug.getBugHasBugsIncluded().iterator(); it.hasNext(); ) {
-//                        BugHasBug bugHasBugIt = it.next();
-//                        if (!bugHasBugIt.getIncluded().getId().equals(bugHasBug.getIncluded().getId()) && bugHasBugIt.getStatus().equals(bugHasBug.getStatus()))
-//                            atributesChanges.put(
-//                                    bugHasBugIt.getIncluded().getId() + " ->" + bugHasBug.getIncluded().getId(),
-//                                    setLogStatusFromString(bugHasBug.getStatus()));
-//                    }
-
-                    return newBugHasBug;
                 })
                 .collect(Collectors.toSet()));
 

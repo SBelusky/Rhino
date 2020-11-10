@@ -24,6 +24,7 @@ public class BugHasVersionKey implements Serializable {
     }
 
     //Getters & setters
+
     public int getBug_id() {
         return bug_id;
     }

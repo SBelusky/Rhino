@@ -16,9 +16,6 @@ public enum LogStatus {
     TYPE_CHANGE("Type changed"),
     PRIORITY_CHANGE("Priority changed"),
     REPRODUCIBILITY_CHANGE("Reproducibility changed"),
-    //Relation with other bug status
-    RELATION_CREATE("Relation created"),
-    RELATION_DELETE("Relation deleted"),
     //Version status
     FOUND_IN_VERSION_CHANGE("Found in version changed"),
     REPAIRED_IN_VERSION_CHANGE("Repaired in version changed"),

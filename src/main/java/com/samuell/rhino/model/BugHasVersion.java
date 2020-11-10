@@ -14,6 +14,7 @@ public class BugHasVersion {
     @EmbeddedId
     private BugHasVersionKey id;
 
+    @NonNull
     private String type; // found/repared
 
     @JsonBackReference(value = "bug-bugHasVersions")

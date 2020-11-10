@@ -1,6 +1,9 @@
 package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.Bug;
+import com.samuell.rhino.model.BugHasBug;
+import com.samuell.rhino.model.BugHasSpecification;
+import com.samuell.rhino.model.BugHasVersion;
 import com.samuell.rhino.model.dto.BugDto;
 import com.samuell.rhino.model.mapper.BugMapper;
 import com.samuell.rhino.model.status_enum.LogStatus;
@@ -14,13 +17,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/project")
 public class BugController {
     @Autowired
     BugMapper bugMapper;
+    @PersistenceContext
+    EntityManager entityManager;
 
     private final BugService bugService;
     private final LogService logService;
@@ -73,14 +83,17 @@ public class BugController {
     @PostMapping("{projectId}/bug/{bugId}")
     public ResponseEntity<?> updateBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         //TEST
-//        Bug asdasdsa = bugRepository.findById(bugId).orElse(new Bug());
-//        Bug x = new Bug();
-//        x.setBugHasVersions(asdasdsa.getBugHasVersions());
-//        Integer i = x.getBugHasVersions().size();
-//        for (Iterator<BugHasVersion> it = x.getBugHasVersions().iterator(); it.hasNext();) {
-//            BugHasVersion bugHasVersionIt = it.next();
-//            System.out.println(bugHasVersionIt.getVersion().getId());
-//        }
+        entityManager.clear();
+        Bug oldBug = bugRepository.findById(bugId).orElse(new Bug());
+        Set<BugHasVersion> oldBugHasVersionSet = new HashSet<>(oldBug.getBugHasVersions());
+        Set<BugHasSpecification> oldBugHasSpecificationSet = new HashSet<>(oldBug.getBugHasSpecifications());;
+        Set<BugHasBug> oldBugHasBugSet = new HashSet<>(oldBug.getBugHasBugsContains());;
+
+        oldBug = null;
+        entityManager.clear();
+
+
+
 
         bugRepository.deleteSpecifications(bugId);
         bugRepository.deleteVersions(bugId);
@@ -90,7 +103,7 @@ public class BugController {
             return new ResponseEntity<>("Bug not found",HttpStatus.PRECONDITION_FAILED);
         }
         else {
-            Bug bug = bugService.updateBug(projectId,bugId,bugDto/*,newbugHasVersionSet*/);
+            Bug bug = bugService.updateBug(projectId,bugId,bugDto,oldBugHasVersionSet, oldBugHasSpecificationSet, oldBugHasBugSet);
             String logMessage = "Bug with id: " + bug.getId();
 
             logService.addLog(bug.getId(),bug.getUser().getId(),logMessage, LogStatus.BUG_EDIT);

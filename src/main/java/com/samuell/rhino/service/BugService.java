@@ -1,8 +1,6 @@
 package com.samuell.rhino.service;
 
-import com.samuell.rhino.model.Bug;
-import com.samuell.rhino.model.BugHasVersion;
-import com.samuell.rhino.model.Comment;
+import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
 import com.samuell.rhino.model.dto.CommentDto;
 import org.springframework.lang.Nullable;
@@ -21,7 +19,7 @@ public interface BugService {
     Bug addBug(Integer projectId, BugDto bugDto);
 
     @Nullable
-    Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto/*, Set<BugHasVersion> newbugHasVersionSet*/);
+    Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto, Set<BugHasVersion> oldBugHasVersionSet, Set<BugHasSpecification> oldBugHasSpecificationSet, Set<BugHasBug> oldBugHasBugSet);
 
     @Nullable
     Bug deleteBug(Integer projectId, Integer bugId);
