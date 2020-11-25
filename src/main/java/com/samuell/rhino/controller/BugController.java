@@ -7,9 +7,7 @@ import com.samuell.rhino.model.BugHasVersion;
 import com.samuell.rhino.model.dto.BugDto;
 import com.samuell.rhino.model.mapper.BugMapper;
 import com.samuell.rhino.model.status_enum.LogStatus;
-import com.samuell.rhino.repository.BugHasVersionRepository;
 import com.samuell.rhino.repository.BugRepository;
-import com.samuell.rhino.repository.VersionRepository;
 import com.samuell.rhino.service.BugService;
 import com.samuell.rhino.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("api/project")
+@RequestMapping("api/project/{projectId}")
 public class BugController {
     @Autowired
     BugMapper bugMapper;
@@ -35,25 +33,21 @@ public class BugController {
     private final BugService bugService;
     private final LogService logService;
     private final BugRepository bugRepository;
-    private final VersionRepository versionRepository;
-    private final BugHasVersionRepository bugHasVersionRepository;
 
-    public BugController(BugService bugService, LogService logService, BugRepository bugRepository, VersionRepository versionRepository, BugHasVersionRepository bugHasVersionRepository) {
+    public BugController(BugService bugService, LogService logService, BugRepository bugRepository) {
         this.bugService = bugService;
         this.logService = logService;
         this.bugRepository = bugRepository;
-        this.versionRepository = versionRepository;
-        this.bugHasVersionRepository = bugHasVersionRepository;
     }
 
-    @GetMapping("{projectId}/bug")
+    @GetMapping("/bug")
     public ResponseEntity<?> getAllBugsByProjectId(@PathVariable("projectId") Integer projectId) {
         List<BugDto> bugDtoList = bugService.getAllBugsByProjectId(projectId);
 
         return new ResponseEntity<>(bugDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("{projectId}/bug/{bugId}")
+    @GetMapping("/bug/{bugId}")
     public ResponseEntity<?> getBugById(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         BugDto bugDto = bugService.getBugById(projectId,bugId);
 
@@ -65,7 +59,7 @@ public class BugController {
         }
     }
 
-    @PostMapping("{projectId}/bug")
+    @PostMapping("/add/bug")
     public ResponseEntity<?> addBug(@PathVariable("projectId") Integer projectId, @RequestBody BugDto bugDto) {
         Bug bug = bugService.addBug(projectId, bugDto);
 
@@ -80,7 +74,7 @@ public class BugController {
         }
     }
 
-    @PostMapping("{projectId}/bug/{bugId}")
+    @PostMapping("/edit/bug/{bugId}")
     public ResponseEntity<?> updateBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         //TEST
         entityManager.clear();
@@ -112,7 +106,7 @@ public class BugController {
 
     }
 
-    @DeleteMapping("{projectId}/bug/{bugId}")
+    @DeleteMapping("/delete/bug/{bugId}")
     public ResponseEntity<?> deleteBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         if(bugService.getBugById(projectId,bugId) == null){
             return new ResponseEntity<>("Bug not found",HttpStatus.NOT_FOUND);
