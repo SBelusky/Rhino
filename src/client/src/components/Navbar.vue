@@ -1,10 +1,14 @@
 <template>
     <div id="nav-bar">
         <nav class="level">
-            <div class="level-left" />
+            <div class="level-left">
+                <div class="main-logo">
+                    <img src="../assets/img/rhino_logo.png" />
+                </div>
+            </div>
             <div class="level-right">
                 <div class="level-item">
-                    <span id="change-project-text">Change project:</span>
+                    <span class="change-project-text">Aktuálny projekt:</span>
                     <div class="field">
                         <div class="control" @change="projectChangeHandler()">
                             <div class="select">
@@ -17,10 +21,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="vl"></div>
+                <div class="vertical-line"></div>
                 <div class="level-item">
-                    <b-button class="is-info" icon-left="mdi mdi-sticker-plus-outline">
-                        Add bug
+                    <b-button class="is-success" icon-left="mdi mdi-sticker-plus-outline">
+                        Pridať bug
                     </b-button>
                 </div>
             </div>
@@ -34,7 +38,7 @@ export default {
         return {
             selected: "",
             isPublic: true,
-            projects: ["All", "Project"]
+            projects: ["Všetky", "Rhino"]
         };
     },
     methods: {
@@ -51,25 +55,45 @@ export default {
 
 <style lang="scss" scoped>
 #nav-bar {
-    background-color: #343a40;
-    padding: 2em 4em !important;
-    margin-bottom: 2em;
-    border-bottom-left-radius: 15px;
+    background-color: #41586e;
+    padding: 0.5em 2em !important;
+    width: 100%;
 }
 #nav-bar .columns {
     min-height: 0px !important;
 }
+.main-logo {
+    width: 10em;
+}
+#nav-bar .control:active {
+    border: 0 !important;
+}
 .select select {
     width: 150px;
 }
-#nav-bar #change-project-text {
-    color: #c2c7d0;
-    font-size: 1.1em;
+.select select:focus {
+    border: none;
+    box-shadow: none;
+}
+#nav-bar .change-project-text {
+    color: white;
+    font-size: 1em;
     margin-right: 0.8em;
     padding: 0.2em;
-    border-bottom: 2px dotted #c2c7d0;
+    border-bottom: 2px dotted white;
 }
 #nav-bar .select:not(.is-multiple):not(.is-loading)::after {
     border-color: #494e53;
+}
+#nav-bar .level-item .button {
+    color: #000;
+}
+#nav-bar .level-item .button:hover {
+    background-color: hsl(141, 53%, 43%);
+}
+.vertical-line {
+    border-left: 1px solid #c2c7d0;
+    margin-right: 0.8em;
+    height: 3em;
 }
 </style>

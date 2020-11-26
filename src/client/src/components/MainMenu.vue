@@ -1,6 +1,9 @@
 <template>
     <b-menu id="main-menu" class="has-background-light">
-        <img src="../assets/img/rhino_logo.png" width="250" class="mb-5" />
+        <img src="../assets/img/user-avatar.png" />
+        <div class="user-info">
+            <p>Samuel Beluský</p>
+        </div>
         <b-menu-list>
             <router-link id="pm-zero" :to="'/' + projectUrl + '/bug'">
                 <b-menu-item
@@ -8,12 +11,12 @@
                     v-bind:class="{ rip: selected == 'bug' }"
                     icon="bug"
                     icon-pack="fas"
-                    label="Bug"
+                    label="Reporty"
                 ></b-menu-item>
             </router-link>
             <b-menu-item icon="user-cog" icon-pack="fas">
                 <template slot="label" slot-scope="props">
-                    Programmer
+                    Programátor
                     <i class="is-pulled-right" id="expand-icon" :class="props.expanded ? 'fas fa-minus' : 'fas fa-plus'"></i>
                 </template>
                 <b-menu-list label="Bug specification" />
@@ -22,25 +25,25 @@
             </b-menu-item>
             <b-menu-item icon="user-tie" icon-pack="fas">
                 <template slot="label" slot-scope="props">
-                    Administrator
+                    Administrátor
                     <i class="is-pulled-right" id="expand-icon" :class="props.expanded ? 'fas fa-minus' : 'fas fa-plus'"></i>
                 </template>
-                <b-menu-item icon="monitor-dashboard" label="Project" icon-pack="fas"></b-menu-item>
+                <b-menu-item icon="monitor-dashboard" label="Projekty" icon-pack="fas"></b-menu-item>
 
                 <router-link id="pm-zero" to="/user">
                     <b-menu-item
                         v-on:click="selected = 'user'"
                         v-bind:class="{ rip: selected == 'user' }"
-                        icon="account-network-outline"
+                        icon="user-friends"
                         icon-pack="fas"
-                        label="User"
+                        label="Používatelia"
                     ></b-menu-item>
                 </router-link>
 
-                <b-menu-list label="Project specification"> </b-menu-list>
-                <b-menu-item icon="alert-octagon-outline" label="Priority" icon-pack="fas"></b-menu-item>
-                <b-menu-item icon="shape-outline" label="Type" icon-pack="fas"></b-menu-item>
-                <b-menu-item icon="content-duplicate" label="Reproducibility" icon-pack="fas"></b-menu-item>
+                <b-menu-list label="Špecifikácia projektov"> </b-menu-list>
+                <b-menu-item icon="alert-octagon-outline" label="Priorita" icon-pack="fas"></b-menu-item>
+                <b-menu-item icon="shape-outline" label="Typy" icon-pack="fas"></b-menu-item>
+                <b-menu-item icon="content-duplicate" label="Reprodukovateľnosť" icon-pack="fas"></b-menu-item>
             </b-menu-item>
             <router-link id="pm-zero" to="/account">
                 <b-menu-item
@@ -48,12 +51,12 @@
                     v-bind:class="{ rip: selected == 'account' }"
                     icon="user-circle"
                     icon-pack="far"
-                    label="Account"
+                    label="Môj účet"
                 ></b-menu-item>
             </router-link>
         </b-menu-list>
-        <b-menu-list label="Actions">
-            <b-menu-item icon="sign-out-alt" icon-pack="fas" label="Logout"></b-menu-item>
+        <b-menu-list label="Akcie">
+            <b-menu-item icon="sign-out-alt" icon-pack="fas" label="Odhlásiť sa"></b-menu-item>
         </b-menu-list>
     </b-menu>
 </template>
@@ -81,20 +84,36 @@ export default {
 .is-horizontal-center {
     justify-content: center;
 }
+#main-menu img {
+    width: 6em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#main-menu .user-info {
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid snow;
+}
+#main-menu .user-info p {
+    text-align: center;
+    color: #c2c7d0;
+    font-weight: 700;
+}
 #main-menu {
     max-height: 100vh;
     min-height: 80vh;
-    max-width: 350px;
-    padding: 2em 0.7em !important;
+    min-width: 250px;
+    padding: 1em 0.7em !important;
     padding-bottom: 15em !important;
     margin-bottom: 10em;
     background-color: #343a40 !important;
-    border-bottom-right-radius: 15px;
+    font-size: 0.9em;
 }
 .fa,
 .fas,
 .far {
-    font-size: 1.1em;
+    font-size: 1em;
     margin-right: 10px;
     position: relative;
     top: 0px;
@@ -127,7 +146,6 @@ export default {
     color: #c2c7d0;
 }
 #main-menu .rip {
-    //background-color: #f8ac01 !important;
     background-color: #494e53 !important;
 }
 </style>

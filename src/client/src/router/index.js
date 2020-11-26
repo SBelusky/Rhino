@@ -1,8 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+
+//Bug
 import Bug from "../views/bug-views/Bug.vue";
+//Account
 import Account from "../views/account-views/Account.vue";
+//User
 import User from "../views/user-views/User.vue";
 
 Vue.use(VueRouter);
@@ -11,11 +14,6 @@ const routes = [
     {
         path: "/",
         redirect: "/All/bug"
-    },
-    {
-        path: "/",
-        name: "Home",
-        component: Home
     },
     {
         path: "**/bug",

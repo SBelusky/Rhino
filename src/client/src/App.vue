@@ -1,14 +1,17 @@
 <template>
     <div id="app">
-        <div class="columns is-8 content-div">
-            <div class="column is-2 menu-div">
+        <div class="level">
+            <navbar />
+        </div>
+        <div class="columns">
+            <div class="column is-narrow">
                 <main-menu class="menu-min-height" />
             </div>
-            <div class="column is-10">
-                <navbar class="pt-3 pr-3" />
-                <router-view class="testa" />
+            <div class="column is-narrow view">
+                <router-view />
             </div>
         </div>
+
         <my-footer />
     </div>
 </template>
@@ -38,13 +41,20 @@ body {
 #app {
     background-color: #f8f8f8;
 }
-/* #app .menu-min-height {
-    min-height: 80vh !important;
-} */
+#app .level {
+    margin: 0;
+}
 #app .columns {
     margin-bottom: 0 !important;
 }
 .content-div {
     padding-bottom: 5em;
+}
+main-menu {
+    width: 500px !important;
+}
+.view {
+    padding: 3em;
+    width: 100%;
 }
 </style>

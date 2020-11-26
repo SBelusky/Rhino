@@ -18,7 +18,7 @@ export default {};
 <style lang="scss" scoped>
 .footer {
     padding: 6rem 6rem 6rem;
-    background-color: #464646 !important;
+    background-color: rgba(65, 88, 110, 0.8) !important;
 }
 .footer p,
 .footer strong {

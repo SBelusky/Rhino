@@ -1,54 +1,37 @@
 <template>
     <div id="account-form">
-        <div class="columns">
-            <div class="column is-12">
-                <h1 class="title is-1 pb-6 title-under-navBar"><span id="small-title">account | </span>Samuel Beluský</h1>
-            </div>
+        <window-title small-title="môj účet" big-title="Samuel Beluský" />
+        <div class="account-button pb-2">
+            <button class="button is-warning"><i class="far fa-edit"></i>Editovať</button>
         </div>
-        <div class="columns padding-in-content">
-            <div class="column is-5">
+        <div class="columns pt-4">
+            <div class="column is-5 account-info">
                 <div class="field">
-                    <label class="label is-medium">E-mail:</label>
+                    <label class="label">E-mail:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input is-medium"
-                            type="email"
-                            placeholder="Extra small"
-                            disabled
-                            value="samuel.belusky@gmail.com"
-                        />
+                        <input class="input" type="email" placeholder="Extra small" disabled value="samuel.belusky@gmail.com" />
                         <span class="icon is-left">
                             <i class="mdi mdi-at"></i>
                         </span>
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label is-medium">Phone number:</label>
+                    <label class="label">Telefónne číslo:</label>
                     <div class="control has-icons-left">
-                        <input class="input is-medium" type="email" placeholder="Extra small" disabled value="+421 948 775 092" />
+                        <input class="input" type="email" placeholder="Extra small" disabled value="+421 948 775 092" />
                         <span class="icon is-left">
                             <i class="mdi mdi-cellphone"></i>
                         </span>
                     </div>
                 </div>
                 <div class="field">
-                    <label class="label is-medium">Role:</label>
+                    <label class="label">Rola:</label>
                     <div class="control has-icons-left">
-                        <input class="input is-medium" type="email" placeholder="Extra small" disabled value="Administrator" />
+                        <input class="input" type="email" placeholder="Extra small" disabled value="Administrátor" />
                         <span class="icon is-left">
                             <i class="mdi mdi-account-star-outline  "></i>
                         </span>
                     </div>
-                </div>
-                <div class="buttons">
-                    <button class="button is-info is-active">
-                        <i class="mdi mdi-grease-pencil mr-2"></i>
-                        Edit
-                    </button>
-                    <button class="button is-danger is-active">
-                        <i class="mdi mdi-delete mr-2"></i>
-                        Delete
-                    </button>
                 </div>
             </div>
         </div>
@@ -56,9 +39,14 @@
 </template>
 
 <script>
+import WindowTitle from "../../components/WindowTitle.vue";
+
 export default {
     data() {
         return {};
+    },
+    components: {
+        WindowTitle
     }
 };
 </script>
@@ -67,5 +55,22 @@ export default {
 #account-form .control.has-icons-left .icon,
 #account-form .control.has-icons-right .icon {
     color: #7a7a7a;
+}
+#account-form .columns {
+    margin-left: 0;
+}
+#account-form .input {
+    border: 1px solid #b8b8b8b3;
+}
+#account-form .account-info {
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    padding: 2em;
+    background-color: #fff;
+}
+#account-form .account-button button {
+    color: black;
+}
+#account-form .account-button button:hover {
+    background-color: hsl(48, 100%, 57%);
 }
 </style>

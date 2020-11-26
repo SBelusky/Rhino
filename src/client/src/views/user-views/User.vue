@@ -1,17 +1,17 @@
 <template>
     <div id="user-view">
-        <div class="columns">
-            <div class="column is-12">
-                <h1 class="testb title is-1 pb-2">Users</h1>
-            </div>
-        </div>
-        <div class="columns padding-in-content">
+        <window-title small-title="prehľad" big-title="Používatelia" />
+        <b-button class="is-success user-buttons" icon-left="mdi mdi-sticker-plus-outline">
+            Pridať používateľa
+        </b-button>
+        <div class="columns pt-4">
             <div class="column is-9">
                 <section>
                     <b-table
                         striped
                         hoverable
                         :data="data"
+                        :columns="columns"
                         :paginated="isPaginated"
                         :per-page="perPage"
                         :current-page="currentPage"
@@ -26,23 +26,15 @@
                         aria-page-label="Page"
                         aria-current-label="Current page"
                     >
-                        <b-table-column field="adas" label="Action" width="110">
-                            <a href="">
-                                <i class="far fa-eye has-text-info"></i>
-                            </a>
-                            <a href="">
-                                <i class="far fa-edit has-text-dark"></i>
-                            </a>
-                            <a href="">
-                                <i class="far fa-trash-alt has-text-danger"></i>
-                            </a>
+                        <b-table-column label="Akcie" width="200">
+                            <table-action-buttons view-link="" edit-link="" delete-link="" />
                         </b-table-column>
 
-                        <b-table-column field="id" label="ID" width="40" sortable v-slot="props">
+                        <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
                             {{ props.row.id }}
                         </b-table-column>
 
-                        <b-table-column field="name" label="Name" sortable v-slot="props">
+                        <b-table-column field="name" label="Meno" sortable v-slot="props">
                             {{ props.row.name }}
                         </b-table-column>
 
@@ -50,13 +42,17 @@
                             {{ props.row.email }}
                         </b-table-column>
 
-                        <b-table-column field="role" label="Role" sortable v-slot="props" v-bind:role="'role'">
+                        <b-table-column field="telephone" label="Telefón" sortable v-slot="props">
+                            {{ props.row.telephone_number }}
+                        </b-table-column>
+
+                        <b-table-column field="role" label="Rola" sortable v-slot="props" v-bind:role="'role'">
                             <span :class="classObject">
                                 {{ props.row.role }}
                             </span>
                         </b-table-column>
 
-                        <b-table-column field="created_at" label="Create time" sortable v-slot="props">
+                        <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
                             <span>
                                 {{ new Date(props.row.created_at).toLocaleDateString() }}
                             </span>
@@ -70,8 +66,14 @@
 
 <script>
 import axios from "axios";
+import TableActionButtons from "../../components/TableActionButtons.vue";
+import WindowTitle from "../../components/WindowTitle.vue";
 
 export default {
+    components: {
+        TableActionButtons,
+        WindowTitle
+    },
     data() {
         return {
             data: [],
@@ -82,11 +84,18 @@ export default {
             sortIcon: "arrow-up",
             sortIconSize: "is-small",
             currentPage: 1,
-            perPage: 20,
-            classObject: {
-                "tag is-success": true
-            }
+            perPage: 20
         };
+    },
+    computed: {
+        classObject: function() {
+            return {
+                /*  active: this.isActive && !this.error,
+                'text-danger': this.error && this.error.type === 'fatal' */
+
+                "tag admin": this.role === "Tester"
+            };
+        }
     },
     mounted() {
         axios.get("http://localhost:8080/api/user").then(response => (this.data = response.data));
@@ -98,19 +107,26 @@ export default {
 #user-view .b-table {
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
 }
-/* #user-view a {
-    color: black;
-} */
+#user-view .level.top {
+    max-height: 50px !important;
+}
 #user-view .b-table .is-unselectable,
 .table thead td,
 .table thead th {
-    background-color: rgba($color: #c2c7d0, $alpha: 0.7);
+    background-color: rgba(65, 88, 110, 0.7);
+    color: white !important;
 }
 #user-view .pagination {
     padding: 0.7em 2em 2em 1em;
 }
 #user-view .pagination-link.is-current {
-    background-color: #c2c7d0;
-    border-color: #c2c7d0;
+    background-color: rgba(65, 88, 110, 0.7);
+    border-color: rgba(65, 88, 110, 0.7);
+}
+#user-view .user-buttons {
+    color: black;
+}
+#user-view .user-buttons:hover {
+    background-color: hsl(141, 53%, 43%);
 }
 </style>

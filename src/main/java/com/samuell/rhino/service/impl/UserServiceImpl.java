@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
+                .filter(user -> !user.isWas_deleted())
                 .map(user -> userMapper.toUserDto(user))
                 .collect(Collectors.toList());
     }

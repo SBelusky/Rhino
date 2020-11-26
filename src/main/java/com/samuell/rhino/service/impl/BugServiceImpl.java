@@ -226,8 +226,8 @@ public class BugServiceImpl implements BugService {
     //-> Method return LogStatus from type in String
     private LogStatus setLogStatusFromString(String type){
         switch (type) {
-            case "Type":
-                return LogStatus.TYPE_CHANGE;
+            case "Status":
+                return LogStatus.STATUS_CHANGE;
             case "Priority":
                 return LogStatus.PRIORITY_CHANGE;
             case "Reproducibility":
