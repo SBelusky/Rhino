@@ -20,6 +20,7 @@ public class VersionController {
     }
 
     @GetMapping("/{projectId}/version")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllVersionsByProjectId(@PathVariable("projectId") Integer projectId) {
         List<VersionDto> versionDtoList = versionService.getAllVersionsByProjectId(projectId);
 
@@ -27,6 +28,7 @@ public class VersionController {
     }
 
     @GetMapping("/{projectId}/version/{versionId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getVersionById(@PathVariable("projectId") Integer projectId, @PathVariable("versionId") Integer versionId) {
         VersionDto versionDto = versionService.getVersionById(projectId,versionId);
 
@@ -39,6 +41,7 @@ public class VersionController {
     }
 
     @PostMapping("/{projectId}/version")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addVersion(@PathVariable("projectId") Integer projectId, @RequestBody VersionDto versionDto) {
         Version version = versionService.addVersion(projectId, versionDto);
 
@@ -51,6 +54,7 @@ public class VersionController {
     }
 
     @PostMapping("/{projectId}/version/{versionId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateVersion(@PathVariable("projectId") Integer projectId, @PathVariable("versionId") Integer versionId, @RequestBody VersionDto versionDto) {
         if(versionService.getVersionById(projectId, versionId) == null){
             return new ResponseEntity<>("Version not found",HttpStatus.PRECONDITION_FAILED);
@@ -63,6 +67,7 @@ public class VersionController {
     }
 
     @DeleteMapping("/{projectId}/version/{versionId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteVersion(@PathVariable("projectId") Integer projectId,@PathVariable("versionId") Integer versionId) {
         if(versionService.getVersionById(projectId,versionId) == null){
             return new ResponseEntity<>("Version not found",HttpStatus.NOT_FOUND);

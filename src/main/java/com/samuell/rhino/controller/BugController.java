@@ -41,6 +41,7 @@ public class BugController {
     }
 
     @GetMapping("/bug")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllBugsByProjectId(@PathVariable("projectId") Integer projectId) {
         List<BugDto> bugDtoList = bugService.getAllBugsByProjectId(projectId);
 
@@ -48,6 +49,7 @@ public class BugController {
     }
 
     @GetMapping("/bug/{bugId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getBugById(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         BugDto bugDto = bugService.getBugById(projectId,bugId);
 
@@ -60,6 +62,7 @@ public class BugController {
     }
 
     @PostMapping("/add/bug")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addBug(@PathVariable("projectId") Integer projectId, @RequestBody BugDto bugDto) {
         Bug bug = bugService.addBug(projectId, bugDto);
 
@@ -75,6 +78,7 @@ public class BugController {
     }
 
     @PostMapping("/edit/bug/{bugId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         //TEST
         entityManager.clear();
@@ -107,6 +111,7 @@ public class BugController {
     }
 
     @DeleteMapping("/delete/bug/{bugId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         if(bugService.getBugById(projectId,bugId) == null){
             return new ResponseEntity<>("Bug not found",HttpStatus.NOT_FOUND);

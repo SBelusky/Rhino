@@ -21,11 +21,12 @@ public class SpecificationServiceImpl implements SpecificationService {
     SpecificationMapper specificationMapper;
 
     @Override
-    public List<SpecificationDto> getAllSpecifications() {
+    public List<SpecificationDto> getAllSpecificationByType(String type) {
         return specificationRepository.findAll()
                 .stream()
                 .filter(specification ->
-                        !specification.isWas_deleted())
+                        !specification.isWas_deleted() &&
+                                specification.getType().equals(type))
                 .map(specification -> specificationMapper.toSpecificationDto(specification))
                 .collect(Collectors.toList());
     }

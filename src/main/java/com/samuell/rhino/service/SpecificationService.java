@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface SpecificationService {
     @Nullable
-    List<SpecificationDto> getAllSpecifications();
+    List<SpecificationDto> getAllSpecificationByType(String type);
 
     @Nullable
     SpecificationDto getSpecificationById(Integer specificationId);

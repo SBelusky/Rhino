@@ -1,7 +1,7 @@
 <template>
     <div class="window-title">
         <div class="columns">
-            <div class="column is-5 mb-6">
+            <div class="column is-5 mb-4">
                 <div class="title-block">
                     <h1 class="title is-1 pb-4 title-under-navBar">
                         <span class="small-title">{{ smallTitle }} | </span>{{ bigTitle }}

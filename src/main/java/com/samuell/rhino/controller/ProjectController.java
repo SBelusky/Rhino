@@ -27,6 +27,7 @@ public class ProjectController{
     }
 
     @GetMapping
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllProjects() {
         List<ProjectDto> projectDtoList = projectService.getAllProjects();
 
@@ -34,6 +35,7 @@ public class ProjectController{
     }
 
     @GetMapping("{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getProjectById(@PathVariable("id") Integer id) {
         ProjectDto projectDto = projectService.getProjectById(id);
 

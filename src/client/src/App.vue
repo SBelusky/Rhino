@@ -26,10 +26,10 @@ export default {
         MainMenu,
         Navbar,
         MyFooter
-    },
-    mounted() {
-        this.$root.$emit("project-change-handler", "All");
     }
+    /*     mounted() {
+        this.$root.$emit("project-change-handler", "1");
+    } */
 };
 </script>
 

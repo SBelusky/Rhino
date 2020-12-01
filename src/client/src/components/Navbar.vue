@@ -13,8 +13,8 @@
                         <div class="control" @change="projectChangeHandler()">
                             <div class="select">
                                 <select v-model="selected">
-                                    <option v-for="project in projects" :key="project">
-                                        {{ project }}
+                                    <option v-for="project in projects" :key="project.id" v-bind:value="project.id">
+                                        {{ project.name }}
                                     </option>
                                 </select>
                             </div>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="vertical-line"></div>
                 <div class="level-item">
-                    <b-button class="is-success" icon-left="mdi mdi-sticker-plus-outline">
+                    <b-button class="is-success" icon-left="mdi mdi-sticker-plus-outline icon-center">
                         Pridať bug
                     </b-button>
                 </div>
@@ -33,22 +33,30 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     data() {
         return {
-            selected: "",
+            selected: 1,
             isPublic: true,
-            projects: ["Všetky", "Rhino"]
+            projects: []
         };
     },
     methods: {
         projectChangeHandler() {
-            this.$root.$emit("project-change-handler", event.target.value);
-            this.$router.push("/" + event.target.value + "/bug");
+            this.$root.$emit("project-change-handler", this.selected);
+            this.$router.push("/www/project/" + this.selected + "/bug");
+            this.$router.go();
         }
     },
     mounted() {
         this.$root.$on("project-change-handler", data => (this.selected = data));
+        axios.get("http://localhost:8080/api/project").then(response => (this.projects = response.data));
+    },
+    updated() {
+        this.selected = this.$route.params.id;
+        this.$root.$emit("project-change-handler", this.selected);
     }
 };
 </script>

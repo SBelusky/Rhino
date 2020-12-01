@@ -5,10 +5,10 @@
             <p>Samuel Beluský</p>
         </div>
         <b-menu-list>
-            <router-link id="pm-zero" :to="'/' + projectUrl + '/bug'">
+            <router-link id="pm-zero" :to="'/www/project/' + projectUrl + '/bug'">
                 <b-menu-item
                     v-on:click="selected = 'bug'"
-                    v-bind:class="{ rip: selected == 'bug' }"
+                    v-bind:class="{ 'active-menu-item': selected == 'bug' }"
                     icon="bug"
                     icon-pack="fas"
                     label="Reporty"
@@ -19,21 +19,44 @@
                     Programátor
                     <i class="is-pulled-right" id="expand-icon" :class="props.expanded ? 'fas fa-minus' : 'fas fa-plus'"></i>
                 </template>
-                <b-menu-list label="Bug specification" />
-                <b-menu-item icon="list-ul" label="Category" icon-pack="fas"></b-menu-item>
-                <b-menu-item icon="sort-numeric-up-alt" label="Version" icon-pack="fas"></b-menu-item>
+                <b-menu-list label="Špecifikácia projektu" />
+                <router-link id="pm-zero" :to="'/www/project/' + projectUrl + '/category'">
+                    <b-menu-item
+                        icon="list-ul"
+                        icon-pack="fas"
+                        label="Kategórie"
+                        v-on:click="selected = 'category'"
+                        v-bind:class="{ 'active-menu-item': selected == 'category' }"
+                    ></b-menu-item>
+                </router-link>
+                <router-link id="pm-zero" :to="'/www/project/' + projectUrl + '/version'">
+                    <b-menu-item
+                        icon="sort-numeric-up-alt"
+                        icon-pack="fas"
+                        label="Verzie"
+                        v-on:click="selected = 'version'"
+                        v-bind:class="{ 'active-menu-item': selected == 'version' }"
+                    ></b-menu-item>
+                </router-link>
             </b-menu-item>
             <b-menu-item icon="user-tie" icon-pack="fas">
                 <template slot="label" slot-scope="props">
                     Administrátor
                     <i class="is-pulled-right" id="expand-icon" :class="props.expanded ? 'fas fa-minus' : 'fas fa-plus'"></i>
                 </template>
-                <b-menu-item icon="monitor-dashboard" label="Projekty" icon-pack="fas"></b-menu-item>
-
-                <router-link id="pm-zero" to="/user">
+                <router-link id="pm-zero" to="/www/project">
+                    <b-menu-item
+                        v-on:click="selected = 'project'"
+                        v-bind:class="{ 'active-menu-item': selected == 'project' }"
+                        icon="project-diagram"
+                        label="Projekty"
+                        icon-pack="fas"
+                    ></b-menu-item>
+                </router-link>
+                <router-link id="pm-zero" to="/www/user">
                     <b-menu-item
                         v-on:click="selected = 'user'"
-                        v-bind:class="{ rip: selected == 'user' }"
+                        v-bind:class="{ 'active-menu-item': selected == 'user' }"
                         icon="user-friends"
                         icon-pack="fas"
                         label="Používatelia"
@@ -41,11 +64,37 @@
                 </router-link>
 
                 <b-menu-list label="Špecifikácia projektov"> </b-menu-list>
-                <b-menu-item icon="alert-octagon-outline" label="Priorita" icon-pack="fas"></b-menu-item>
-                <b-menu-item icon="shape-outline" label="Typy" icon-pack="fas"></b-menu-item>
-                <b-menu-item icon="content-duplicate" label="Reprodukovateľnosť" icon-pack="fas"></b-menu-item>
+                <router-link id="pm-zero" to="/www/priority">
+                    <b-menu-item
+                        v-on:click="selected = 'priority'"
+                        v-bind:class="{ 'active-menu-item': selected == 'priority' }"
+                        icon="bolt"
+                        icon-pack="fas"
+                        label="Priority"
+                    >
+                    </b-menu-item>
+                </router-link>
+                <router-link id="pm-zero" to="/www/status">
+                    <b-menu-item
+                        v-on:click="selected = 'status'"
+                        v-bind:class="{ 'active-menu-item': selected == 'status' }"
+                        label="Statusy"
+                        icon="check-circle"
+                        icon-pack="fas"
+                    >
+                    </b-menu-item>
+                </router-link>
+                <router-link id="pm-zero" to="/www/reproducibility">
+                    <b-menu-item
+                        v-on:click="selected = 'reproducibility'"
+                        v-bind:class="{ 'active-menu-item': selected == 'reproducibility' }"
+                        label="Reprodukovateľnosti"
+                        icon="copy"
+                        icon-pack="fas"
+                    ></b-menu-item>
+                </router-link>
             </b-menu-item>
-            <router-link id="pm-zero" to="/account">
+            <router-link id="pm-zero" to="/www/account">
                 <b-menu-item
                     v-on:click="selected = 'account'"
                     v-bind:class="{ rip: selected == 'account' }"
@@ -145,7 +194,7 @@ export default {
 #main-menu .menu-label {
     color: #c2c7d0;
 }
-#main-menu .rip {
+#main-menu .active-menu-item {
     background-color: #494e53 !important;
 }
 </style>

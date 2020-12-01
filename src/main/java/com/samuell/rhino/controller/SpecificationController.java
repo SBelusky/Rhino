@@ -18,13 +18,15 @@ public class SpecificationController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getAllSpecifications() {
-        List<SpecificationDto> specificationDtoList = specificationService.getAllSpecifications();
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ResponseEntity<?> getAllSpecifications(@RequestParam(required = false) String type) {
+        List<SpecificationDto> specificationDtoList = specificationService.getAllSpecificationByType(type);
 
         return new ResponseEntity<>(specificationDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/{specificationId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getSpecificationById(@PathVariable("specificationId") Integer specificationId) {
         SpecificationDto specificationDto = specificationService.getSpecificationById(specificationId);
 
@@ -37,6 +39,7 @@ public class SpecificationController {
     }
 
     @PostMapping()
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addSpecification(@RequestBody SpecificationDto specificationDto) {
         Specification specification = specificationService.addSpecification(specificationDto);
 
@@ -49,6 +52,7 @@ public class SpecificationController {
     }
 
     @PostMapping("/{specificationId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateSpecification(@PathVariable("specificationId") Integer specificationId,@RequestBody SpecificationDto specificationDto) {
         if(specificationService.getSpecificationById(specificationId) == null){
             return new ResponseEntity<>("Specification not found",HttpStatus.PRECONDITION_FAILED);
@@ -61,6 +65,7 @@ public class SpecificationController {
     }
 
     @DeleteMapping("/{specificationId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteSpecification(@PathVariable("specificationId") Integer specificationId) {
         if(specificationService.getSpecificationById(specificationId) == null){
             return new ResponseEntity<>("Specification not found",HttpStatus.NOT_FOUND);

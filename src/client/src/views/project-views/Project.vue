@@ -1,8 +1,8 @@
 <template>
     <div id="data-table">
-        <window-title small-title="prehľad" big-title="Používatelia" />
+        <window-title small-title="prehľad" big-title="Projekty" />
         <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
-            Pridať používateľa
+            Pridať projekt
         </b-button>
         <div class="columns pt-4">
             <div class="column is-9">
@@ -26,29 +26,23 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons resource="user" :id="props.row.id" />
+                            <table-action-buttons resource="project" :id="props.row.id" />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
                             {{ props.row.id }}
                         </b-table-column>
 
-                        <b-table-column field="name" label="Meno" sortable v-slot="props">
+                        <b-table-column field="name" label="Názov" sortable v-slot="props">
                             {{ props.row.name }}
                         </b-table-column>
 
-                        <b-table-column field="email" label="E-mail" sortable v-slot="props">
-                            {{ props.row.email }}
+                        <b-table-column field="email" label="Popis" sortable v-slot="props">
+                            {{ props.row.description }}
                         </b-table-column>
 
-                        <b-table-column field="telephone" label="Telefón" sortable v-slot="props">
-                            {{ props.row.telephone_number }}
-                        </b-table-column>
-
-                        <b-table-column field="role" label="Rola" sortable v-slot="props" v-bind:role="'role'">
-                            <span :class="classObject(props.row.role)">
-                                {{ props.row.role }}
-                            </span>
+                        <b-table-column field="role" label="Priradení používatelia" sortable v-slot="props" v-bind:role="'role'">
+                            {{ props.row.user_has_projects.length }}
                         </b-table-column>
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
@@ -89,17 +83,8 @@ export default {
             perPage: 20
         };
     },
-    methods: {
-        classObject: function(role) {
-            return {
-                "tag admin": role === "Administrátor",
-                "tag tester": role === "Tester",
-                "tag programmer": role === "Programátor"
-            };
-        }
-    },
     mounted() {
-        axios.get("http://localhost:8080/api/user").then(response => (this.data = response.data));
+        axios.get("http://localhost:8080/api/project").then(response => (this.data = response.data));
     }
 };
 </script>

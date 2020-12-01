@@ -1,14 +1,54 @@
 .rhino {
     background-color: #f8ac01;
 }
+/*Nekategorizované štýly*/
 #pm-zero {
     margin: 0;
     padding: 0;
 }
 .tag.admin {
-    background-color: red;
+    background-color: #aed6f1;
 }
 .tag.programmer {
+    background-color: #82e0aa;
 }
 .tag.tester {
+    background-color: #f9e79f;
+}
+.form-section-title {
+    font-size: 1.3em;
+    max-width: 300px;
+    margin-bottom: 1em;
+    font-weight: bold;
+}
+.icon-center {
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+}
+/*Prehľadové tabuľky naprieč celou aplikáciou*/
+#data-table .b-table {
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+}
+#data-table .level.top {
+    max-height: 50px !important;
+}
+#data-table .b-table .is-unselectable,
+.table thead td,
+.table thead th {
+    background-color: rgba(65, 88, 110, 0.7);
+    color: white !important;
+}
+#data-table .pagination {
+    padding: 0.7em 2em 2em 1em;
+}
+#data-table .pagination-link.is-current {
+    background-color: rgba(65, 88, 110, 0.7);
+    border-color: rgba(65, 88, 110, 0.7);
+}
+#data-table .data-table-button {
+    color: black;
+}
+#data-table .data-table-button:hover {
+    background-color: hsl(141, 53%, 43%);
 }

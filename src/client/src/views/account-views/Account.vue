@@ -1,9 +1,6 @@
 <template>
     <div id="account-form">
         <window-title small-title="môj účet" big-title="Samuel Beluský" />
-        <div class="account-button pb-2">
-            <button class="button is-warning"><i class="far fa-edit"></i>Editovať</button>
-        </div>
         <div class="columns pt-4">
             <div class="column is-5 account-info">
                 <div class="field">
@@ -18,7 +15,7 @@
                 <div class="field">
                     <label class="label">Telefónne číslo:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="email" placeholder="Extra small" disabled value="+421 948 775 092" />
+                        <input class="input" type="text" placeholder="Extra small" disabled value="+421 948 775 092" />
                         <span class="icon is-left">
                             <i class="mdi mdi-cellphone"></i>
                         </span>
@@ -27,13 +24,16 @@
                 <div class="field">
                     <label class="label">Rola:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="email" placeholder="Extra small" disabled value="Administrátor" />
+                        <input class="input" type="text" placeholder="Extra small" disabled value="Administrátor" />
                         <span class="icon is-left">
-                            <i class="mdi mdi-account-star-outline  "></i>
+                            <i class="mdi mdi-account-star-outline"></i>
                         </span>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="account-button pb-2">
+            <button class="button is-warning"><i class="far fa-edit icon-center"></i>Editovať</button>
         </div>
     </div>
 </template>

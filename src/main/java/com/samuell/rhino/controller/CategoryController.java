@@ -22,6 +22,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{projectId}/category")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllCategoriesByProjectId(@PathVariable("projectId") Integer projectId) {
         List<CategoryDto> categoryDtoList = categoryService.getAllCategoriesByProjectId(projectId);
 
@@ -29,6 +30,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{projectId}/category/{categoryId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getCategoryById(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId) {
         CategoryDto categoryDto = categoryService.getCategoryById(projectId, categoryId);
 
@@ -41,6 +43,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{projectId}/category")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addCategory(@PathVariable("projectId") Integer projectId, @RequestBody CategoryDto categoryDto) {
         Category category = categoryService.addCategory(projectId, categoryDto);
 
@@ -53,6 +56,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{projectId}/category/{categoryId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateCategory(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId, @RequestBody CategoryDto categoryDto) {
         if(categoryService.getCategoryById(projectId, categoryId) == null){
             return new ResponseEntity<>("Category not found",HttpStatus.PRECONDITION_FAILED);
@@ -65,6 +69,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{projectId}/category/{categoryId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteCategory(@PathVariable("projectId") Integer projectId,@PathVariable("categoryId") Integer categoryId) {
         if(categoryService.getCategoryById(projectId, categoryId) == null){
             return new ResponseEntity<>("Version not found",HttpStatus.NOT_FOUND);
