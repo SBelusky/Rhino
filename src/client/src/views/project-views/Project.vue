@@ -1,9 +1,11 @@
 <template>
     <div id="data-table">
-        <window-title small-title="prehľad" big-title="Projekty" />
-        <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
-            Pridať projekt
-        </b-button>
+        <window-title small-title="| prehľad evidencie" big-title="Projekty" />
+        <router-link id="pm-zero" :to="`/admin/add/project`">
+            <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
+                Pridať projekt
+            </b-button>
+        </router-link>
         <div class="columns pt-4">
             <div class="column is-9">
                 <section>

@@ -1,11 +1,15 @@
 .rhino {
     background-color: #f8ac01;
 }
-/*Nekategorizované štýly*/
+/*Nekategorizované (pomocné) štýly*/
 #pm-zero {
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
 }
+#additional_info {
+    color: rgba(0, 0, 0, 0.3) !important;
+}
+
 .tag.admin {
     background-color: #aed6f1;
 }
@@ -51,4 +55,91 @@
 }
 #data-table .data-table-button:hover {
     background-color: hsl(141, 53%, 43%);
+}
+/*Formulár v režíme editácie/detailu/pridávania naprieč celou aplikáciou*/
+::placeholder {
+    color: black !important;
+    opacity: 0.4 !important;
+}
+#form-view .form-info {
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    padding: 2em;
+    background-color: #fff;
+    display: block !important;
+    margin-left: 12px;
+}
+#form-view .form-view-button button {
+    color: black;
+    border: none;
+}
+#form-view .form-view-button button:nth-child(1) {
+    background-color: #5199e4;
+}
+#form-view .form-view-button button:nth-child(1):hover {
+    background-color: hsl(211, 73%, 51%);
+}
+#form-view .form-view-button button:nth-child(2):hover {
+    background-color: hsl(141, 53%, 43%);
+}
+#form-view .form-view-button button:focus {
+    box-shadow: none;
+    border: none;
+}
+#form-view input:focus,
+#form-view textarea:focus,
+#form-view .multi-select:focus {
+    box-shadow: 0 0 5px rgba(166, 198, 239, 1) !important;
+}
+#form-view .multiselect {
+    border-radius: 4px !important;
+    opacity: 1;
+}
+#form-view .multiselect__content-wrapper {
+    border: 1px solid #b8b8b8b3 !important;
+}
+#form-view .multiselect__tags {
+    border-radius: 3px !important;
+    border: 0px;
+}
+#form-view .control.has-icons-left .icon,
+#form-view .control.has-icons-right .icon {
+    color: #7a7a7a;
+}
+#form-view .input,
+#form-view .multi-select-detail,
+#form-view textarea {
+    border: 1px solid #b8b8b8b3 !important;
+    color: black;
+}
+#form-view .multi-select-detail .multiselect__select,
+#form-view .multi-select-detail .multiselect__tags,
+#form-view .multi-select-detail .multiselect__single {
+    background-color: whitesmoke;
+    color: black;
+    pointer-events: auto;
+    cursor: not-allowed;
+}
+#form-view .multiselect__option--highlight:after {
+    font-weight: bold !important;
+}
+#form-view .multiselect__option--highlight,
+#form-view .multiselect__option--highlight:after {
+    background: #f3f3f3 !important;
+    color: black;
+}
+
+#form-view .multi-select {
+    color: black;
+    border: 1px solid #b8b8b8b3 !important;
+}
+
+#form-view .multiselect__tag-icon {
+    top: -1px;
+}
+#form-view .color-picker .vue-swatches__trigger {
+    width: 82px !important;
+    height: 30px !important;
+    margin: 0 !important;
+    position: absolute !important;
+    top: -13% !important;
 }

@@ -1,6 +1,6 @@
 <template>
     <div id="data-table">
-        <window-title small-title="prehľad" big-title="Kategórie" />
+        <window-title small-title="| prehľad evidencie" big-title="Kategórie" />
         <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
             Pridať kategóriu
         </b-button>

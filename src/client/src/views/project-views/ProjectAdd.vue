@@ -1,18 +1,12 @@
 <template>
     <div id="form-view">
-        <window-title small-title="| detail" :big-title="data.name" />
+        <window-title small-title="| pridanie projektu" big-title="Nový záznam" />
         <div class="columns pt-4">
             <div class="column is-5 form-info">
                 <div class="field">
                     <label class="label">Názov:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="Extra small"
-                            :disabled="type == 'detail'"
-                            :value="data.name"
-                        />
+                        <input class="input" type="text" placeholder="Netflix" />
                         <span class="icon is-left">
                             <i class="mdi mdi-tag"></i>
                         </span>
@@ -21,22 +15,13 @@
                 <div class="field">
                     <label class="label">Popis:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="Extra small"
-                            :disabled="type == 'detail'"
-                            :value="data.description"
-                        />
-                        <span class="icon is-left">
-                            <i class="mdi mdi-lead-pencil"></i>
-                        </span>
+                        <textarea class="textarea" placeholder="Bližšie informácie o projekte..."> </textarea>
                     </div>
                 </div>
                 <div class="skuska">
                     <label class="typo__label label">Priradení používatelia: </label>
                     <multiselect
-                        :class="type == 'detail' ? 'multi-select-detail' : 'multi-select'"
+                        class="multi-select"
                         :searchable="false"
                         :close-on-select="false"
                         label="name"
@@ -50,13 +35,17 @@
                         :multiple="true"
                         :taggable="true"
                         @tag="addTag"
-                        :disabled="type == 'detail'"
                     ></multiselect>
                 </div>
             </div>
         </div>
         <div class="form-view-button pb-2">
-            <button class="button" v-on:click="$router.back()"><i class="fas fa-long-arrow-alt-left icon-center"></i>Späť</button>
+            <button class="button mr-3" v-on:click="$router.back()">
+                <i class="fas fa-long-arrow-alt-left icon-center"></i>Späť
+            </button>
+            <button class="button is-success" v-on:click="$router.back()">
+                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
+            </button>
         </div>
     </div>
 </template>
@@ -77,15 +66,10 @@ export default {
             allUsers: [],
             arrayOfPreselectedUsers: [],
             value: null,
-            options: null,
-            type: this.$route.params.type
+            options: null
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/detail/project/" + this.$route.params.id).then(response => {
-            this.data = response.data;
-            this.pickSelectedUsers();
-        });
         axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
     },
     methods: {
@@ -96,11 +80,6 @@ export default {
             };
             this.options.push(tag);
             this.value.push(tag);
-        },
-        pickSelectedUsers() {
-            for (let i = 0; i < this.data.user_has_projects.length; i++) {
-                this.arrayOfPreselectedUsers.push(this.data.user_has_projects[i].user);
-            }
         }
     }
 };

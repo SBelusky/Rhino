@@ -1,6 +1,6 @@
 <template>
     <div id="data-table">
-        <window-title small-title="prehľad" big-title="Verzie" />
+        <window-title small-title="| prehľad evidencie" big-title="Verzie" />
         <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
             Pridať verziu
         </b-button>

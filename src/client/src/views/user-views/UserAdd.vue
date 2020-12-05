@@ -1,21 +1,12 @@
 <template>
     <div id="form-view">
-        <window-title
-            :small-title="type == 'detail' ? '| detail používateľa' : '| editácia používateľa'"
-            :big-title="data.name"
-        />
+        <window-title small-title="| pridanie používateľa" big-title="Nový záznam" />
         <div class="columns pt-1">
             <div class="column is-5 form-info">
                 <div class="field">
                     <label class="label">Meno:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="Jožko Mrkvička"
-                            :disabled="type == 'detail'"
-                            :value="data.name"
-                        />
+                        <input class="input" type="text" placeholder="Jožko Mrkvička" />
                         <span class="icon is-left">
                             <i class="mdi mdi-account-circle"></i>
                         </span>
@@ -24,13 +15,7 @@
                 <div class="field">
                     <label class="label">E-mail:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="jozko.mrkvicka@gmail.com"
-                            :disabled="type == 'detail'"
-                            :value="data.email"
-                        />
+                        <input class="input" type="text" placeholder="jozko.mrkvicka@gmail.com" />
                         <span class="icon is-left">
                             <i class="mdi mdi-at"></i>
                         </span>
@@ -39,32 +24,24 @@
                 <div class="field">
                     <label class="label">Telefónne číslo:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="+421 999 888 777"
-                            :disabled="type == 'detail'"
-                            :value="data.telephone_number"
-                        />
+                        <input class="input" type="text" placeholder="+421 999 888 777" />
                         <span class="icon is-left">
                             <i class="mdi mdi-cellphone"></i>
                         </span>
                     </div>
                 </div>
-
-                <label class="label">Rola:</label>
-                <multiselect
-                    v-model="data.role"
-                    :options="options"
-                    :searchable="false"
-                    :close-on-select="true"
-                    :show-labels="false"
-                    :disabled="type == 'detail'"
-                    placeholder="Výber role"
-                    :allow-empty="false"
-                    :class="type == 'detail' ? 'multi-select-detail' : 'multi-select'"
-                >
-                </multiselect>
+                <div class="field">
+                    <label class="label">Rola:</label>
+                    <multiselect
+                        v-model="data.role"
+                        :options="options"
+                        :searchable="false"
+                        :close-on-select="true"
+                        :show-labels="false"
+                        placeholder="Výber role"
+                        class="multi-select"
+                    ></multiselect>
+                </div>
             </div>
         </div>
         <div class="columns pt-4">
@@ -73,13 +50,7 @@
                 <div class="field">
                     <label class="label">Login:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="login"
-                            :disabled="type == 'detail'"
-                            :value="data.login_name"
-                        />
+                        <input class="input" type="text" placeholder="login" />
                         <span class="icon is-left">
                             <i class="mdi mdi-lock"></i>
                         </span>
@@ -88,13 +59,7 @@
                 <div class="field">
                     <label class="label">Heslo:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="password"
-                            placeholder="*********"
-                            :disabled="type == 'detail'"
-                            :value="data.login_password"
-                        />
+                        <input class="input" type="password" placeholder="*********" />
                         <span class="icon is-left">
                             <i class="mdi mdi-key"></i>
                         </span>
@@ -106,7 +71,7 @@
             <button class="button mr-3" v-on:click="$router.back()">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Späť
             </button>
-            <button v-if="type == 'edit'" class="button is-success" v-on:click="$router.back()">
+            <button class="button is-success" v-on:click="$router.back()">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
             </button>
         </div>
@@ -126,12 +91,8 @@ export default {
     data() {
         return {
             data: [],
-            type: this.$route.params.type,
             options: ["Administrátor", "Programátor", "Tester"]
         };
-    },
-    mounted() {
-        axios.get("http://localhost:8080/api/detail/user/" + this.$route.params.id).then(response => (this.data = response.data));
     }
 };
 </script>

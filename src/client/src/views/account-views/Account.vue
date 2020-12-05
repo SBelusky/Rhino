@@ -1,6 +1,6 @@
 <template>
     <div id="account-form">
-        <window-title small-title="môj účet" big-title="Samuel Beluský" />
+        <window-title small-title="| detail účtu" big-title="Samuel Beluský" />
         <div class="columns pt-4">
             <div class="column is-5 account-info">
                 <div class="field">
@@ -31,9 +31,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="account-button pb-2">
-            <button class="button is-warning"><i class="far fa-edit icon-center"></i>Editovať</button>
         </div>
     </div>
 </template>

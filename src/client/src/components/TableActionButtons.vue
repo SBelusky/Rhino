@@ -1,26 +1,35 @@
 <template>
-    <div id="action-buttons">
-        <div class="action-button-container">
-            <router-link id="pm-zero" :to="`/www/${resource}/${id}`">
-                <i class="far fa-eye has-text-dark icon-center"></i>
-            </router-link>
-        </div>
-        <div class="action-button-container">
-            <router-link id="pm-zero" :to="`/www/edit/${resource}/${id}`">
-                <i class="far fa-edit has-text-dark icon-center"></i>
-            </router-link>
-        </div>
-        <div class="action-button-container">
-            <router-link id="pm-zero" :to="`/www/delete/${resource}/${id}`">
-                <i class="far fa-trash-alt has-text-dark icon-center"></i>
-            </router-link>
-        </div>
+  <div id="action-buttons">
+    <div class="action-button-container">
+      <router-link
+        id="pm-zero"
+        :to="`/admin/detail/${resource}/${id}`"
+      >
+        <i class="far fa-eye has-text-dark icon-center"></i>
+      </router-link>
     </div>
+    <div class="action-button-container">
+      <router-link
+        id="pm-zero"
+        :to="`/admin/edit/${resource}/${id}`"
+      >
+        <i class="far fa-edit has-text-dark icon-center"></i>
+      </router-link>
+    </div>
+    <div class="action-button-container">
+      <router-link
+        id="pm-zero"
+        :to="`/admin/delete/${resource}/${id}`"
+      >
+        <i class="far fa-trash-alt has-text-dark icon-center"></i>
+      </router-link>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: ["resource", "id"]
+    props: ["resource", "id"],
 };
 </script>
 

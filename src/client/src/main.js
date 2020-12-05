@@ -9,6 +9,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "vue-multiselect/dist/vue-multiselect.min.css";
+import "vue-swatches/dist/vue-swatches.css";
 
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;

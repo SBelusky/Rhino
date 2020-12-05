@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/project")
+@RequestMapping("api/")
 public class ProjectController{
     @Autowired
     ProjectMapper projectMapper;
@@ -26,7 +26,7 @@ public class ProjectController{
         this.projectRepository = projectRepository;
     }
 
-    @GetMapping
+    @GetMapping("project")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllProjects() {
         List<ProjectDto> projectDtoList = projectService.getAllProjects();
@@ -34,7 +34,7 @@ public class ProjectController{
         return new ResponseEntity<>(projectDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("detail/project/{id}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getProjectById(@PathVariable("id") Integer id) {
         ProjectDto projectDto = projectService.getProjectById(id);
@@ -47,7 +47,8 @@ public class ProjectController{
         }
     }
 
-    @PostMapping
+    @PostMapping("add/project")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addProject(@RequestBody ProjectDto projectDto) {
         Project project = projectService.addProject(projectDto);
 
@@ -59,7 +60,8 @@ public class ProjectController{
         }
     }
 
-    @PostMapping("edit/{id}")
+    @PostMapping("edit/project/{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateProject(@PathVariable("id") Integer id, @RequestBody ProjectDto projectDto) {
         projectRepository.deleteUsers(id);
 
@@ -73,7 +75,8 @@ public class ProjectController{
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/project/{id}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteProject(@PathVariable("id") Integer id) {
         if(projectService.getProjectById(id) == null){
             return new ResponseEntity<>("Project not found",HttpStatus.NOT_FOUND);

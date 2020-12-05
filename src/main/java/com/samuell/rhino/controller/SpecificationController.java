@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/specification")
+@RequestMapping("api/")
 public class SpecificationController {
     private final SpecificationService specificationService;
 
@@ -17,7 +17,7 @@ public class SpecificationController {
         this.specificationService = specificationService;
     }
 
-    @GetMapping()
+    @GetMapping("specification")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllSpecifications(@RequestParam(required = false) String type) {
         List<SpecificationDto> specificationDtoList = specificationService.getAllSpecificationByType(type);
@@ -25,7 +25,7 @@ public class SpecificationController {
         return new ResponseEntity<>(specificationDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/{specificationId}")
+    @GetMapping("detail/specification/{specificationId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getSpecificationById(@PathVariable("specificationId") Integer specificationId) {
         SpecificationDto specificationDto = specificationService.getSpecificationById(specificationId);
@@ -38,7 +38,7 @@ public class SpecificationController {
         }
     }
 
-    @PostMapping()
+    @PostMapping("add/specification")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addSpecification(@RequestBody SpecificationDto specificationDto) {
         Specification specification = specificationService.addSpecification(specificationDto);
@@ -51,7 +51,7 @@ public class SpecificationController {
         }
     }
 
-    @PostMapping("/{specificationId}")
+    @PostMapping("edit/specification/{specificationId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateSpecification(@PathVariable("specificationId") Integer specificationId,@RequestBody SpecificationDto specificationDto) {
         if(specificationService.getSpecificationById(specificationId) == null){
@@ -64,7 +64,7 @@ public class SpecificationController {
         }
     }
 
-    @DeleteMapping("/{specificationId}")
+    @DeleteMapping("delete/specification/{specificationId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteSpecification(@PathVariable("specificationId") Integer specificationId) {
         if(specificationService.getSpecificationById(specificationId) == null){

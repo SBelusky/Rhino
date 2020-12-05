@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/")
 public class UserController {
 
     private final UserService userService;
@@ -19,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("user")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllUsers() {
         List<UserDto> usersDtoList = userService.getAllUsers();
@@ -27,7 +27,7 @@ public class UserController {
         return new ResponseEntity<>(usersDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("detail/user/{id}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getUserById(@PathVariable("id") Integer id) {
         UserDto userDto = userService.getUserById(id);
@@ -53,7 +53,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("edit/{id}")
+    @PostMapping("edit/user/{id}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateUser(@PathVariable("id") Integer id, @RequestBody UserDto userDto) {
         if(userService.getUserById(id) == null){
@@ -66,7 +66,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/user/{id}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
 

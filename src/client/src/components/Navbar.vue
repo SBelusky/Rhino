@@ -1,35 +1,45 @@
 <template>
-    <div id="nav-bar">
-        <nav class="level">
-            <div class="level-left">
-                <div class="main-logo">
-                    <img src="../assets/img/rhino_logo.png" />
-                </div>
+  <div id="nav-bar">
+    <nav class="level">
+      <div class="level-left">
+        <div class="main-logo">
+          <img src="../assets/img/rhino_logo.png" />
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <span class="change-project-text">Aktuálny projekt:</span>
+          <div class="field">
+            <div
+              class="control"
+              @change="projectChangeHandler()"
+            >
+              <div class="select">
+                <select v-model="selected">
+                  <option
+                    v-for="project in projects"
+                    :key="project.id"
+                    v-bind:value="project.id"
+                  >
+                    {{ project.name }}
+                  </option>
+                </select>
+              </div>
             </div>
-            <div class="level-right">
-                <div class="level-item">
-                    <span class="change-project-text">Aktuálny projekt:</span>
-                    <div class="field">
-                        <div class="control" @change="projectChangeHandler()">
-                            <div class="select">
-                                <select v-model="selected">
-                                    <option v-for="project in projects" :key="project.id" v-bind:value="project.id">
-                                        {{ project.name }}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="vertical-line"></div>
-                <div class="level-item">
-                    <b-button class="is-success" icon-left="mdi mdi-sticker-plus-outline icon-center">
-                        Pridať bug
-                    </b-button>
-                </div>
-            </div>
-        </nav>
-    </div>
+          </div>
+        </div>
+        <div class="vertical-line"></div>
+        <div class="level-item">
+          <b-button
+            class="is-success"
+            icon-left="mdi mdi-sticker-plus-outline icon-center"
+          >
+            Pridať bug
+          </b-button>
+        </div>
+      </div>
+    </nav>
+  </div>
 </template>
 
 <script>
@@ -40,24 +50,24 @@ export default {
         return {
             selected: 1,
             isPublic: true,
-            projects: []
+            projects: [],
         };
     },
     methods: {
         projectChangeHandler() {
             this.$root.$emit("project-change-handler", this.selected);
-            this.$router.push("/www/project/" + this.selected + "/bug");
+            this.$router.push("/admin/project/" + this.selected + "/bug");
             this.$router.go();
-        }
+        },
     },
     mounted() {
-        this.$root.$on("project-change-handler", data => (this.selected = data));
-        axios.get("http://localhost:8080/api/project").then(response => (this.projects = response.data));
+        this.$root.$on("project-change-handler", (data) => (this.selected = data));
+        axios.get("http://localhost:8080/api/project").then((response) => (this.projects = response.data));
     },
     updated() {
         this.selected = this.$route.params.id;
         this.$root.$emit("project-change-handler", this.selected);
-    }
+    },
 };
 </script>
 
