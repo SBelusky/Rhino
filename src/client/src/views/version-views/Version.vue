@@ -1,9 +1,11 @@
 <template>
     <div id="data-table">
         <window-title small-title="| prehľad evidencie" big-title="Verzie" />
-        <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
-            Pridať verziu
-        </b-button>
+        <router-link id="pm-zero" :to="`/admin/project/` + projectId + `/add/version`">
+            <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
+                Pridať verziu
+            </b-button>
+        </router-link>
         <div class="columns pt-4">
             <div class="column is-9">
                 <section>
@@ -26,7 +28,7 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons :resource="'project/' + projectId + '/version'" :id="props.row.id" />
+                            <table-action-buttons resource="version" :id="props.row.id" :project="'project/' + projectId + '/'" />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">

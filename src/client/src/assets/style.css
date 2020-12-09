@@ -1,6 +1,12 @@
 .rhino {
     background-color: #f8ac01;
 }
+.back-button-color {
+    background-color: #5199e4;
+}
+.back-button-color:hover {
+    background-color: hsl(211, 73%, 51%);
+}
 /*Nekategorizované (pomocné) štýly*/
 #pm-zero {
     margin: 0 !important;
@@ -9,7 +15,12 @@
 #additional_info {
     color: rgba(0, 0, 0, 0.3) !important;
 }
-
+.bbutton-remove-style {
+    border: none !important;
+}
+.bbutton-remove-style:focus {
+    box-shadow: none !important;
+}
 .tag.admin {
     background-color: #aed6f1;
 }
@@ -38,11 +49,18 @@
     max-height: 50px !important;
 }
 #data-table .b-table .is-unselectable,
-.table thead td,
-.table thead th {
+#data-table .table thead td,
+#data-table .table thead th {
     background-color: rgba(65, 88, 110, 0.7);
     color: white !important;
+    border-width: 0 0 4px;
 }
+#data-table .b-table .table th.is-current-sort,
+#data-table .b-table .table thead th:hover {
+    border-color: #5199e4;
+    font-weight: 600;
+}
+
 #data-table .pagination {
     padding: 0.7em 2em 2em 1em;
 }
@@ -56,6 +74,7 @@
 #data-table .data-table-button:hover {
     background-color: hsl(141, 53%, 43%);
 }
+
 /*Formulár v režíme editácie/detailu/pridávania naprieč celou aplikáciou*/
 ::placeholder {
     color: black !important;
@@ -142,4 +161,7 @@
     margin: 0 !important;
     position: absolute !important;
     top: -13% !important;
+}
+#form-view .invalid-field {
+    border-color: red !important;
 }

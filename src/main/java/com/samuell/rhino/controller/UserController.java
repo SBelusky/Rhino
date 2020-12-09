@@ -1,5 +1,6 @@
 package com.samuell.rhino.controller;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.User;
 import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.service.UserService;
@@ -7,12 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
 
 @RestController
 @RequestMapping("api/")
 public class UserController {
-
+    Matcher matcher;
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -40,15 +45,17 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping("add/user")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addUser(@RequestBody UserDto userDto) {
-        User user = userService.addUser(userDto);
+        Map<String,String> errors = userService.validateUser(userDto);
 
-        if(user == null){
-            return new ResponseEntity<>("Error while creating user",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
+            User user = userService.addUser(userDto);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("User created with ID: "+ user.getId());
         }
     }
@@ -56,8 +63,10 @@ public class UserController {
     @PostMapping("edit/user/{id}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateUser(@PathVariable("id") Integer id, @RequestBody UserDto userDto) {
-        if(userService.getUserById(id) == null){
-            return new ResponseEntity<>("User not found",HttpStatus.PRECONDITION_FAILED);
+        Map<String,String> errors = userService.validateUser(userDto);
+
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
             User user = userService.updateUser(id,userDto);

@@ -1,12 +1,24 @@
 <template>
     <div id="data-table">
         <window-title small-title="| prehľad evidencie" big-title="Používatelia" resource="user" />
-        <router-link id="pm-zero" :to="`/admin/add/user`">
-            <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
-                Pridať používateľa
-            </b-button>
-        </router-link>
-        <div class="columns pt-4">
+        <div class="columns">
+            <div class="column is-9 pt-0 pb-0">
+                <div class="level">
+                    <div class="level-left">
+                        <router-link id="pm-zero" :to="`/admin/add/user`">
+                            <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
+                                Pridať používateľa
+                            </b-button>
+                        </router-link>
+                    </div>
+                    <div class="level-right">
+                        <export-data-to-xls :jsonData="data" :jsonFields="jsonFields" fileName="pouzivatelia" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns pt-1">
             <div class="column is-9">
                 <section>
                     <b-table
@@ -28,7 +40,7 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons resource="user" :id="props.row.id" />
+                            <table-action-buttons resource="user" :id="props.row.id" project="" />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
@@ -53,9 +65,14 @@
                             </span>
                         </b-table-column>
 
-                        <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
+                        <b-table-column field="created_at" label="Vytvorený" sortable v-slot="props">
                             <span>
-                                {{ new Date(props.row.created_at).toLocaleDateString() }}
+                                {{ dateFormater(props.row.created_at) }}
+                            </span>
+                        </b-table-column>
+                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
+                            <span>
+                                {{ dateFormater(props.row.edited_at) }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">
@@ -72,11 +89,13 @@
 import axios from "axios";
 import TableActionButtons from "../../components/TableActionButtons.vue";
 import WindowTitle from "../../components/WindowTitle.vue";
+import ExportDataToXls from "../../components/ExportDataToXls.vue";
 
 export default {
     components: {
         TableActionButtons,
-        WindowTitle
+        WindowTitle,
+        ExportDataToXls
     },
     data() {
         return {
@@ -88,7 +107,18 @@ export default {
             sortIcon: "arrow-up",
             sortIconSize: "is-small",
             currentPage: 1,
-            perPage: 20
+            perPage: 20,
+            jsonFields: {
+                ID: "id",
+                Meno: "name",
+                "E-mail": "email",
+                "Telefónne číslo": "telephone_number",
+                "Prihlasovacie meno": "login_name",
+                "Prihlasovacie heslo": "login_password",
+                Rola: "role",
+                Vytvorený: "created_at",
+                Editovaný: "edited_at"
+            }
         };
     },
     methods: {
@@ -98,6 +128,13 @@ export default {
                 "tag tester": role === "Tester",
                 "tag programmer": role === "Programátor"
             };
+        },
+        dateFormater(date) {
+            if (date == null) {
+                return "";
+            } else {
+                return new Date(date).toLocaleString();
+            }
         }
     },
     mounted() {

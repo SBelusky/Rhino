@@ -28,7 +28,7 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons resource="status" :id="props.row.id" />
+                            <table-action-buttons resource="status" :id="props.row.id" project="" />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">

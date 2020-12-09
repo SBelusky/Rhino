@@ -3,7 +3,7 @@
         <div class="columns">
             <div class="column is-5">
                 <div class="title-block">
-                    <h1 class="title is-1 pb-4 title-under-navBar">
+                    <h1 class="title is-1 pb-1 title-under-navBar">
                         {{ bigTitle }}<span class="small-title"> {{ smallTitle }} </span>
                     </h1>
                 </div>
@@ -19,12 +19,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import url("https://fonts.googleapis.com/css?family=Raleway:200");
+
 .window-title .title-block {
-    /* background-color: rgb(122, 138, 153); */
     padding-bottom: 1em;
-    margin-bottom: 1em;
-    border-bottom: 2px solid #41586e;
-    /* max-width: 1000px; */
+    margin-bottom: 2em;
+    border-bottom: 4px solid #5199e4;
 }
 .title-under-navBar {
     color: black;

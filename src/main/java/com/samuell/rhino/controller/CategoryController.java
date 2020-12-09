@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/project/")
+@RequestMapping("api/project/{projectId}/")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
@@ -21,7 +21,7 @@ public class CategoryController {
         this.categoryRepository = categoryRepository;
     }
 
-    @GetMapping("/{projectId}/category")
+    @GetMapping("category")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllCategoriesByProjectId(@PathVariable("projectId") Integer projectId) {
         List<CategoryDto> categoryDtoList = categoryService.getAllCategoriesByProjectId(projectId);
@@ -29,7 +29,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/{projectId}/category/{categoryId}")
+    @GetMapping("detail/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getCategoryById(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId) {
         CategoryDto categoryDto = categoryService.getCategoryById(projectId, categoryId);
@@ -42,7 +42,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("/{projectId}/category")
+    @PostMapping("add/category")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addCategory(@PathVariable("projectId") Integer projectId, @RequestBody CategoryDto categoryDto) {
         Category category = categoryService.addCategory(projectId, categoryDto);
@@ -55,7 +55,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("/{projectId}/category/{categoryId}")
+    @PostMapping("edit/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateCategory(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId, @RequestBody CategoryDto categoryDto) {
         if(categoryService.getCategoryById(projectId, categoryId) == null){
@@ -68,7 +68,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("/{projectId}/category/{categoryId}")
+    @DeleteMapping("delete/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteCategory(@PathVariable("projectId") Integer projectId,@PathVariable("categoryId") Integer categoryId) {
         if(categoryService.getCategoryById(projectId, categoryId) == null){

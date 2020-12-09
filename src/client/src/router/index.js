@@ -33,9 +33,13 @@ import ReproducibilityDetail from "../views/reproducibility-views/Reproducibilit
 import ReproducibilityAdd from "../views/reproducibility-views/ReproducibilityAdd.vue";
 //Category
 import Category from "../views/category-views/Category.vue";
+import CategoryDetail from "../views/category-views/CategoryDetail.vue";
+import CategoryAdd from "../views/category-views/CategoryAdd.vue";
 
 //Version
 import Version from "../views/version-views/Version.vue";
+import VersionDetail from "../views/version-views/VersionDetail.vue";
+import VersionAdd from "../views/version-views/VersionAdd.vue";
 
 Vue.use(VueRouter);
 
@@ -121,13 +125,29 @@ const routes = [
     },
     //Category
     {
-        path: "/admin/project/:id/category",
+        path: "/admin/project/:projectId/category",
         component: Category
+    },
+    {
+        path: "/admin/project/:projectId/:type/category/:id",
+        component: CategoryDetail
+    },
+    {
+        path: "/admin/project/:projectId/add/category",
+        component: CategoryAdd
     },
     //Version
     {
         path: "/admin/project/:id/version",
         component: Version
+    },
+    {
+        path: "/admin/project/:projectId/:type/version/:id",
+        component: VersionDetail
+    },
+    {
+        path: "/admin/project/:projectId/add/version",
+        component: VersionAdd
     }
 ];
 /* router.resolve({ name: "type", params: { type: ["edit", "detail"] } }).href; */

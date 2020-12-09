@@ -10,11 +10,14 @@ import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import "vue-swatches/dist/vue-swatches.css";
+import JsonExcel from "vue-json-excel";
+
+Vue.component("downloadExcel", JsonExcel);
+Vue.use(Buefy);
+require("@/assets/style.css");
 
 Vue.config.productionTip = false;
 Vue.prototype.$http = axios;
-Vue.use(Buefy);
-require("@/assets/style.css");
 
 new Vue({
     router,

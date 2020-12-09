@@ -4,43 +4,77 @@
         <div class="columns pt-1">
             <div class="column is-5 form-info">
                 <div class="field">
-                    <label class="label">Meno:</label>
+                    <label class="label"><span class="has-text-danger">* </span>Meno:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Jožko Mrkvička" />
+                        <input
+                            class="input"
+                            :class="{ 'invalid-field': errors.name }"
+                            type="text"
+                            placeholder="Jožko Mrkvička"
+                            v-model="name"
+                            maxlength="50"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-account-circle"></i>
                         </span>
                     </div>
+                    <div v-if="errors.name">
+                        <p class="help is-danger">{{ this.errors.name }}</p>
+                    </div>
                 </div>
                 <div class="field">
-                    <label class="label">E-mail:</label>
+                    <label class="label"><span class="has-text-danger">* </span>E-mail:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="jozko.mrkvicka@gmail.com" />
+                        <input
+                            class="input"
+                            :class="{ 'invalid-field': errors.email }"
+                            type="text"
+                            placeholder="jozko.mrkvicka@gmail.com"
+                            v-model="email"
+                            maxlength="50"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-at"></i>
                         </span>
+                    </div>
+                    <div v-if="errors.email">
+                        <p class="help is-danger">{{ this.errors.email }}</p>
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Telefónne číslo:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="+421 999 888 777" />
+                        <input
+                            class="input"
+                            :class="{ 'invalid-field': errors.telephone_number }"
+                            type="text"
+                            placeholder="+421 999 888 777"
+                            v-model="telephone_number"
+                            maxlength="50"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-cellphone"></i>
                         </span>
                     </div>
+                    <div v-if="errors.telephone_number">
+                        <p class="help is-danger">{{ this.errors.telephone_number }}</p>
+                    </div>
                 </div>
                 <div class="field">
-                    <label class="label">Rola:</label>
+                    <label class="label"><span class="has-text-danger">* </span>Rola:</label>
                     <multiselect
-                        v-model="data.role"
+                        v-model="role"
                         :options="options"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber role"
                         class="multi-select"
+                        :class="{ 'invalid-field': errors.role }"
                     ></multiselect>
+                    <div v-if="errors.role">
+                        <p class="help is-danger">{{ this.errors.role }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,30 +82,48 @@
             <div class="column is-5 form-info">
                 <p class="form-section-title">Prihlasovacie údaje:</p>
                 <div class="field">
-                    <label class="label">Login:</label>
+                    <label class="label"><span class="has-text-danger">* </span>Login:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="login" />
+                        <input
+                            class="input"
+                            :class="{ 'invalid-field': errors.login_name }"
+                            type="text"
+                            placeholder="login"
+                            v-model="login_name"
+                            maxlength="50"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-lock"></i>
                         </span>
                     </div>
+                    <div v-if="errors.login_name">
+                        <p class="help is-danger">{{ this.errors.login_name }}</p>
+                    </div>
                 </div>
                 <div class="field">
-                    <label class="label">Heslo:</label>
+                    <label class="label"><span class="has-text-danger">* </span>Heslo:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="password" placeholder="*********" />
+                        <input
+                            class="input"
+                            :class="{ 'invalid-field': errors.login_password }"
+                            type="password"
+                            placeholder="*********"
+                            v-model="login_password"
+                            maxlength="50"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-key"></i>
                         </span>
+                    </div>
+                    <div v-if="errors.login_password">
+                        <p class="help is-danger">{{ this.errors.login_password }}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-view-button pb-2">
-            <button class="button mr-3" v-on:click="$router.back()">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Späť
-            </button>
-            <button class="button is-success" v-on:click="$router.back()">
+            <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
+            <button class="button is-success" v-on:click="submitForm">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
             </button>
         </div>
@@ -90,9 +142,39 @@ export default {
     },
     data() {
         return {
-            data: [],
+            email: null,
+            name: null,
+            telephone_number: null,
+            role: null,
+            login_name: null,
+            login_password: null,
+            errors: {},
             options: ["Administrátor", "Programátor", "Tester"]
         };
+    },
+    methods: {
+        submitForm() {
+            let data = {
+                email: this.email,
+                name: this.name,
+                telephone_number: this.telephone_number,
+                role: this.role,
+                login_name: this.login_name,
+                login_password: this.login_password
+            };
+
+            axios
+                .post("http://localhost:8080/api/add/user", data)
+                .then(response => {
+                    if (response.status == 201) {
+                        this.$router.back();
+                    }
+                })
+                .catch(errors => {
+                    this.errors = null;
+                    this.errors = errors.response.data;
+                });
+        }
     }
 };
 </script>

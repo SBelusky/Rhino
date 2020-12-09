@@ -5,6 +5,7 @@ import com.samuell.rhino.model.dto.UserDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService{
     @Nullable
@@ -21,4 +22,8 @@ public interface UserService{
 
     @Nullable
     User deleteUser(Integer id);
+
+    @Nullable
+    Map<String,String> validateUser(UserDto userDto);
+
 }

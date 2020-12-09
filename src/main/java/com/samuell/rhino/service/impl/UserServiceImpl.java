@@ -1,5 +1,6 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.User;
 import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.model.mapper.UserMapper;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +42,13 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(userDto);
         user.setCreated_at(Timestamp.from(Instant.now()));
 
+        if (user.getName() == null ||
+            user.getEmail() == null ||
+            user.getLogin_name() == null ||
+            user.getLogin_password() == null ||
+            user.getRole() == null){
+            return user;
+        }
         return userRepository.save(user);
     }
 
@@ -62,5 +73,36 @@ public class UserServiceImpl implements UserService {
         user.setWas_deleted(true);
 
         return userRepository.save(user);
+    }
+
+    public Map<String,String> validateUser(UserDto userDto){
+        Matcher matcher;
+        Map<String,String> errors = new HashMap<>();
+        List<User> userList = userRepository.findAll();
+
+        if(userDto.getName() == null || !userDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("name","Zadajte meno");
+
+        if(userDto.getEmail() == null || !userDto.getEmail().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("email","Zadajte e-mail");
+        else if(!userDto.getEmail().matches(ValidationHelpers.VALID_EMAIL_ADDRESS_REGEX.pattern()))
+            errors.put("email","Zadajte platný e-mail");
+        else if(userRepository.findAll()
+                .stream()
+                .filter(user -> {
+                    return !user.getId().equals(userDto.getId()) && user.getEmail().equals(userDto.getEmail());
+                })
+                .count() >= 1){
+            errors.put("email","E-mail je obsahený");
+        }
+
+        if(userDto.getLogin_name() == null || !userDto.getLogin_name().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("login_name","Zadajte login");
+        if(userDto.getLogin_password() == null || !userDto.getLogin_password().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("login_password","Zadajte heslo");
+        if(userDto.getRole() == null || !userDto.getRole().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("role","Vyberte rolu");
+
+        return errors;
     }
 }

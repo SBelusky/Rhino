@@ -1,6 +1,7 @@
 package com.samuell.rhino.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.lang.Nullable;
 
 import java.sql.Timestamp;
 
@@ -15,12 +16,14 @@ public class UserDto {
     private String role;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
+    private Timestamp edited_at;
 
     //Constructors
     public UserDto() {
     }
 
-    public UserDto(Integer id, String name, String email, String telephone_number, String login_name, String login_password, String role, Timestamp created_at) {
+    public UserDto(Integer id, String name, String email, String telephone_number, String login_name, String login_password, String role, Timestamp created_at, Timestamp edited_at) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -29,6 +32,7 @@ public class UserDto {
         this.login_password = login_password;
         this.role = role;
         this.created_at = created_at;
+        this.edited_at = edited_at;
     }
 
     //Getters & setters
@@ -94,5 +98,13 @@ public class UserDto {
 
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
+    }
+
+    public Timestamp getEdited_at() {
+        return edited_at;
+    }
+
+    public void setEdited_at(Timestamp edited_at) {
+        this.edited_at = edited_at;
     }
 }
