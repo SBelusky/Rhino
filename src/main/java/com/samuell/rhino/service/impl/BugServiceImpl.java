@@ -4,6 +4,7 @@ import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
 import com.samuell.rhino.model.embedded_key.BugHasSpecificationKey;
+import com.samuell.rhino.model.embedded_key.BugHasUserKey;
 import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 import com.samuell.rhino.model.mapper.BugMapper;
 import com.samuell.rhino.model.status_enum.LogStatus;
@@ -22,8 +23,6 @@ import java.util.stream.Collectors;
 public class BugServiceImpl implements BugService {
     @Autowired
     BugRepository bugRepository;
-    @Autowired
-    BugHasVersionRepository bugHasVersionRepository;
     @Autowired
     VersionRepository versionRepository;
     @Autowired
@@ -70,10 +69,26 @@ public class BugServiceImpl implements BugService {
         bug.setSeek_time(bugDto.getSeek_time());
         bug.setProject(projectRepository.findById(projectId).orElse(null));
         bug.setCategory(categoryRepository.findById(bugDto.getCategory().getId()).orElse(null));
-        bug.setUser(userRepository.findById(bugDto.getUser().getId()).orElse(null));
         bug.setCreated_at(Timestamp.from(Instant.now()));
 
         bugRepository.save(bug);
+
+        bug.setBugHasUsers(bugDto.getBugHasUsers()
+                .stream()
+                .map(bugUser -> {
+                    Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
+                    User newUser = userRepository.findById(bugUser.getUser().getId()).orElse(null);
+                    BugHasUserKey newBugHasVersionKey = new BugHasUserKey(bug.getId(), bugUser.getUser().getId());
+                    BugHasUser newBugHasUser = new BugHasUser();
+
+                    newBugHasUser.setId(newBugHasVersionKey);
+                    newBugHasUser.setBug(newBug);
+                    newBugHasUser.setUser(newUser);
+                    newBugHasUser.setType(bugUser.getType());
+
+                    return newBugHasUser;
+                })
+                .collect(Collectors.toSet()));
 
         bug.setBugHasVersions(bugDto.getBugHasVersions()
                 .stream()
@@ -123,7 +138,7 @@ public class BugServiceImpl implements BugService {
     }
 
     @Override
-    public Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto, Set<BugHasVersion> oldBugHasVersionSet, Set<BugHasSpecification> oldBugHasSpecificationSet, Set<BugHasBug> oldBugHasBugSet) {
+    public Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto, Set<BugHasUser> oldBugHasUserSet, Set<BugHasVersion> oldBugHasVersionSet, Set<BugHasSpecification> oldBugHasSpecificationSet, Set<BugHasBug> oldBugHasBugSet) {
         Bug bug = bugRepository.findById(bugId).orElse(new Bug());
         HashMap<String, LogStatus> atributesChanges = new HashMap<>();
         LogStatus logStatus;
@@ -183,6 +198,33 @@ public class BugServiceImpl implements BugService {
                 })
                 .collect(Collectors.toSet()));
 
+        //-> Users
+        bug.setBugHasUsers(bugDto.getBugHasUsers()
+                .stream()
+                .map(bugUser -> {
+                    Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
+                    User newUser = userRepository.findById(bugUser.getUser().getId()).orElse(null);
+                    BugHasUserKey newBugHasUserKey = new BugHasUserKey(newBug.getId(), newUser.getId());
+                    BugHasUser newBugHasUser = new BugHasUser();
+
+                    newBugHasUser.setId(newBugHasUserKey);
+                    newBugHasUser.setBug(newBug);
+                    newBugHasUser.setUser(newUser);
+                    newBugHasUser.setType(bugUser.getType());
+
+                    for (Iterator<BugHasUser> it = oldBugHasUserSet.iterator(); it.hasNext();) {
+                        BugHasUser bugHasUserIt = it.next();
+                        if (!bugHasUserIt.getUser().getId().equals(bugUser.getUser().getId()) && bugHasUserIt.getType().equals(bugUser.getType())){
+                            atributesChanges.put(
+                                    bugHasUserIt.getUser().getName()+ " -> " + bugUser.getUser().getName(),
+                                    setLogStatusFromString(bugUser.getType())
+                            );
+                        }
+                    }
+                    return newBugHasUser;
+                })
+                .collect(Collectors.toSet()));
+
         //-> Specifications
         bug.setBugHasSpecifications(bugDto.getBugHasSpecifications()
                 .stream()
@@ -236,6 +278,8 @@ public class BugServiceImpl implements BugService {
                 return LogStatus.FOUND_IN_VERSION_CHANGE;
             case "Repaired in version":
                 return LogStatus.REPAIRED_IN_VERSION_CHANGE;
+            case "Associated user":
+                return LogStatus.ASSOCIATED_USER_CHANGE;
             default:
                 return LogStatus.DEFAULT;
         }

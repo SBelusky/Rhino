@@ -33,17 +33,6 @@ public interface BugMapper {
     CategoryDto toCategoryDto(Category category);
     Category toCategory(CategoryDto categoryDto);
 
-    //User
-    @Mappings({
-            @Mapping(target = "telephone_number", ignore=true),
-            @Mapping(target = "login_name", ignore=true),
-            @Mapping(target = "login_password", ignore=true),
-            @Mapping(target = "role", ignore=true),
-            @Mapping(target = "created_at", ignore=true),
-    })
-    UserDto toUserDto(User user);
-    User toUser(UserDto userDto);
-
     //BugHasVersion
     @Mapping(target="bug", ignore=true)
     BugHasVersionDto toBugHasVersionDto(BugHasVersion bugHasVersion);
@@ -58,6 +47,23 @@ public interface BugMapper {
             })
             VersionDto toVersionDto(Version version);
             Version toVersion(VersionDto versionDto);
+
+    //BugHasUser
+    @Mapping(target="bug", ignore=true)
+    BugHasUserDto toBugHasUserDto(BugHasUser bugHasUser);
+    @Mapping(target="bug", ignore=true)
+    BugHasUser toBugHasUser(BugHasUserDto bugHasUserDto);
+
+        //User
+        @Mappings({
+                @Mapping(target = "telephone_number", ignore=true),
+                @Mapping(target = "login_name", ignore=true),
+                @Mapping(target = "login_password", ignore=true),
+                @Mapping(target = "role", ignore=true),
+                @Mapping(target = "created_at", ignore=true),
+        })
+        UserDto toUserDto(User user);
+        User toUser(UserDto userDto);
 
     //BugHasSpecification
     @Mapping(target="bug", ignore=true)

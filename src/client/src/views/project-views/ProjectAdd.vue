@@ -4,18 +4,28 @@
         <div class="columns pt-4">
             <div class="column is-5 form-info">
                 <div class="field">
-                    <label class="label">Názov:</label>
+                    <label class="label"><span class="has-text-danger">* </span>Názov:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Netflix" />
+                        <input
+                            class="input"
+                            type="text"
+                            placeholder="Netflix"
+                            :class="{ 'invalid-field': errors.name }"
+                            v-model="name"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-tag"></i>
                         </span>
+                    </div>
+                    <div v-if="errors.name">
+                        <p class="help is-danger">{{ this.errors.name }}</p>
                     </div>
                 </div>
                 <div class="field">
                     <label class="label">Popis:</label>
                     <div class="control has-icons-left">
-                        <textarea class="textarea" placeholder="Bližšie informácie o projekte..."> </textarea>
+                        <textarea class="textarea" placeholder="Bližšie informácie o projekte..." v-model="description">
+                        </textarea>
                     </div>
                 </div>
                 <div class="skuska">
@@ -27,7 +37,7 @@
                         label="name"
                         track-by="id"
                         :options="allUsers"
-                        v-model="arrayOfPreselectedUsers"
+                        v-model="user_has_projects"
                         placeholder="Výber používateľov"
                         select-label="Pridať"
                         selectedLabel="Pridaný"
@@ -40,10 +50,8 @@
             </div>
         </div>
         <div class="form-view-button pb-2">
-            <button class="button mr-3" v-on:click="$router.back()">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Späť
-            </button>
-            <button class="button is-success" v-on:click="$router.back()">
+            <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
+            <button class="button is-success" v-on:click="submitForm">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
             </button>
         </div>
@@ -64,7 +72,10 @@ export default {
         return {
             data: [],
             allUsers: [],
-            arrayOfPreselectedUsers: [],
+            name: null,
+            description: null,
+            user_has_projects: null,
+            errors: {},
             value: null,
             options: null
         };
@@ -80,6 +91,31 @@ export default {
             };
             this.options.push(tag);
             this.value.push(tag);
+        },
+        submitForm() {
+            let data = {
+                name: this.name,
+                description: this.description,
+                user_has_projects: []
+            };
+
+            if (this.user_has_projects != null) {
+                for (let i = 0; i < this.user_has_projects.length; i++) {
+                    data.user_has_projects.push({ user: this.user_has_projects[i] });
+                }
+            }
+
+            axios
+                .post("http://localhost:8080/api/add/project", data)
+                .then(response => {
+                    if (response.status == 201) {
+                        this.$router.back();
+                    }
+                })
+                .catch(errors => {
+                    this.errors = null;
+                    this.errors = errors.response.data;
+                });
         }
     }
 };

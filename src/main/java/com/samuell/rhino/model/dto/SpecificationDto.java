@@ -13,18 +13,21 @@ public class SpecificationDto {
     private String color;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
+    private Timestamp edited_at;
 
     //Constructors
     public SpecificationDto() {
     }
 
-    public SpecificationDto(Integer id, String name, String description, String type, String color, Timestamp created_at) {
+    public SpecificationDto(Integer id, String name, String description, String type, String color, Timestamp created_at, Timestamp edited_at) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.type = type;
         this.color = color;
         this.created_at = created_at;
+        this.edited_at = edited_at;
     }
 
     //Getters & setters
@@ -74,5 +77,13 @@ public class SpecificationDto {
 
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
+    }
+
+    public Timestamp getEdited_at() {
+        return edited_at;
+    }
+
+    public void setEdited_at(Timestamp edited_at) {
+        this.edited_at = edited_at;
     }
 }

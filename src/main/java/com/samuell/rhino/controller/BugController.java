@@ -1,9 +1,6 @@
 package com.samuell.rhino.controller;
 
-import com.samuell.rhino.model.Bug;
-import com.samuell.rhino.model.BugHasBug;
-import com.samuell.rhino.model.BugHasSpecification;
-import com.samuell.rhino.model.BugHasVersion;
+import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
 import com.samuell.rhino.model.mapper.BugMapper;
 import com.samuell.rhino.model.status_enum.LogStatus;
@@ -72,7 +69,8 @@ public class BugController {
         else {
             String logMessage = "Bug with id: " + bug.getId();
 
-            logService.addLog(bug.getId(),bug.getUser().getId(),logMessage, LogStatus.BUG_CREATE);
+            //Opraviť, aby bol uložený autor bugu
+            logService.addLog(bug.getId(),1,logMessage, LogStatus.BUG_CREATE);
             return ResponseEntity.status(HttpStatus.CREATED).body("Bug created with ID: "+ bug.getId());
         }
     }
@@ -84,8 +82,9 @@ public class BugController {
         entityManager.clear();
         Bug oldBug = bugRepository.findById(bugId).orElse(new Bug());
         Set<BugHasVersion> oldBugHasVersionSet = new HashSet<>(oldBug.getBugHasVersions());
-        Set<BugHasSpecification> oldBugHasSpecificationSet = new HashSet<>(oldBug.getBugHasSpecifications());;
-        Set<BugHasBug> oldBugHasBugSet = new HashSet<>(oldBug.getBugHasBugsContains());;
+        Set<BugHasSpecification> oldBugHasSpecificationSet = new HashSet<>(oldBug.getBugHasSpecifications());
+        Set<BugHasBug> oldBugHasBugSet = new HashSet<>(oldBug.getBugHasBugsContains());
+        Set<BugHasUser> oldBugHasUserSet = new HashSet<>(oldBug.getBugHasUsers());
 
         oldBug = null;
         entityManager.clear();
@@ -101,10 +100,11 @@ public class BugController {
             return new ResponseEntity<>("Bug not found",HttpStatus.PRECONDITION_FAILED);
         }
         else {
-            Bug bug = bugService.updateBug(projectId,bugId,bugDto,oldBugHasVersionSet, oldBugHasSpecificationSet, oldBugHasBugSet);
+            Bug bug = bugService.updateBug(projectId,bugId,bugDto,oldBugHasUserSet, oldBugHasVersionSet, oldBugHasSpecificationSet, oldBugHasBugSet);
             String logMessage = "Bug with id: " + bug.getId();
 
-            logService.addLog(bug.getId(),bug.getUser().getId(),logMessage, LogStatus.BUG_EDIT);
+            //Opraviť, aby bol uložený editor bugu
+            logService.addLog(bug.getId(),1,logMessage, LogStatus.BUG_EDIT);
             return ResponseEntity.status(HttpStatus.OK).body("Bug with ID: "+ bug.getId() + " was updated");
         }
 

@@ -50,10 +50,10 @@ public class User {
     @Nullable
     private Set<Attachment> attachments;
 
-    @JsonManagedReference(value = "user-bugs")
-    @OneToMany(mappedBy="user")
+    @JsonManagedReference(value = "user-bugHasUsers")
+    @OneToMany(mappedBy="user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
-    private Set<Bug> bugs;
+    private Set<BugHasUser> bugHasUsers;
 
     @JsonManagedReference(value = "user-user_has_projects")
     @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -64,7 +64,7 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, @NonNull String name, @NonNull String email, @Nullable String telephone_number, @NonNull String login_name, @NonNull String login_password, @NonNull String role, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<Attachment> attachments, @Nullable Set<UserHasProject> user_has_projects) {
+    public User(@Nullable Integer id, @NonNull String name, @NonNull String email, @Nullable String telephone_number, @NonNull String login_name, @NonNull String login_password, @NonNull String role, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<Attachment> attachments, @Nullable Set<BugHasUser> bugHasUsers, @Nullable Set<UserHasProject> user_has_projects) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -78,6 +78,7 @@ public class User {
         this.logs = logs;
         this.comments = comments;
         this.attachments = attachments;
+        this.bugHasUsers = bugHasUsers;
         this.user_has_projects = user_has_projects;
     }
 
@@ -207,31 +208,11 @@ public class User {
     }
 
     @Nullable
-    public Set<Bug> getBugs() {
-        return bugs;
+    public Set<BugHasUser> getBugHasUsers() {
+        return bugHasUsers;
     }
 
-    public void setBugs(@Nullable Set<Bug> bugs) {
-        this.bugs = bugs;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone_number='" + telephone_number + '\'' +
-                ", login_name='" + login_name + '\'' +
-                ", login_password='" + login_password + '\'' +
-                ", role='" + role + '\'' +
-                ", created_at=" + created_at +
-                ", edited_at=" + edited_at +
-                ", was_deleted=" + was_deleted +
-                ", logs=" + logs +
-                ", comments=" + comments +
-                ", attachments=" + attachments +
-                ", user_has_projects=" + user_has_projects +
-                '}';
+    public void setBugHasUsers(@Nullable Set<BugHasUser> bugHasUsers) {
+        this.bugHasUsers = bugHasUsers;
     }
 }

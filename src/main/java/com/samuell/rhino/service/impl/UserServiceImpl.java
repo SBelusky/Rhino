@@ -9,6 +9,7 @@ import com.samuell.rhino.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EmbeddedId;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
@@ -33,8 +34,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserById(Integer id) {
-        return userMapper.toUserDto(userRepository.findById(id).orElse(null));
+    public UserDto getUserById(Integer userId) {
+        return userMapper.toUserDto(userRepository.findById(userId).orElse(null));
     }
 
     @Override
@@ -53,8 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(Integer id, UserDto userDto) {
-        User user = userRepository.findById(id).orElse(new User());
+    public User updateUser(Integer userId, UserDto userDto) {
+        User user = userRepository.findById(userId).orElse(new User());
 
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
@@ -68,17 +69,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User deleteUser(Integer id) {
-        User user = userRepository.findById(id).orElse(new User());
+    public User deleteUser(Integer userId) {
+        User user = userRepository.findById(userId).orElse(new User());
         user.setWas_deleted(true);
 
         return userRepository.save(user);
     }
 
+    @Override
     public Map<String,String> validateUser(UserDto userDto){
-        Matcher matcher;
         Map<String,String> errors = new HashMap<>();
-        List<User> userList = userRepository.findAll();
 
         if(userDto.getName() == null || !userDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
             errors.put("name","Zadajte meno");
@@ -89,11 +89,18 @@ public class UserServiceImpl implements UserService {
             errors.put("email","Zadajte platný e-mail");
         else if(userRepository.findAll()
                 .stream()
-                .filter(user -> {
-                    return !user.getId().equals(userDto.getId()) && user.getEmail().equals(userDto.getEmail());
-                })
+                .filter(user ->
+                        !user.getId().equals(userDto.getId()) &&
+                        user.getEmail().equals(userDto.getEmail()))
                 .count() >= 1){
             errors.put("email","E-mail je obsahený");
+        }
+
+        if(userRepository.findAll()
+                .stream()
+                .filter(user -> !user.getId().equals(userDto.getId()) && user.getLogin_name().equals(userDto.getLogin_name()))
+                .count() >= 1){
+            errors.put("login_name","Login je obsadený");
         }
 
         if(userDto.getLogin_name() == null || !userDto.getLogin_name().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))

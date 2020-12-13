@@ -1,7 +1,9 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.Specification;
 import com.samuell.rhino.model.dto.SpecificationDto;
+import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.model.mapper.SpecificationMapper;
 import com.samuell.rhino.repository.SpecificationRepository;
 import com.samuell.rhino.service.SpecificationService;
@@ -10,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,5 +68,28 @@ public class SpecificationServiceImpl implements SpecificationService {
         specification.setWas_deleted(true);
 
         return specificationRepository.save(specification);
+    }
+
+    @Override
+    public Map<String, String> validateSpecification(SpecificationDto specificationDto) {
+        Map<String,String> errors = new HashMap<>();
+
+        if(specificationDto.getName() == null || !specificationDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+        errors.put("name","Zadajte názov");
+
+        if(specificationDto.getType().equals("Status") && specificationDto.getColor().equals(""))
+            errors.put("color","Vyberte farbu");
+        else if(specificationDto.getType().equals("Status") && !specificationDto.getColor().matches(ValidationHelpers.HEX_COLOR.pattern()))
+            errors.put("color","Farba je v nesprávnom tvare");
+        else if(specificationRepository.findAll()
+                .stream()
+                .filter(specification ->
+                        specification.getType().equals("Status") &&
+                        !specification.getId().equals(specificationDto.getId()) && specification.getColor().equals(specificationDto.getColor()))
+                .count() >= 1){
+            errors.put("color","Farba je obsahená");
+        }
+
+        return errors;
     }
 }

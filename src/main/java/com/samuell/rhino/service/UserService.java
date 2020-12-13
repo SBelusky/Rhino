@@ -12,16 +12,16 @@ public interface UserService{
     List<UserDto> getAllUsers();
 
     @Nullable
-    UserDto getUserById(Integer id);
+    UserDto getUserById(Integer userId);
 
     @Nullable
     User addUser(UserDto userDto);
 
     @Nullable
-    User updateUser(Integer id, UserDto userDto);
+    User updateUser(Integer userId, UserDto userDto);
 
     @Nullable
-    User deleteUser(Integer id);
+    User deleteUser(Integer userId);
 
     @Nullable
     Map<String,String> validateUser(UserDto userDto);

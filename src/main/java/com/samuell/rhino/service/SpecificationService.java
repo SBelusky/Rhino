@@ -3,10 +3,12 @@ package com.samuell.rhino.service;
 import com.samuell.rhino.model.Specification;
 import com.samuell.rhino.model.Version;
 import com.samuell.rhino.model.dto.SpecificationDto;
+import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.model.dto.VersionDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SpecificationService {
     @Nullable
@@ -23,4 +25,7 @@ public interface SpecificationService {
 
     @Nullable
     Specification deleteSpecification(Integer specificationId);
+
+    @Nullable
+    Map<String,String> validateSpecification(SpecificationDto specificationDto);
 }

@@ -27,9 +27,6 @@ export default {
         Navbar,
         MyFooter
     }
-    /*     mounted() {
-        this.$root.$emit("project-change-handler", "1");
-    } */
 };
 </script>
 

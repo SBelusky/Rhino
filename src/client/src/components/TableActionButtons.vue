@@ -21,11 +21,13 @@
                     <button class="delete" aria-label="close" v-on:click="showModal"></button>
                 </header>
                 <section class="modal-card-body">
-                    <p>Naozaj chcete vymazať používateľa?</p>
+                    <p>
+                        Naozaj chcete vymazať {{ typeForDelete }}: <span class="has-text-weight-bold">{{ nameForDelete }}</span> ?
+                    </p>
                 </section>
                 <footer class="modal-card-foot container">
                     <b-button
-                        class="bbutton-remove-style button is-success has-text-dark"
+                        class="bbutton-remove-style button delete-button-color has-text-dark"
                         icon-left="trash-alt pl-3"
                         icon-pack="far"
                         v-on:click="deleteRow"
@@ -52,13 +54,23 @@ import axios from "axios";
 export default {
     data() {
         return {
-            showModalFlag: false
+            showModalFlag: false,
+            wasDeleting: false
         };
     },
-    props: ["resource", "id", "project"],
+    props: ["resource", "id", "project", "typeForDelete", "nameForDelete"],
     methods: {
         deleteRow() {
-            axios.delete("http://localhost:8080/api/delete/user/" + this.id).then(this.$router.back());
+            this.$root.$emit("project-was-deleted", true);
+
+            if (this.resource == "priority" || this.resource == "status" || this.resource == "reproducibility") {
+                this.resource = "specification";
+            }
+
+            axios.delete("http://localhost:8080/api/delete/" + this.resource + "/" + this.id);
+            this.$router.go();
+            /*             this.$buefy.notification.open("Something happened");
+             */
         },
         showModal() {
             this.showModalFlag = !this.showModalFlag;
@@ -77,10 +89,10 @@ export default {
     margin: 0.1em;
 }
 #action-buttons .delete-button {
-    height: 35px;
+    height: 33.6px;
+    border: none;
 }
 #action-buttons .delete-button:focus {
-    border: none;
     box-shadow: none;
 }
 #action-buttons .action-button-container:nth-child(1) {

@@ -5,20 +5,24 @@ import com.samuell.rhino.model.dto.ProjectDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProjectService {
     @Nullable
     List<ProjectDto> getAllProjects();
 
     @Nullable
-    ProjectDto getProjectById(Integer id);
+    ProjectDto getProjectById(Integer projectId);
 
     @Nullable
     Project addProject(ProjectDto projectDto);
 
     @Nullable
-    Project updateProject(Integer id, ProjectDto projectDto);
+    Project updateProject(Integer projectId, ProjectDto projectDto);
 
     @Nullable
-    Project deleteProject(Integer id);
+    Project deleteProject(Integer projectId);
+
+    @Nullable
+    Map<String,String> validateProject(ProjectDto projectDto);
 }

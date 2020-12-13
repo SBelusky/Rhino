@@ -15,17 +15,21 @@ public class ProjectDto {
     private Set<UserHasProjectDto> user_has_projects;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
+    private Timestamp edited_at;
 
 
     //Constructors
     public ProjectDto() {
     }
 
-    public ProjectDto(Integer id, String name, String description, Set<UserHasProjectDto> user_has_projects) {
+    public ProjectDto(Integer id, String name, String description, Set<UserHasProjectDto> user_has_projects, Timestamp created_at, Timestamp edited_at) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.user_has_projects = user_has_projects;
+        this.created_at = created_at;
+        this.edited_at = edited_at;
     }
 
     //Getters & setters
@@ -67,5 +71,13 @@ public class ProjectDto {
 
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
+    }
+
+    public Timestamp getEdited_at() {
+        return edited_at;
+    }
+
+    public void setEdited_at(Timestamp edited_at) {
+        this.edited_at = edited_at;
     }
 }

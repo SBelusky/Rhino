@@ -6,54 +6,52 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class BugHasVersionKey implements Serializable {
+public class BugHasUserKey implements Serializable {
     //Atributes
     @Column(name = "bug_id")
     private Integer bug_id;
 
-    @Column(name = "version_id")
-    private Integer version_id;
+    @Column(name = "user_id")
+    private Integer user_id;
 
     //Constructors
-    public BugHasVersionKey() {
+    public BugHasUserKey() {
     }
 
-    public BugHasVersionKey(int bug_id, int version_id) {
+    public BugHasUserKey(Integer bug_id, Integer user_id) {
         this.bug_id = bug_id;
-        this.version_id = version_id;
+        this.user_id = user_id;
     }
 
     //Getters & setters
-
-    public int getBug_id() {
+    public Integer getBug_id() {
         return bug_id;
     }
 
-    public void setBug_id(int bug_id) {
+    public void setBug_id(Integer bug_id) {
         this.bug_id = bug_id;
     }
 
-    public int getVersion_id() {
-        return version_id;
+    public Integer getUser_id() {
+        return user_id;
     }
 
-    public void setVersion_id(int version_id) {
-        this.version_id = version_id;
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
     //equals() and hashCode()
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BugHasVersionKey that = (BugHasVersionKey) o;
-        return bug_id == that.bug_id &&
-                version_id == that.version_id;
+        BugHasUserKey that = (BugHasUserKey) o;
+        return Objects.equals(bug_id, that.bug_id) &&
+                Objects.equals(user_id, that.user_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bug_id, version_id);
+        return Objects.hash(bug_id, user_id);
     }
 }

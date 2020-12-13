@@ -28,7 +28,13 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons resource="status" :id="props.row.id" project="" />
+                            <table-action-buttons
+                                resource="status"
+                                :id="props.row.id"
+                                project=""
+                                typeForDelete="status"
+                                :nameForDelete="props.row.name"
+                            />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
@@ -42,10 +48,18 @@
                         <b-table-column field="description" label="Popis" sortable v-slot="props">
                             {{ props.row.description }}
                         </b-table-column>
+                        <b-table-column field="color" label="Farba" sortable v-slot="props">
+                            <v-swatches v-model="props.row.color" show-fallback popover-x="left" disabled></v-swatches>
+                        </b-table-column>
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
                             <span>
-                                {{ new Date(props.row.created_at).toLocaleDateString() }}
+                                {{ props.row.created_at | moment("DD. MM. YYYY hh:mm") }}
+                            </span>
+                        </b-table-column>
+                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
+                            <span>
+                                {{ props.row.edited_at | moment("DD. MM. YYYY hh:mm") }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">
@@ -62,11 +76,14 @@
 import axios from "axios";
 import TableActionButtons from "../../components/TableActionButtons.vue";
 import WindowTitle from "../../components/WindowTitle.vue";
+import VSwatches from "vue-swatches";
 
 export default {
+    title: "Statusy | prehľad",
     components: {
         TableActionButtons,
-        WindowTitle
+        WindowTitle,
+        VSwatches
     },
     data() {
         return {

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/")
@@ -50,12 +51,14 @@ public class ProjectController{
     @PostMapping("add/project")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addProject(@RequestBody ProjectDto projectDto) {
-        Project project = projectService.addProject(projectDto);
+        Map<String,String> errors = projectService.validateProject(projectDto);
 
-        if(project == null){
-            return new ResponseEntity<>("Error while creating project",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            Project project = projectService.addProject(projectDto);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Project created with ID: "+ project.getId());
         }
     }
@@ -63,12 +66,13 @@ public class ProjectController{
     @PostMapping("edit/project/{id}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateProject(@PathVariable("id") Integer id, @RequestBody ProjectDto projectDto) {
-        projectRepository.deleteUsers(id);
+        Map<String,String> errors = projectService.validateProject(projectDto);
 
-        if(projectService.getProjectById(id) == null){
-            return new ResponseEntity<>("Project not found",HttpStatus.PRECONDITION_FAILED);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            projectRepository.deleteUsers(id);
             Project project = projectService.updateProject(id,projectDto);
 
             return ResponseEntity.status(HttpStatus.OK).body("Project with ID: "+ project.getId() + " was updated");

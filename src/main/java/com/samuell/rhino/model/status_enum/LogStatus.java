@@ -26,6 +26,9 @@ public enum LogStatus {
     //Category status
     CATEGORY_CHANGE("Category changed"),
 
+    //Category status
+    ASSOCIATED_USER_CHANGE("Associated user changed"),
+
     //Default if we dont choose from previous attributes
     DEFAULT("DEFAULT");
 

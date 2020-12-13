@@ -28,7 +28,13 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons resource="project" :id="props.row.id" project="" />
+                            <table-action-buttons
+                                resource="project"
+                                :id="props.row.id"
+                                project=""
+                                typeForDelete="projekt"
+                                :nameForDelete="props.row.name"
+                            />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
@@ -49,7 +55,12 @@
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
                             <span>
-                                {{ new Date(props.row.created_at).toLocaleDateString() }}
+                                {{ props.row.created_at | moment("DD. MM. YYYY hh:mm") }}
+                            </span>
+                        </b-table-column>
+                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
+                            <span>
+                                {{ props.row.edited_at | moment("DD. MM. YYYY hh:mm") }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">

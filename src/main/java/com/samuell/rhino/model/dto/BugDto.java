@@ -2,6 +2,7 @@ package com.samuell.rhino.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.samuell.rhino.model.BugHasUser;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -18,8 +19,8 @@ public class BugDto {
     private Set<BugHasSpecificationDto> bugHasSpecifications;
     private ProjectDto project;
     private CategoryDto category;
-    private UserDto user;
     private Integer idOfLastEditingUser;
+    private Set<BugHasUser> bugHasUsers;
     private Set<BugHasBugDto> bugHasBugsContains;
     private Set<BugHasBugDto> bugHasBugsIncluded;
 
@@ -131,12 +132,12 @@ public class BugDto {
         this.category = category;
     }
 
-    public UserDto getUser() {
-        return user;
+    public Set<BugHasUser> getBugHasUsers() {
+        return bugHasUsers;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setBugHasUsers(Set<BugHasUser> bugHasUsers) {
+        this.bugHasUsers = bugHasUsers;
     }
 
     public Timestamp getCreated_at() {
@@ -155,7 +156,6 @@ public class BugDto {
         this.edited_at = edited_at;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -170,8 +170,8 @@ public class BugDto {
                 Objects.equals(bugHasSpecifications, bugDto.bugHasSpecifications) &&
                 Objects.equals(project, bugDto.project) &&
                 Objects.equals(category, bugDto.category) &&
-                Objects.equals(user, bugDto.user) &&
                 Objects.equals(idOfLastEditingUser, bugDto.idOfLastEditingUser) &&
+                Objects.equals(bugHasUsers, bugDto.bugHasUsers) &&
                 Objects.equals(bugHasBugsContains, bugDto.bugHasBugsContains) &&
                 Objects.equals(bugHasBugsIncluded, bugDto.bugHasBugsIncluded) &&
                 Objects.equals(created_at, bugDto.created_at) &&
@@ -180,6 +180,6 @@ public class BugDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, summarize, description, additional_info, seek_time, bugHasVersions, bugHasSpecifications, project, category, user, idOfLastEditingUser, bugHasBugsContains, bugHasBugsIncluded, created_at, edited_at);
+        return Objects.hash(id, summarize, description, additional_info, seek_time, bugHasVersions, bugHasSpecifications, project, category, idOfLastEditingUser, bugHasUsers, bugHasBugsContains, bugHasBugsIncluded, created_at, edited_at);
     }
 }

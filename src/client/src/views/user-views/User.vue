@@ -40,7 +40,13 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons resource="user" :id="props.row.id" project="" />
+                            <table-action-buttons
+                                resource="user"
+                                :id="props.row.id"
+                                project=""
+                                typeForDelete="používateľa"
+                                :nameForDelete="props.row.name"
+                            />
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
@@ -67,12 +73,12 @@
 
                         <b-table-column field="created_at" label="Vytvorený" sortable v-slot="props">
                             <span>
-                                {{ dateFormater(props.row.created_at) }}
+                                {{ props.row.created_at | moment("DD. MM. YYYY hh:mm") }}
                             </span>
                         </b-table-column>
                         <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
                             <span>
-                                {{ dateFormater(props.row.edited_at) }}
+                                {{ props.row.edited_at | moment("DD. MM. YYYY hh:mm") }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">
@@ -128,13 +134,6 @@ export default {
                 "tag tester": role === "Tester",
                 "tag programmer": role === "Programátor"
             };
-        },
-        dateFormater(date) {
-            if (date == null) {
-                return "";
-            } else {
-                return new Date(date).toLocaleString();
-            }
         }
     },
     mounted() {

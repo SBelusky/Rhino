@@ -1,9 +1,11 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.Project;
 import com.samuell.rhino.model.User;
 import com.samuell.rhino.model.UserHasProject;
 import com.samuell.rhino.model.dto.ProjectDto;
+import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.model.embedded_key.UserHasProjectKey;
 import com.samuell.rhino.model.mapper.ProjectMapper;
 import com.samuell.rhino.repository.ProjectRepository;
@@ -14,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,30 +41,26 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto getProjectById(Integer id) {
-        return projectMapper.toProjectDto(projectRepository.findById(id).orElse(null));
+    public ProjectDto getProjectById(Integer projectId) {
+        return projectMapper.toProjectDto(projectRepository.findById(projectId).orElse(null));
     }
 
     @Override
     public Project addProject(ProjectDto projectDto) {
-        Project project = projectMapper.toProject(projectDto);
-        project.setCreated_at(Timestamp.from(Instant.now()));
-
-        return projectRepository.save(project);
-    }
-
-    @Override
-    public Project updateProject(Integer id, ProjectDto projectDto) {
-        Project project = projectRepository.findById(id).orElse(new Project());
+        Project project = new Project();
 
         project.setName(projectDto.getName());
         project.setDescription(projectDto.getDescription());
+        project.setCreated_at(Timestamp.from(Instant.now()));
+
+        projectRepository.save(project);
+
         project.setUser_has_projects(projectDto.getUser_has_projects()
                 .stream()
                 .map(userProject -> {
-                    User newuser = userRepository.findById(userProject.getId().getUser_id()).orElse(null);
-                    Project newproject = projectRepository.findById(id).orElse(null);
-                    UserHasProjectKey newuserHasProjectKey = new UserHasProjectKey(userProject.getId().getUser_id(),userProject.getId().getProject_id());
+                    User newuser = userRepository.findById(userProject.getUser().getId()).orElse(null);
+                    Project newproject = projectRepository.findById(project.getId()).orElse(null);
+                    UserHasProjectKey newuserHasProjectKey = new UserHasProjectKey(userProject.getUser().getId(),newproject.getId());
                     UserHasProject newuserHasProject = new UserHasProject();
 
                     newuserHasProject.setId(newuserHasProjectKey);
@@ -69,17 +70,54 @@ public class ProjectServiceImpl implements ProjectService {
                     return newuserHasProject;
                 })
                 .collect(Collectors.toSet()));
-        project.setEdited_at(Timestamp.from(Instant.now()));
+
 
         return projectRepository.save(project);
     }
 
     @Override
-    public Project deleteProject(Integer id) {
-        Project project = projectRepository.findById(id).orElse(new Project());
+    public Project updateProject(Integer projectId, ProjectDto projectDto) {
+        Project project = projectRepository.findById(projectId).orElse(new Project());
+
+        project.setName(projectDto.getName());
+        project.setDescription(projectDto.getDescription());
+        project.setEdited_at(Timestamp.from(Instant.now()));
+
+        project.setUser_has_projects(projectDto.getUser_has_projects()
+                .stream()
+                .map(userProject -> {
+                    User newuser = userRepository.findById(userProject.getUser().getId()).orElse(null);
+                    Project newproject = projectRepository.findById(projectId).orElse(null);
+                    UserHasProjectKey newuserHasProjectKey = new UserHasProjectKey(userProject.getUser().getId(),newproject.getId());
+                    UserHasProject newuserHasProject = new UserHasProject();
+
+                    newuserHasProject.setId(newuserHasProjectKey);
+                    newuserHasProject.setUser(newuser);
+                    newuserHasProject.setProject(newproject);
+
+                    return newuserHasProject;
+                })
+                .collect(Collectors.toSet()));
+
+        return projectRepository.save(project);
+    }
+
+    @Override
+    public Project deleteProject(Integer projectId) {
+        Project project = projectRepository.findById(projectId).orElse(new Project());
         project.setWas_deleted(true);
 
         return projectRepository.save(project);
+    }
+
+    @Override
+    public Map<String,String> validateProject(ProjectDto projectDto){
+        Map<String,String> errors = new HashMap<>();
+
+        if(projectDto.getName() == null || !projectDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("name","Zadajte názov");
+
+        return errors;
     }
 }
 

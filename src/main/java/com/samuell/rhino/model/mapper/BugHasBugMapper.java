@@ -26,7 +26,7 @@ public interface BugHasBugMapper {
         @Mapping(target = "bugHasVersions", ignore=true),
         @Mapping(target = "project", ignore=true),
         @Mapping(target = "category", ignore=true),
-        @Mapping(target = "user", ignore=true),
+        @Mapping(target = "bugHasUsers", ignore=true),
         @Mapping(target = "created_at", ignore=true),
         @Mapping(target = "edited_at", ignore=true),
     })

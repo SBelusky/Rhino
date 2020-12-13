@@ -27,6 +27,7 @@
                         Pridať bug
                     </b-button>
                 </div>
+                {{ $store.state.actualProject }}
             </div>
         </nav>
     </div>
@@ -38,25 +39,26 @@ import axios from "axios";
 export default {
     data() {
         return {
-            selected: 1,
+            selected: this.$store.state.actualProject,
             isPublic: true,
             projects: []
         };
     },
     methods: {
         projectChangeHandler() {
-            this.$root.$emit("project-change-handler", this.selected);
+            console.log(this.selected);
+            this.$store.commit("CHANGE_PROJECT", this.selected);
+            this.$store.commit("CHANGE_MAIN_MENU_ITEM", "bug");
             this.$router.push("/admin/project/" + this.selected + "/bug");
             this.$router.go();
         }
     },
     mounted() {
-        this.$root.$on("project-change-handler", data => (this.selected = data));
         axios.get("http://localhost:8080/api/project").then(response => (this.projects = response.data));
+        this.selected = this.$store.state.actualProject;
     },
     updated() {
-        this.selected = this.$route.params.id;
-        this.$root.$emit("project-change-handler", this.selected);
+        this.selected = this.$store.state.actualProject;
     }
 };
 </script>

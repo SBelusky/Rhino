@@ -29,13 +29,9 @@
                             <table-action-buttons :resource="'project/' + projectId + '/bug'" :id="props.row.id" />
                         </b-table-column>
 
-                        <b-table-column field="name" label="Autor" sortable v-slot="props">
+                        <!--    <b-table-column field="name" label="Autor" sortable v-slot="props">
                             {{ props.row.user.name }}
-                        </b-table-column>
-
-                        <b-table-column field="name" label="Autor" sortable v-slot="props">
-                            {{ props.row.user.name }}
-                        </b-table-column>
+                        </b-table-column> -->
 
                         <b-table-column field="category" label="Kategória" sortable v-slot="props">
                             {{ props.row.category.name }}
@@ -69,7 +65,7 @@ export default {
     data() {
         return {
             data: [],
-            projectId: this.$route.params.id,
+            projectId: this.$store.state.actualProject,
             isPaginated: true,
             isPaginationSimple: false,
             paginationPosition: "bottom",
@@ -77,7 +73,7 @@ export default {
             sortIcon: "arrow-up",
             sortIconSize: "is-small",
             currentPage: 1,
-            perPage: 20
+            perPage: 15
         };
     },
     methods: {},

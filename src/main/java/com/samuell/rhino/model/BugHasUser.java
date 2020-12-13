@@ -1,76 +1,79 @@
 package com.samuell.rhino.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
+import com.samuell.rhino.model.embedded_key.BugHasUserKey;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 
-@Entity(name = "bug_has_version")
-@Table(name = "bug_has_version")
-public class BugHasVersion {
+@Entity(name = "bug_has_user")
+@Table(name = "bug_has_user")
+public class BugHasUser {
     //Attributes
     @EmbeddedId
-    private BugHasVersionKey id;
+    private BugHasUserKey id;
 
     @NonNull
     private String type;
 
-    @JsonBackReference(value = "bug-bugHasVersions")
+    @JsonBackReference(value = "bug-bugHasUsers")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("bug_id")
     @JoinColumn(name = "bug_id")
     @NonNull
     private Bug bug;
 
-    @JsonBackReference(value = "version-bugHasVersions")
+    @JsonBackReference(value = "user-bugHasUsers")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @MapsId("version_id")
-    @JoinColumn(name = "version_id")
+    @MapsId("user_id")
+    @JoinColumn(name = "user_id")
     @NonNull
-    private Version version;
+    private User user;
 
     //Constructors
-    public BugHasVersion() {
+    public BugHasUser() {
     }
 
-    public BugHasVersion(BugHasVersionKey id, String type, Bug bug, Version version) {
+    public BugHasUser(BugHasUserKey id, @NonNull String type, @NonNull Bug bug, @NonNull User user) {
         this.id = id;
         this.type = type;
         this.bug = bug;
-        this.version = version;
+        this.user = user;
     }
 
     //Getters & setters
-    public BugHasVersionKey getId() {
+    public BugHasUserKey getId() {
         return id;
     }
 
-    public void setId(BugHasVersionKey id) {
+    public void setId(BugHasUserKey id) {
         this.id = id;
     }
 
+    @NonNull
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(@NonNull String type) {
         this.type = type;
     }
 
+    @NonNull
     public Bug getBug() {
         return bug;
     }
 
-    public void setBug(Bug bug) {
+    public void setBug(@NonNull Bug bug) {
         this.bug = bug;
     }
 
-    public Version getVersion() {
-        return version;
+    @NonNull
+    public User getUser() {
+        return user;
     }
 
-    public void setVersion(Version version) {
-        this.version = version;
+    public void setUser(@NonNull User user) {
+        this.user = user;
     }
 }

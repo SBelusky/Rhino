@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/")
@@ -41,12 +42,14 @@ public class SpecificationController {
     @PostMapping("add/specification")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addSpecification(@RequestBody SpecificationDto specificationDto) {
-        Specification specification = specificationService.addSpecification(specificationDto);
+        Map<String,String> errors = specificationService.validateSpecification(specificationDto);
 
-        if(specification == null){
-            return new ResponseEntity<>("Error while creating specification",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            Specification specification = specificationService.addSpecification(specificationDto);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Specification created with ID: "+ specification.getId());
         }
     }
@@ -54,8 +57,10 @@ public class SpecificationController {
     @PostMapping("edit/specification/{specificationId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateSpecification(@PathVariable("specificationId") Integer specificationId,@RequestBody SpecificationDto specificationDto) {
-        if(specificationService.getSpecificationById(specificationId) == null){
-            return new ResponseEntity<>("Specification not found",HttpStatus.PRECONDITION_FAILED);
+        Map<String,String> errors = specificationService.validateSpecification(specificationDto);
+
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
             Specification specification = specificationService.updateSpecification(specificationId, specificationDto);

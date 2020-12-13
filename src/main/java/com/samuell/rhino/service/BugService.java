@@ -19,7 +19,7 @@ public interface BugService {
     Bug addBug(Integer projectId, BugDto bugDto);
 
     @Nullable
-    Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto, Set<BugHasVersion> oldBugHasVersionSet, Set<BugHasSpecification> oldBugHasSpecificationSet, Set<BugHasBug> oldBugHasBugSet);
+    Bug updateBug(Integer projectId, Integer bugId, BugDto bugDto, Set<BugHasUser> oldBugHasUserSet, Set<BugHasVersion> oldBugHasVersionSet, Set<BugHasSpecification> oldBugHasSpecificationSet, Set<BugHasBug> oldBugHasBugSet);
 
     @Nullable
     Bug deleteBug(Integer projectId, Integer bugId);

@@ -1,35 +1,43 @@
 package com.samuell.rhino.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
+import com.samuell.rhino.model.embedded_key.BugHasUserKey;
 
-
-public class BugHasVersionDto {
+public class BugHasUserDto {
     //Attributes
-    private BugHasVersionKey id;
-    private VersionDto version;
+    private BugHasUserKey id;
+    private UserDto user;
     private String type;
 
     @JsonBackReference
     private BugDto bug;
 
     //Constructors
-    public BugHasVersionDto() {
+    public BugHasUserDto() {
     }
 
-    public BugHasVersionDto(BugHasVersionKey id, BugDto bug, VersionDto version) {
+    public BugHasUserDto(BugHasUserKey id, UserDto user, String type, BugDto bug) {
         this.id = id;
+        this.user = user;
+        this.type = type;
         this.bug = bug;
-        this.version = version;
     }
 
     //Getters & setters
-    public BugHasVersionKey getId() {
+    public BugHasUserKey getId() {
         return id;
     }
 
-    public void setId(BugHasVersionKey id) {
+    public void setId(BugHasUserKey id) {
         this.id = id;
+    }
+
+    public UserDto getUser() {
+        return user;
+    }
+
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 
     public String getType() {
@@ -46,13 +54,5 @@ public class BugHasVersionDto {
 
     public void setBug(BugDto bug) {
         this.bug = bug;
-    }
-
-    public VersionDto getVersion() {
-        return version;
-    }
-
-    public void setVersion(VersionDto version) {
-        this.version = version;
     }
 }

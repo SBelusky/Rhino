@@ -48,6 +48,11 @@ public class Bug {
     @Nullable
     private Set<Comment> comments;
 
+    @JsonManagedReference(value = "bug-bugHasUsers")
+    @OneToMany(mappedBy="bug",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Nullable
+    private Set<BugHasUser> bugHasUsers;
+
     @JsonManagedReference(value = "bug-bugHasVersions")
     @OneToMany(mappedBy="bug",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
@@ -61,12 +66,12 @@ public class Bug {
     @JsonManagedReference(value = "bug-bugHasBugsContains")
     @OneToMany(mappedBy="contains",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
-    private Set<BugHasBug> bugHasBugsContains; //bug contains bugs
+    private Set<BugHasBug> bugHasBugsContains;
 
     @JsonManagedReference(value = "bug-bugHasBugsIncluded")
     @OneToMany(mappedBy="included",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @Nullable
-    private Set<BugHasBug> bugHasBugsIncluded;// bug is included in bugs
+    private Set<BugHasBug> bugHasBugsIncluded;
 
     @JsonBackReference(value = "category-bugs")
     @ManyToOne
@@ -80,17 +85,11 @@ public class Bug {
     @NonNull
     private Project project;
 
-    @JsonBackReference(value = "user-bugs")
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    @NonNull
-    private User user;
-
     //Constructors
     public Bug() {
     }
 
-    public Bug(@Nullable Integer id, @NonNull String summarize, @NonNull String description, @Nullable String additional_info, @Nullable Integer seek_time, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Attachment> attachments, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<BugHasVersion> bugHasVersions, @Nullable Set<BugHasSpecification> bugHasSpecifications, @Nullable Set<BugHasBug> bugHasBugsContains, @Nullable Set<BugHasBug> bugHasBugsIncluded, @NonNull Category category, @NonNull Project project) {
+    public Bug(@Nullable Integer id, @NonNull String summarize, @NonNull String description, @Nullable String additional_info, @Nullable Integer seek_time, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Attachment> attachments, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<BugHasUser> bugHasUsers, @Nullable Set<BugHasVersion> bugHasVersions, @Nullable Set<BugHasSpecification> bugHasSpecifications, @Nullable Set<BugHasBug> bugHasBugsContains, @Nullable Set<BugHasBug> bugHasBugsIncluded, @NonNull Category category, @NonNull Project project) {
         this.id = id;
         this.summarize = summarize;
         this.description = description;
@@ -102,8 +101,10 @@ public class Bug {
         this.attachments = attachments;
         this.logs = logs;
         this.comments = comments;
+        this.bugHasUsers = bugHasUsers;
         this.bugHasVersions = bugHasVersions;
         this.bugHasSpecifications = bugHasSpecifications;
+        this.bugHasBugsContains = bugHasBugsContains;
         this.bugHasBugsIncluded = bugHasBugsIncluded;
         this.category = category;
         this.project = project;
@@ -180,6 +181,15 @@ public class Bug {
 
     public void setEdited_at(@Nullable Timestamp edited_at) {
         this.edited_at = edited_at;
+    }
+
+    @Nullable
+    public Set<BugHasUser> getBugHasUsers() {
+        return bugHasUsers;
+    }
+
+    public void setBugHasUsers(@Nullable Set<BugHasUser> bugHasUsers) {
+        this.bugHasUsers = bugHasUsers;
     }
 
     public boolean isWas_deleted() {
@@ -262,15 +272,6 @@ public class Bug {
         this.project = project;
     }
 
-    @NonNull
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(@NonNull User user) {
-        this.user = user;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -287,17 +288,18 @@ public class Bug {
                 Objects.equals(attachments, bug.attachments) &&
                 Objects.equals(logs, bug.logs) &&
                 Objects.equals(comments, bug.comments) &&
+                Objects.equals(bugHasUsers, bug.bugHasUsers) &&
+                Objects.equals(bugHasVersions, bug.bugHasVersions) &&
                 Objects.equals(bugHasVersions, bug.bugHasVersions) &&
                 Objects.equals(bugHasSpecifications, bug.bugHasSpecifications) &&
                 Objects.equals(bugHasBugsContains, bug.bugHasBugsContains) &&
                 Objects.equals(bugHasBugsIncluded, bug.bugHasBugsIncluded) &&
                 category.equals(bug.category) &&
-                project.equals(bug.project) &&
-                user.equals(bug.user);
+                project.equals(bug.project);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, summarize, description, additional_info, seek_time, created_at, edited_at, was_deleted, attachments, logs, comments, bugHasVersions, bugHasSpecifications, bugHasBugsContains, bugHasBugsIncluded, category, project, user);
+        return Objects.hash(id, summarize, description, additional_info, seek_time, created_at, edited_at, was_deleted, attachments, logs, comments, bugHasUsers, bugHasVersions, bugHasVersions, bugHasSpecifications, bugHasBugsContains, bugHasBugsIncluded, category, project);
     }
 }
