@@ -1,5 +1,6 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.Version;
 import com.samuell.rhino.model.dto.VersionDto;
 import com.samuell.rhino.model.mapper.VersionMapper;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,5 +71,24 @@ public class VersionServiceImpl implements VersionService {
         version.setWas_deleted(true);
 
         return versionRepository.save(version);
+    }
+
+    @Override
+    public Map<String, String> validateVersion(Integer projectId, VersionDto versionDto) {
+        Map<String,String> errors = new HashMap<>();
+
+        if(versionDto.getName() == null || !versionDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("name","Zadajte číslo verzie");
+        else if(versionRepository.findAll()
+                .stream()
+                .filter(version ->
+                        !version.isWas_deleted() &&
+                        !version.getId().equals(versionDto.getId()) &&
+                        version.getProject().getId().equals(projectId) &&
+                        version.getName().equals(versionDto.getName()))
+                .count() >= 1){
+            errors.put("name","Číslo verzie je už použité");
+        }
+        return errors;
     }
 }

@@ -13,9 +13,6 @@ public class BugHasUser {
     @EmbeddedId
     private BugHasUserKey id;
 
-    @NonNull
-    private String type;
-
     @JsonBackReference(value = "bug-bugHasUsers")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("bug_id")
@@ -34,9 +31,8 @@ public class BugHasUser {
     public BugHasUser() {
     }
 
-    public BugHasUser(BugHasUserKey id, @NonNull String type, @NonNull Bug bug, @NonNull User user) {
+    public BugHasUser(BugHasUserKey id, @NonNull Bug bug, @NonNull User user) {
         this.id = id;
-        this.type = type;
         this.bug = bug;
         this.user = user;
     }
@@ -48,15 +44,6 @@ public class BugHasUser {
 
     public void setId(BugHasUserKey id) {
         this.id = id;
-    }
-
-    @NonNull
-    public String getType() {
-        return type;
-    }
-
-    public void setType(@NonNull String type) {
-        this.type = type;
     }
 
     @NonNull

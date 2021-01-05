@@ -19,8 +19,7 @@ public class BugDto {
     private Set<BugHasSpecificationDto> bugHasSpecifications;
     private ProjectDto project;
     private CategoryDto category;
-    private Integer idOfLastEditingUser;
-    private Set<BugHasUser> bugHasUsers;
+    private Set<BugHasUserDto> bugHasUsers;
     private Set<BugHasBugDto> bugHasBugsContains;
     private Set<BugHasBugDto> bugHasBugsIncluded;
 
@@ -108,14 +107,6 @@ public class BugDto {
         this.bugHasSpecifications = bugHasSpecifications;
     }
 
-    public Integer getIdOfLastEditingUser() {
-        return idOfLastEditingUser;
-    }
-
-    public void setIdOfLastEditingUser(Integer idOfLastEditingUser) {
-        this.idOfLastEditingUser = idOfLastEditingUser;
-    }
-
     public ProjectDto getProject() {
         return project;
     }
@@ -132,11 +123,11 @@ public class BugDto {
         this.category = category;
     }
 
-    public Set<BugHasUser> getBugHasUsers() {
+    public Set<BugHasUserDto> getBugHasUsers() {
         return bugHasUsers;
     }
 
-    public void setBugHasUsers(Set<BugHasUser> bugHasUsers) {
+    public void setBugHasUsers(Set<BugHasUserDto> bugHasUsers) {
         this.bugHasUsers = bugHasUsers;
     }
 
@@ -154,32 +145,5 @@ public class BugDto {
 
     public void setEdited_at(Timestamp edited_at) {
         this.edited_at = edited_at;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BugDto bugDto = (BugDto) o;
-        return Objects.equals(id, bugDto.id) &&
-                Objects.equals(summarize, bugDto.summarize) &&
-                Objects.equals(description, bugDto.description) &&
-                Objects.equals(additional_info, bugDto.additional_info) &&
-                Objects.equals(seek_time, bugDto.seek_time) &&
-                Objects.equals(bugHasVersions, bugDto.bugHasVersions) &&
-                Objects.equals(bugHasSpecifications, bugDto.bugHasSpecifications) &&
-                Objects.equals(project, bugDto.project) &&
-                Objects.equals(category, bugDto.category) &&
-                Objects.equals(idOfLastEditingUser, bugDto.idOfLastEditingUser) &&
-                Objects.equals(bugHasUsers, bugDto.bugHasUsers) &&
-                Objects.equals(bugHasBugsContains, bugDto.bugHasBugsContains) &&
-                Objects.equals(bugHasBugsIncluded, bugDto.bugHasBugsIncluded) &&
-                Objects.equals(created_at, bugDto.created_at) &&
-                Objects.equals(edited_at, bugDto.edited_at);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, summarize, description, additional_info, seek_time, bugHasVersions, bugHasSpecifications, project, category, idOfLastEditingUser, bugHasUsers, bugHasBugsContains, bugHasBugsIncluded, created_at, edited_at);
     }
 }

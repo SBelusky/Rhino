@@ -6,6 +6,7 @@ import com.samuell.rhino.model.embedded_key.BugHasVersionKey;
 
 public class BugHasVersionDto {
     //Attributes
+
     private BugHasVersionKey id;
     private VersionDto version;
     private String type;

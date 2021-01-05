@@ -51,12 +51,12 @@
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
                             <span>
-                                {{ props.row.created_at | moment("DD. MM. YYYY hh:mm") }}
+                                {{ props.row.created_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
                         </b-table-column>
                         <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
                             <span>
-                                {{ props.row.edited_at | moment("DD. MM. YYYY hh:mm") }}
+                                {{ props.row.edited_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">

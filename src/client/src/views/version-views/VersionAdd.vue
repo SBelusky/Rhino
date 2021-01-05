@@ -4,12 +4,22 @@
         <div class="columns pt-1">
             <div class="column is-5 form-info">
                 <div class="field">
-                    <label class="label">Číslo:</label>
+                    <label class="label"><span class="has-text-danger">* </span>Číslo:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Číslo verzie" />
+                        <input
+                            class="input"
+                            :class="{ 'invalid-field': errors.name }"
+                            type="text"
+                            placeholder="Číslo verzie"
+                            v-model="name"
+                            maxlength="50"
+                        />
                         <span class="icon is-left">
                             <i class="mdi mdi-numeric"></i>
                         </span>
+                    </div>
+                    <div v-if="errors.name">
+                        <p class="help is-danger">{{ this.errors.name }}</p>
                     </div>
                 </div>
                 <div class="field">
@@ -21,10 +31,8 @@
             </div>
         </div>
         <div class="form-view-button pb-2">
-            <button class="button mr-3" v-on:click="$router.back()">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Späť
-            </button>
-            <button class="button is-success" v-on:click="$router.back()">
+            <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
+            <button class="button is-success" v-on:click="submitForm">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
             </button>
         </div>
@@ -36,11 +44,37 @@ import axios from "axios";
 import WindowTitle from "../../components/WindowTitle.vue";
 
 export default {
+    title: "Verzie | pridanie",
     components: {
         WindowTitle
     },
     data() {
-        return {};
+        return {
+            name: null,
+            description: null,
+            actualProject: this.$store.state.actualProject,
+            errors: {}
+        };
+    },
+    methods: {
+        submitForm() {
+            let data = {
+                name: this.name,
+                description: this.description
+            };
+
+            axios
+                .post("http://localhost:8080/api/project/" + this.actualProject + "/add/version", data)
+                .then(response => {
+                    if (response.status == 201) {
+                        this.$router.back();
+                    }
+                })
+                .catch(errors => {
+                    this.errors = null;
+                    this.errors = errors.response.data;
+                });
+        }
     }
 };
 </script>

@@ -7,6 +7,7 @@ import com.samuell.rhino.model.dto.UserDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryService {
     @Nullable
@@ -23,4 +24,7 @@ public interface CategoryService {
 
     @Nullable
     Category deleteCategory(Integer categoryId);
+
+    @Nullable
+    Map<String,String> validateCategory(CategoryDto categoryDto);
 }

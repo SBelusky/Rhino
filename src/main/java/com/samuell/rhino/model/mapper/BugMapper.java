@@ -34,6 +34,7 @@ public interface BugMapper {
     Category toCategory(CategoryDto categoryDto);
 
     //BugHasVersion
+    @Mapping(target="id", ignore=true)
     @Mapping(target="bug", ignore=true)
     BugHasVersionDto toBugHasVersionDto(BugHasVersion bugHasVersion);
     @Mapping(target="bug", ignore=true)
@@ -50,6 +51,7 @@ public interface BugMapper {
 
     //BugHasUser
     @Mapping(target="bug", ignore=true)
+    @Mapping(target="id", ignore=true)
     BugHasUserDto toBugHasUserDto(BugHasUser bugHasUser);
     @Mapping(target="bug", ignore=true)
     BugHasUser toBugHasUser(BugHasUserDto bugHasUserDto);
@@ -67,6 +69,7 @@ public interface BugMapper {
 
     //BugHasSpecification
     @Mapping(target="bug", ignore=true)
+    @Mapping(target="id", ignore=true)
     BugHasSpecificationDto toBugHasSpecificationDto(BugHasSpecification bugHasSpecification);
     BugHasSpecification toBugHasSpecification(BugHasSpecificationDto bugHasSpecificationDto);
 

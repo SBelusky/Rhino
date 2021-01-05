@@ -22,4 +22,9 @@ public interface BugRepository extends JpaRepository<Bug,Integer> {
     @Modifying
     @Query(value = "delete from bug_has_bug where contains = ?1", nativeQuery = true)
     void deleteBugHasBug(Integer bugId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "delete from bug_has_user where bug_id = ?1", nativeQuery = true)
+    void deleteUsers(Integer bugId);
 }

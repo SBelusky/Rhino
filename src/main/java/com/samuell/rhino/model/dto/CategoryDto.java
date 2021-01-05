@@ -12,18 +12,21 @@ public class CategoryDto {
     private ProjectDto project;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
+    private Timestamp edited_at;
 
 
     //Constructors
     public CategoryDto() {
     }
 
-    public CategoryDto(Integer id, String name, String description, ProjectDto project, Timestamp created_at) {
+    public CategoryDto(Integer id, String name, String description, ProjectDto project, Timestamp created_at, Timestamp edited_at) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.project = project;
         this.created_at = created_at;
+        this.edited_at = edited_at;
     }
 
     //Getters & setters
@@ -65,5 +68,13 @@ public class CategoryDto {
 
     public void setCreated_at(Timestamp created_at) {
         this.created_at = created_at;
+    }
+
+    public Timestamp getEdited_at() {
+        return edited_at;
+    }
+
+    public void setEdited_at(Timestamp edited_at) {
+        this.edited_at = edited_at;
     }
 }

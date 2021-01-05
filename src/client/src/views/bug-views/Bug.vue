@@ -1,15 +1,15 @@
 <template>
     <div id="data-table">
-        <window-title small-title="| prehľad evidencie" big-title="Bugov" />
-        <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
-            Pridať bug
-        </b-button>
+        <window-title small-title="| prehľad evidencie" big-title="Reporty" />
+        <router-link id="pm-zero" :to="`/admin/project/` + projectId + `/add/bug`">
+            <b-button class="is-success data-table-button" icon-left="mdi mdi-sticker-plus-outline icon-center">
+                Pridať bug
+            </b-button>
+        </router-link>
         <div class="columns pt-4">
             <div class="column is-9">
                 <section>
                     <b-table
-                        striped
-                        hoverable
                         :data="data"
                         :paginated="isPaginated"
                         :per-page="perPage"
@@ -26,20 +26,54 @@
                         aria-current-label="Current page"
                     >
                         <b-table-column label="Akcie" width="200" v-slot="props">
-                            <table-action-buttons :resource="'project/' + projectId + '/bug'" :id="props.row.id" />
+                            <table-action-buttons
+                                resource="bug"
+                                :project="'project/' + projectId + '/'"
+                                :id="props.row.id"
+                                typeForDelete="report s ID"
+                                :nameForDelete="props.row.id"
+                            />
                         </b-table-column>
 
-                        <!--    <b-table-column field="name" label="Autor" sortable v-slot="props">
-                            {{ props.row.user.name }}
-                        </b-table-column> -->
+                        <b-table-column field="id" label="ID" sortable v-slot="props">
+                            {{ props.row.id }}
+                        </b-table-column>
+
+                        <b-table-column field="priority" label="Priorita" sortable v-slot="props">
+                            {{ getSpecificationFromArray(props.row.bugHasSpecifications, "Priority") }}
+                        </b-table-column>
+
+                        <b-table-column field="status" label="Status" sortable v-slot="props">
+                            {{ getSpecificationFromArray(props.row.bugHasSpecifications, "Status") }}
+                        </b-table-column>
+
+                        <b-table-column field="summarize" label="Zhrnutie" sortable v-slot="props">
+                            {{ props.row.summarize }}
+                        </b-table-column>
 
                         <b-table-column field="category" label="Kategória" sortable v-slot="props">
                             {{ props.row.category.name }}
+                        </b-table-column>
+                        <b-table-column field="FoundInVersion" label="Verzia nájdenia" sortable v-slot="props">
+                            {{ getVersionFromArray(props.row.bugHasVersions, "Found in version") }}
+                        </b-table-column>
+
+                        <b-table-column field="RepairedInVersion" label="Verzia vyriešenia" sortable v-slot="props">
+                            {{ getVersionFromArray(props.row.bugHasVersions, "Repaired in version") }}
+                        </b-table-column>
+
+                        <b-table-column field="AssociatedUser" label="Priradený" sortable v-slot="props">
+                            {{ getAssociatedUserFromArray(props.row.bugHasUsers, "Associated user") }}
                         </b-table-column>
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
                             <span>
                                 {{ new Date(props.row.created_at).toLocaleDateString() }}
+                            </span>
+                        </b-table-column>
+                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
+                            <span>
+                                {{ new Date(props.row.edited_at).toLocaleDateString() }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">
@@ -58,6 +92,7 @@ import TableActionButtons from "../../components/TableActionButtons.vue";
 import WindowTitle from "../../components/WindowTitle.vue";
 
 export default {
+    title: "Reporty | prehľad",
     components: {
         TableActionButtons,
         WindowTitle
@@ -76,11 +111,34 @@ export default {
             perPage: 15
         };
     },
-    methods: {},
+    methods: {
+        getSpecificationFromArray(obj, type) {
+            for (let i = 0; i < obj.length; i++) {
+                if (obj[i].specification.type == type) return obj[i].specification.name;
+            }
+            return "";
+        },
+        getAssociatedUserFromArray(obj, type) {
+            for (let i = 0; i < obj.length; i++) {
+                if (obj[i].type == type) return obj[i].user.name;
+            }
+            return "";
+        },
+        getVersionFromArray(obj, type) {
+            for (let i = 0; i < obj.length; i++) {
+                if (obj[i].type == type) return obj[i].version.name;
+            }
+            return "";
+        }
+    },
     mounted() {
         axios.get("http://localhost:8080/api/project/" + this.projectId + "/bug").then(response => (this.data = response.data));
     }
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.x {
+    background-color: #fff !important;
+}
+</style>

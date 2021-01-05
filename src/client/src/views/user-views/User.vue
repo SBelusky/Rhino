@@ -49,36 +49,43 @@
                             />
                         </b-table-column>
 
-                        <b-table-column field="id" label="ID" width="60" sortable v-slot="props">
+                        <b-table-column field="id" label="ID" width="80" sortable v-slot="props" :searchable="true">
                             {{ props.row.id }}
                         </b-table-column>
 
-                        <b-table-column field="name" label="Meno" sortable v-slot="props">
+                        <b-table-column field="name" label="Meno" sortable v-slot="props" :searchable="true">
                             {{ props.row.name }}
                         </b-table-column>
 
-                        <b-table-column field="email" label="E-mail" sortable v-slot="props">
+                        <b-table-column field="email" label="E-mail" sortable v-slot="props" :searchable="true">
                             {{ props.row.email }}
                         </b-table-column>
 
-                        <b-table-column field="telephone" label="Telefón" sortable v-slot="props">
+                        <b-table-column field="telephone" label="Telefón" sortable v-slot="props" :searchable="true">
                             {{ props.row.telephone_number }}
                         </b-table-column>
 
-                        <b-table-column field="role" label="Rola" sortable v-slot="props" v-bind:role="'role'">
+                        <b-table-column field="role" label="Rola" sortable v-slot="props" v-bind:role="'role'" :searchable="true">
                             <span :class="classObject(props.row.role)">
                                 {{ props.row.role }}
                             </span>
                         </b-table-column>
 
-                        <b-table-column field="created_at" label="Vytvorený" sortable v-slot="props">
+                        <b-table-column field="created_at" label="Vytvorený" sortable v-slot="props" :searchable="true">
                             <span>
-                                {{ props.row.created_at | moment("DD. MM. YYYY hh:mm") }}
+                                {{ props.row.created_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
                         </b-table-column>
-                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
+                        <b-table-column
+                            field="edited_at"
+                            label="Editácia"
+                            sortable
+                            v-slot="props"
+                            :searchable="true"
+                            custom-search
+                        >
                             <span>
-                                {{ props.row.edited_at | moment("DD. MM. YYYY hh:mm") }}
+                                {{ props.row.edited_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">
@@ -96,6 +103,7 @@ import axios from "axios";
 import TableActionButtons from "../../components/TableActionButtons.vue";
 import WindowTitle from "../../components/WindowTitle.vue";
 import ExportDataToXls from "../../components/ExportDataToXls.vue";
+import moment from "moment";
 
 export default {
     components: {

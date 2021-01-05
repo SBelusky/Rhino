@@ -32,6 +32,8 @@
                                 resource="category"
                                 :id="props.row.id"
                                 :project="'project/' + projectId + '/'"
+                                typeForDelete="kategóriu"
+                                :nameForDelete="props.row.name"
                             />
                         </b-table-column>
 
@@ -49,7 +51,13 @@
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
                             <span>
-                                {{ new Date(props.row.created_at).toLocaleDateString() }}
+                                {{ props.row.created_at | moment("DD. MM. YYYY HH:mm") }}
+                            </span>
+                        </b-table-column>
+
+                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props">
+                            <span>
+                                {{ props.row.edited_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
                         </b-table-column>
                         <td slot="empty" colspan="2">
@@ -68,6 +76,7 @@ import TableActionButtons from "../../components/TableActionButtons.vue";
 import WindowTitle from "../../components/WindowTitle.vue";
 
 export default {
+    title: "Kategórie | prehľad",
     components: {
         TableActionButtons,
         WindowTitle
@@ -75,7 +84,7 @@ export default {
     data() {
         return {
             data: [],
-            projectId: this.$route.params.projectId,
+            projectId: this.$store.state.actualProject,
             isPaginated: true,
             isPaginationSimple: false,
             paginationPosition: "bottom",

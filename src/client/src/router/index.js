@@ -3,9 +3,11 @@ import VueRouter from "vue-router";
 
 //Bug
 import Bug from "../views/bug-views/Bug.vue";
+import BugAdd from "../views/bug-views/BugAdd.vue";
 
 //Account
 import Account from "../views/account-views/Account.vue";
+import AccoutDetail from "../views/account-views/AccoutDetail.vue";
 
 //User
 import User from "../views/user-views/User.vue";
@@ -53,10 +55,19 @@ const routes = [
         path: "/admin/project/:id/bug",
         component: Bug
     },
+    {
+        path: "/admin/project/:id/add/bug",
+        component: BugAdd
+    },
     //Account
     {
         path: "/admin/account",
         component: Account
+    },
+    {
+        path: "/admin/detail/account",
+        alias: "/admin/change-password/account/",
+        component: AccoutDetail
     },
     //User
     {
@@ -64,7 +75,7 @@ const routes = [
         component: User
     },
     {
-        path: "/admin/:type/user/:id",
+        path: "/admin/:type(detail|edit)/user/:id",
         component: UserDetail
     },
     {
@@ -77,7 +88,7 @@ const routes = [
         component: Project
     },
     {
-        path: "/admin/:type/project/:id",
+        path: "/admin/:type(detail|edit)/project/:id",
         component: ProjectDetail
     },
     {
@@ -90,7 +101,7 @@ const routes = [
         component: Priority
     },
     {
-        path: "/admin/:type/priority/:id",
+        path: "/admin/:type(detail|edit)/priority/:id",
         component: PriorityDetail
     },
     {
@@ -103,7 +114,7 @@ const routes = [
         component: Status
     },
     {
-        path: "/admin/:type/status/:id",
+        path: "/admin/:type(detail|edit)/status/:id",
         component: StatusDetail
     },
     {
@@ -116,7 +127,7 @@ const routes = [
         component: Reproducibility
     },
     {
-        path: "/admin/:type/reproducibility/:id",
+        path: "/admin/:type(detail|edit)/reproducibility/:id",
         component: ReproducibilityDetail
     },
     {
@@ -129,7 +140,7 @@ const routes = [
         component: Category
     },
     {
-        path: "/admin/project/:projectId/:type/category/:id",
+        path: "/admin/project/:projectId/:type(detail|edit)/category/:id",
         component: CategoryDetail
     },
     {
@@ -142,7 +153,7 @@ const routes = [
         component: Version
     },
     {
-        path: "/admin/project/:projectId/:type/version/:id",
+        path: "/admin/project/:projectId/:type(detail|edit)/version/:id",
         component: VersionDetail
     },
     {

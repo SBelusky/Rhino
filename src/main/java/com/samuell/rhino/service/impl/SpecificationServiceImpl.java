@@ -72,22 +72,22 @@ public class SpecificationServiceImpl implements SpecificationService {
 
     @Override
     public Map<String, String> validateSpecification(SpecificationDto specificationDto) {
-        Map<String,String> errors = new HashMap<>();
+        Map<String, String> errors = new HashMap<>();
 
-        if(specificationDto.getName() == null || !specificationDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
-        errors.put("name","Zadajte názov");
+        if (specificationDto.getName() == null || !specificationDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("name", "Zadajte názov");
 
-        if(specificationDto.getType().equals("Status") && specificationDto.getColor().equals(""))
-            errors.put("color","Vyberte farbu");
-        else if(specificationDto.getType().equals("Status") && !specificationDto.getColor().matches(ValidationHelpers.HEX_COLOR.pattern()))
-            errors.put("color","Farba je v nesprávnom tvare");
-        else if(specificationRepository.findAll()
+        if (specificationDto.getType().equals("Status") && specificationDto.getColor().equals(""))
+            errors.put("color", "Vyberte farbu");
+        else if (specificationDto.getType().equals("Status") && !specificationDto.getColor().matches(ValidationHelpers.HEX_COLOR.pattern()))
+            errors.put("color", "Farba je v nesprávnom tvare");
+        else if (specificationRepository.findAll()
                 .stream()
                 .filter(specification ->
                         specification.getType().equals("Status") &&
                         !specification.getId().equals(specificationDto.getId()) && specification.getColor().equals(specificationDto.getColor()))
-                .count() >= 1){
-            errors.put("color","Farba je obsahená");
+                .count() >= 1) {
+            errors.put("color", "Farba je obsadená");
         }
 
         return errors;

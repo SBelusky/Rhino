@@ -3,10 +3,12 @@ package com.samuell.rhino.service;
 import com.samuell.rhino.model.Comment;
 import com.samuell.rhino.model.Version;
 import com.samuell.rhino.model.dto.CommentDto;
+import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.model.dto.VersionDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface VersionService {
     @Nullable
@@ -23,4 +25,7 @@ public interface VersionService {
 
     @Nullable
     Version deleteVersion(Integer versionId);
+
+    @Nullable
+    Map<String,String> validateVersion(Integer projectId, VersionDto versionDto);
 }

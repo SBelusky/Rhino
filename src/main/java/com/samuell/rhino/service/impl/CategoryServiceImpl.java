@@ -1,5 +1,6 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.Category;
 import com.samuell.rhino.model.dto.CategoryDto;
 import com.samuell.rhino.model.mapper.CategoryMapper;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,5 +72,15 @@ public class CategoryServiceImpl implements CategoryService {
         category.setWas_deleted(true);
 
         return categoryRepository.save(category);
+    }
+
+    @Override
+    public Map<String, String> validateCategory(CategoryDto categoryDto) {
+        Map<String,String> errors = new HashMap<>();
+
+        if(categoryDto.getName() == null || !categoryDto.getName().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("name","Zadajte názov");
+
+        return errors;
     }
 }

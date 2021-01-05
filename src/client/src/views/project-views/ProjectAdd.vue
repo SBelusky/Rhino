@@ -28,7 +28,7 @@
                         </textarea>
                     </div>
                 </div>
-                <div class="skuska">
+                <div>
                     <label class="typo__label label">Priradení používatelia: </label>
                     <multiselect
                         class="multi-select"

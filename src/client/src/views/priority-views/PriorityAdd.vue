@@ -1,6 +1,6 @@
 <template>
     <div id="form-view">
-        <window-title small-title="| pridanie priority" big-title="Nový záznam" />
+        <window-title small-title="| pridanie" big-title="Nová priorita" />
         <div class="columns pt-1">
             <div class="column is-5 form-info">
                 <div class="field">

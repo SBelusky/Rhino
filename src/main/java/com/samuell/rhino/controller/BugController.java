@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("api/project/{projectId}")
+@RequestMapping("api/project/{projectId}/")
 public class BugController {
     @Autowired
     BugMapper bugMapper;
@@ -37,7 +36,7 @@ public class BugController {
         this.bugRepository = bugRepository;
     }
 
-    @GetMapping("/bug")
+    @GetMapping("bug")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllBugsByProjectId(@PathVariable("projectId") Integer projectId) {
         List<BugDto> bugDtoList = bugService.getAllBugsByProjectId(projectId);
@@ -45,7 +44,7 @@ public class BugController {
         return new ResponseEntity<>(bugDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/bug/{bugId}")
+    @GetMapping("detail/bug/{bugId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getBugById(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         BugDto bugDto = bugService.getBugById(projectId,bugId);
@@ -58,7 +57,7 @@ public class BugController {
         }
     }
 
-    @PostMapping("/add/bug")
+    @PostMapping("add/bug")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addBug(@PathVariable("projectId") Integer projectId, @RequestBody BugDto bugDto) {
         Bug bug = bugService.addBug(projectId, bugDto);
@@ -75,10 +74,9 @@ public class BugController {
         }
     }
 
-    @PostMapping("/edit/bug/{bugId}")
+    @PostMapping("edit/bug/{bugId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
-        //TEST
         entityManager.clear();
         Bug oldBug = bugRepository.findById(bugId).orElse(new Bug());
         Set<BugHasVersion> oldBugHasVersionSet = new HashSet<>(oldBug.getBugHasVersions());
@@ -89,12 +87,10 @@ public class BugController {
         oldBug = null;
         entityManager.clear();
 
-
-
-
         bugRepository.deleteSpecifications(bugId);
         bugRepository.deleteVersions(bugId);
         bugRepository.deleteBugHasBug(bugId);
+        bugRepository.deleteUsers(bugId);
 
         if(bugService.getBugById(projectId,bugId) == null){
             return new ResponseEntity<>("Bug not found",HttpStatus.PRECONDITION_FAILED);
@@ -110,7 +106,7 @@ public class BugController {
 
     }
 
-    @DeleteMapping("/delete/bug/{bugId}")
+    @DeleteMapping("delete/bug/{bugId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         if(bugService.getBugById(projectId,bugId) == null){
@@ -120,7 +116,7 @@ public class BugController {
             Bug bug = bugService.deleteBug(projectId,bugId);
             String logMessage = "Bug with id: " + bug.getId();
 
-            logService.addLog(bugId,bugDto.getIdOfLastEditingUser(),logMessage, LogStatus.BUG_DELETE);
+            logService.addLog(bugId,1,logMessage, LogStatus.BUG_DELETE);
             return ResponseEntity.status(HttpStatus.OK).body("Bug with ID: "+ bug.getId() + " was deleted");
         }
     }

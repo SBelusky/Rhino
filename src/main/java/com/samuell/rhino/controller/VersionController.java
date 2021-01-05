@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/project/{projectId}/")
@@ -43,12 +44,14 @@ public class VersionController {
     @PostMapping("add/version")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addVersion(@PathVariable("projectId") Integer projectId, @RequestBody VersionDto versionDto) {
-        Version version = versionService.addVersion(projectId, versionDto);
+        Map<String,String> errors = versionService.validateVersion(projectId,versionDto);
 
-        if(version == null){
-            return new ResponseEntity<>("Error while creating version",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            Version version = versionService.addVersion(projectId, versionDto);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Version created with ID: "+ version.getId());
         }
     }
@@ -56,8 +59,10 @@ public class VersionController {
     @PostMapping("edit/version/{versionId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateVersion(@PathVariable("projectId") Integer projectId, @PathVariable("versionId") Integer versionId, @RequestBody VersionDto versionDto) {
-        if(versionService.getVersionById(projectId, versionId) == null){
-            return new ResponseEntity<>("Version not found",HttpStatus.PRECONDITION_FAILED);
+        Map<String,String> errors = versionService.validateVersion(projectId,versionDto);
+
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
             Version version = versionService.updateVersion(projectId, versionId ,versionDto);

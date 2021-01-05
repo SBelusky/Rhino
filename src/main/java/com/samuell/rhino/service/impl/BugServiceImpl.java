@@ -14,6 +14,8 @@ import com.samuell.rhino.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.*;
@@ -78,13 +80,12 @@ public class BugServiceImpl implements BugService {
                 .map(bugUser -> {
                     Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
                     User newUser = userRepository.findById(bugUser.getUser().getId()).orElse(null);
-                    BugHasUserKey newBugHasVersionKey = new BugHasUserKey(bug.getId(), bugUser.getUser().getId());
+                    BugHasUserKey newBugHasVersionKey = new BugHasUserKey(bugUser.getType(),bug.getId(), bugUser.getUser().getId());
                     BugHasUser newBugHasUser = new BugHasUser();
 
                     newBugHasUser.setId(newBugHasVersionKey);
                     newBugHasUser.setBug(newBug);
                     newBugHasUser.setUser(newUser);
-                    newBugHasUser.setType(bugUser.getType());
 
                     return newBugHasUser;
                 })
@@ -95,17 +96,43 @@ public class BugServiceImpl implements BugService {
                 .map(bugVersion -> {
                     Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
                     Version newVersion = versionRepository.findById(bugVersion.getVersion().getId()).orElse(null);
-                    BugHasVersionKey newBugHasVersionKey = new BugHasVersionKey(bug.getId(), bugVersion.getVersion().getId());
+                    BugHasVersionKey newBugHasVersionKey = new BugHasVersionKey(bugVersion.getType(),bug.getId(), bugVersion.getVersion().getId());
                     BugHasVersion newBugHasVersion = new BugHasVersion();
 
                     newBugHasVersion.setId(newBugHasVersionKey);
                     newBugHasVersion.setBug(newBug);
                     newBugHasVersion.setVersion(newVersion);
-                    newBugHasVersion.setType(bugVersion.getType());
+//                    newBugHasVersion.setType(bugVersion.getType());
 
                     return newBugHasVersion;
                 })
                 .collect(Collectors.toSet()));
+
+//        Set<BugHasVersion> bhv =bugDto.getBugHasVersions()
+//                .stream()
+//                .map(bugVersion -> {
+//                    Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
+//                    Version newVersion = versionRepository.findById(bugVersion.getVersion().getId()).orElse(null);
+//                    BugHasVersionKey newBugHasVersionKey = new BugHasVersionKey(bug.getId(), bugVersion.getVersion().getId());
+//                    BugHasVersion newBugHasVersion = new BugHasVersion();
+//
+//                    newBugHasVersion.setId(newBugHasVersionKey);
+//                    newBugHasVersion.setBug(newBug);
+//                    newBugHasVersion.setVersion(newVersion);
+//                    newBugHasVersion.setType(bugVersion.getType());
+//
+//                    return newBugHasVersion;
+//                })
+//                .collect(Collectors.toSet());
+//
+//        Set<BugHasVersion> xxx = new HashSet<>();
+//        for(BugHasVersion e: bhv){
+//            xxx.add(e);
+//            bug.setBugHasVersions(xxx);
+//            bugRepository.save(bug);
+//            xxx = new HashSet<>();
+//        }
+
 
         bug.setBugHasSpecifications(bugDto.getBugHasSpecifications()
                 .stream()
@@ -134,6 +161,7 @@ public class BugServiceImpl implements BugService {
                     return newBugHasBug;
                 })
                 .collect(Collectors.toSet()));
+
         return bugRepository.save(bug);
     }
 
@@ -177,17 +205,17 @@ public class BugServiceImpl implements BugService {
                 .map(bugVersion -> {
                     Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
                     Version newVersion = versionRepository.findById(bugVersion.getVersion().getId()).orElse(null);
-                    BugHasVersionKey newBugHasVersionKey = new BugHasVersionKey(newBug.getId(), newVersion.getId());
+                    BugHasVersionKey newBugHasVersionKey = new BugHasVersionKey(bugVersion.getType(),newBug.getId(), newVersion.getId());
                     BugHasVersion newBugHasVersion = new BugHasVersion();
 
                     newBugHasVersion.setId(newBugHasVersionKey);
                     newBugHasVersion.setBug(newBug);
                     newBugHasVersion.setVersion(newVersion);
-                    newBugHasVersion.setType(bugVersion.getType());
 
+                    //Logs
                     for (Iterator<BugHasVersion> it = oldBugHasVersionSet.iterator(); it.hasNext();) {
                         BugHasVersion bugHasVersionIt = it.next();
-                        if (!bugHasVersionIt.getVersion().getId().equals(bugVersion.getVersion().getId()) && bugHasVersionIt.getType().equals(bugVersion.getType())){
+                        if (!bugHasVersionIt.getVersion().getId().equals(bugVersion.getVersion().getId()) && bugHasVersionIt.getId().getType().equals(bugVersion.getType())){
                             atributesChanges.put(
                                     bugHasVersionIt.getVersion().getName()+ " -> " + bugVersion.getVersion().getName(),
                                     setLogStatusFromString(bugVersion.getType())
@@ -204,17 +232,16 @@ public class BugServiceImpl implements BugService {
                 .map(bugUser -> {
                     Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
                     User newUser = userRepository.findById(bugUser.getUser().getId()).orElse(null);
-                    BugHasUserKey newBugHasUserKey = new BugHasUserKey(newBug.getId(), newUser.getId());
+                    BugHasUserKey newBugHasUserKey = new BugHasUserKey(bugUser.getType(),newBug.getId(), newUser.getId());
                     BugHasUser newBugHasUser = new BugHasUser();
 
                     newBugHasUser.setId(newBugHasUserKey);
                     newBugHasUser.setBug(newBug);
                     newBugHasUser.setUser(newUser);
-                    newBugHasUser.setType(bugUser.getType());
 
                     for (Iterator<BugHasUser> it = oldBugHasUserSet.iterator(); it.hasNext();) {
                         BugHasUser bugHasUserIt = it.next();
-                        if (!bugHasUserIt.getUser().getId().equals(bugUser.getUser().getId()) && bugHasUserIt.getType().equals(bugUser.getType())){
+                        if (!bugHasUserIt.getUser().getId().equals(bugUser.getUser().getId()) && bugHasUserIt.getId().getType().equals(bugUser.getType())){
                             atributesChanges.put(
                                     bugHasUserIt.getUser().getName()+ " -> " + bugUser.getUser().getName(),
                                     setLogStatusFromString(bugUser.getType())
@@ -251,7 +278,7 @@ public class BugServiceImpl implements BugService {
                 .collect(Collectors.toSet()));
 
         //Save logs of changed bug´s attributes
-        creteLogsOfChangedAttributesBeforeBugUpdate(bugId,bugDto.getIdOfLastEditingUser(),atributesChanges);
+        creteLogsOfChangedAttributesBeforeBugUpdate(bugId,1,atributesChanges);
 
         return bugRepository.save(bug);
     }

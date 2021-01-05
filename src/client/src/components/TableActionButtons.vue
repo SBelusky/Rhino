@@ -67,7 +67,7 @@ export default {
                 this.resource = "specification";
             }
 
-            axios.delete("http://localhost:8080/api/delete/" + this.resource + "/" + this.id);
+            axios.delete("http://localhost:8080/api/" + this.project + "delete/" + this.resource + "/" + this.id);
             this.$router.go();
             /*             this.$buefy.notification.open("Something happened");
              */

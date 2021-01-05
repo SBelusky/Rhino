@@ -66,7 +66,7 @@ public class UserController {
         Map<String,String> errors = userService.validateUser(userDto);
 
         if(errors.size() != 0){
-            return new ResponseEntity<>(errors,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
             User user = userService.updateUser(id,userDto);

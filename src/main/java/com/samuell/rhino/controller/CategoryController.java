@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/project/{projectId}/")
@@ -45,12 +46,14 @@ public class CategoryController {
     @PostMapping("add/category")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addCategory(@PathVariable("projectId") Integer projectId, @RequestBody CategoryDto categoryDto) {
-        Category category = categoryService.addCategory(projectId, categoryDto);
+        Map<String,String> errors = categoryService.validateCategory(categoryDto);
 
-        if(category == null){
-            return new ResponseEntity<>("Error while creating category",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            Category category = categoryService.addCategory(projectId, categoryDto);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Category created with ID: "+ category.getId());
         }
     }
@@ -58,8 +61,10 @@ public class CategoryController {
     @PostMapping("edit/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateCategory(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId, @RequestBody CategoryDto categoryDto) {
-        if(categoryService.getCategoryById(projectId, categoryId) == null){
-            return new ResponseEntity<>("Category not found",HttpStatus.PRECONDITION_FAILED);
+        Map<String,String> errors = categoryService.validateCategory(categoryDto);
+
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
             Category category = categoryService.updateCategory(projectId, categoryId, categoryDto);

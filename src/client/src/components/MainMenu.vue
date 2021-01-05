@@ -126,7 +126,6 @@ export default {
     },
     updated() {
         this.projectUrl = this.$store.state.actualProject;
-        this.selected = this.$store.state.mainMenuSelectedItem;
     }
 };
 </script>
@@ -183,6 +182,7 @@ export default {
 }
 #main-menu .is-active.is-expanded {
     background-color: rgba(245, 245, 245, 0) !important;
+    outline: none;
 }
 #main-menu .menu-list a.is-active {
     color: #c2c7d0 !important;

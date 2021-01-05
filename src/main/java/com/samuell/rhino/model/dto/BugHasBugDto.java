@@ -7,7 +7,6 @@ public class BugHasBugDto {
     //Attributes
     private BugHasBugKey id;
     private String status;
-    private Integer idOfLastEditingUser;
 
     private BugDto contains;
 

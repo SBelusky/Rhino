@@ -1,6 +1,24 @@
 <template>
     <div id="account-form">
         <window-title small-title="| detail účtu" big-title="Samuel Beluský" />
+        <router-link id="pm-zero" :to="`/admin/detail/account`">
+            <b-button
+                class="data-table-button mr-5"
+                icon-left="mdi mdi-sticker-plus-outline icon-center"
+                v-on:click="accountButtonTypeSet('basicInfo')"
+            >
+                Editovať účet
+            </b-button>
+        </router-link>
+        <router-link id="pm-zero" :to="`/admin/change-password/account/`">
+            <b-button
+                class="data-table-button change-password-button"
+                icon-left="mdi mdi-key icon-center"
+                v-on:click="accountButtonTypeSet('password')"
+            >
+                Zmeniť prihlasovacie údaje
+            </b-button>
+        </router-link>
         <div class="columns pt-4">
             <div class="column is-5 account-info">
                 <div class="field">
@@ -39,11 +57,17 @@
 import WindowTitle from "../../components/WindowTitle.vue";
 
 export default {
+    title: "Môj účet | prehľad",
     data() {
         return {};
     },
     components: {
         WindowTitle
+    },
+    methods: {
+        accountButtonTypeSet(type) {
+            this.$store.commit("ACCOUNT_BUTTON_TYPE", type);
+        }
     }
 };
 </script>

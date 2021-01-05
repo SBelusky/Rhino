@@ -11,17 +11,20 @@ public class VersionDto {
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
     private Timestamp created_at;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Europe/Madrid")
+    private Timestamp edited_at;
     private ProjectDto project;
 
     //Constructors
     public VersionDto() {
     }
 
-    public VersionDto(Integer id, String name, String description, Timestamp created_at, ProjectDto project) {
+    public VersionDto(Integer id, String name, String description, Timestamp created_at, Timestamp edited_at, ProjectDto project) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.created_at = created_at;
+        this.edited_at = edited_at;
         this.project = project;
     }
 
@@ -64,6 +67,14 @@ public class VersionDto {
 
     public void setProject(ProjectDto project) {
         this.project = project;
+    }
+
+    public Timestamp getEdited_at() {
+        return edited_at;
+    }
+
+    public void setEdited_at(Timestamp edited_at) {
+        this.edited_at = edited_at;
     }
 
     @Override

@@ -27,7 +27,6 @@
                         Pridať bug
                     </b-button>
                 </div>
-                {{ $store.state.actualProject }}
             </div>
         </nav>
     </div>

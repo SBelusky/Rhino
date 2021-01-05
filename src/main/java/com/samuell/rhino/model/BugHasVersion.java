@@ -8,13 +8,10 @@ import javax.persistence.*;
 
 @Entity(name = "bug_has_version")
 @Table(name = "bug_has_version")
-public class BugHasVersion {
+public class BugHasVersion{
     //Attributes
     @EmbeddedId
     private BugHasVersionKey id;
-
-    @NonNull
-    private String type;
 
     @JsonBackReference(value = "bug-bugHasVersions")
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -34,9 +31,8 @@ public class BugHasVersion {
     public BugHasVersion() {
     }
 
-    public BugHasVersion(BugHasVersionKey id, String type, Bug bug, Version version) {
+    public BugHasVersion(BugHasVersionKey id, @NonNull Bug bug, @NonNull Version version) {
         this.id = id;
-        this.type = type;
         this.bug = bug;
         this.version = version;
     }
@@ -48,14 +44,6 @@ public class BugHasVersion {
 
     public void setId(BugHasVersionKey id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public Bug getBug() {
