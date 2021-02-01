@@ -61,16 +61,14 @@ export default {
     props: ["resource", "id", "project", "typeForDelete", "nameForDelete"],
     methods: {
         deleteRow() {
-            this.$root.$emit("project-was-deleted", true);
-
             if (this.resource == "priority" || this.resource == "status" || this.resource == "reproducibility") {
                 this.resource = "specification";
+            } else if (this.resource == "project") {
+                this.$root.$emit("project-was-deleted", true);
             }
 
             axios.delete("http://localhost:8080/api/" + this.project + "delete/" + this.resource + "/" + this.id);
             this.$router.go();
-            /*             this.$buefy.notification.open("Something happened");
-             */
         },
         showModal() {
             this.showModalFlag = !this.showModalFlag;
@@ -106,12 +104,6 @@ export default {
 }
 #action-buttons .action-button-container:nth-child(2):hover {
     background-color: hsl(48, 100%, 57%);
-}
-#action-buttons .delete-button-color {
-    background-color: hsl(356, 74%, 65%);
-}
-#action-buttons .delete-button-color:hover {
-    background-color: hsl(356, 74%, 60%);
 }
 #action-buttons .modal-card {
     width: inherit;

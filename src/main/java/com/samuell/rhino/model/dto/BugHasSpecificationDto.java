@@ -10,6 +10,7 @@ public class BugHasSpecificationDto {
     //Attributes
     private BugHasSpecificationKey id;
     private SpecificationDto specification;
+    private String type;
 
     @JsonBackReference
     private BugDto bug;
@@ -47,5 +48,13 @@ public class BugHasSpecificationDto {
 
     public void setSpecification(SpecificationDto specification) {
         this.specification = specification;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

@@ -1,5 +1,6 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.Comment;
 import com.samuell.rhino.model.Log;
 import com.samuell.rhino.model.dto.CommentDto;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,10 +72,23 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment deleteComment(Integer id) {
-        Comment comment = commentRepository.findById(id).orElse(new Comment());
+    public Comment deleteComment(Integer commentId) {
+        Comment comment = commentRepository.findById(commentId).orElse(new Comment());
         comment.setWas_deleted(true);
 
         return commentRepository.save(comment);
+    }
+
+    @Override
+    public Map<String, String> validateComment(CommentDto commentDto) {
+        Map<String,String> errors = new HashMap<>();
+
+        if(commentDto.getDescription() == null || !commentDto.getDescription().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("description","Zadajte text komentáru");
+
+        if(commentDto.getSpend_time() == null)
+            errors.put("spend_time","Zadajte čas hľadania");
+
+        return errors;
     }
 }

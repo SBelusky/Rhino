@@ -1,7 +1,6 @@
 package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.Comment;
-import com.samuell.rhino.model.Log;
 import com.samuell.rhino.model.dto.CommentDto;
 import com.samuell.rhino.model.status_enum.LogStatus;
 import com.samuell.rhino.repository.BugRepository;
@@ -14,33 +13,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("api/bug")
+@RequestMapping("api/project/{projectId}/bug/{bugId}")
 public class CommentController {
 
     private final CommentService commentService;
     private final LogService logService;
-    private final CommentRepository commentRepository;
-    private final LogRepository logRepository;
-    private final BugRepository bugRepository;
 
-    public CommentController(CommentService commentService, LogService logService, CommentRepository commentRepository, LogRepository logRepository, BugRepository bugRepository) {
+    public CommentController(CommentService commentService, LogService logService) {
         this.commentService = commentService;
         this.logService = logService;
-        this.commentRepository = commentRepository;
-        this.logRepository = logRepository;
-        this.bugRepository = bugRepository;
     }
 
-    @GetMapping("/{bugId}/comment")
+    @GetMapping("/comment")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllCommentsByBugId(@PathVariable("bugId") Integer bugId) {
         List<CommentDto> commentDtoList = commentService.getAllCommentsByBugId(bugId);
 
         return new ResponseEntity<>(commentDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("/{bugId}/comment/{commentId}")
+    @GetMapping("/detail/comment/{commentId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getCommentById(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId) {
         CommentDto commentDto = commentService.getCommentById(bugId, commentId);
 
@@ -52,38 +48,51 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/{bugId}/comment")
+    @PostMapping("/add/comment")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addComment(@PathVariable("bugId") Integer bugId, @RequestBody CommentDto commentDto) {
-        Comment comment = commentService.addComment(bugId, commentDto);
+        Map<String,String> errors = commentService.validateComment(commentDto);
 
-        if(comment == null){
-            return new ResponseEntity<>("Error while creating comment",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            Comment comment = commentService.addComment(bugId, commentDto);
             String logMessage = "Comment with id: " + comment.getId();
 
             logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_CREATE);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Comment created with ID: "+ comment.getId());
         }
     }
 
-    @PostMapping("/{bugId}/comment/{commentId}")
+    @PostMapping("/edit/comment/{commentId}")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId, @RequestBody CommentDto commentDto) {
+
         if(commentService.getCommentById(bugId, commentId) == null){
             return new ResponseEntity<>("Comment not found",HttpStatus.PRECONDITION_FAILED);
         }
         else {
-            Comment comment = commentService.updateComment(bugId, commentId ,commentDto);
-            String logMessage = "Comment with id: " + comment.getId();
+            Map<String,String> errors = commentService.validateComment(commentDto);
 
-            logService.addLog(bugId,commentDto.getIdOfLastEditingUser(),logMessage, LogStatus.COMMENT_EDIT);
+            if(errors.size() != 0){
+                return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
+            }
+            else {
+                Comment comment = commentService.updateComment(bugId, commentId ,commentDto);
+                String logMessage = "Comment with id: " + comment.getId();
 
-            return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was updated");
+                logService.addLog(bugId,1,logMessage, LogStatus.COMMENT_EDIT);
+
+                return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was updated");
+            }
         }
     }
 
-    @DeleteMapping("/{bugId}/comment/{commentId}")
-    public ResponseEntity<?> deleteComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId, @RequestBody CommentDto commentDto) {
+    @DeleteMapping("/delete/comment/{commentId}")
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ResponseEntity<?> deleteComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId) {
         if(commentService.getCommentById(bugId, commentId) == null){
             return new ResponseEntity<>("Comment not found",HttpStatus.NOT_FOUND);
         }
@@ -91,7 +100,8 @@ public class CommentController {
             Comment comment = commentService.deleteComment(commentId);
             String logMessage = "Comment with id: " + comment.getId();
 
-            logService.addLog(bugId,commentDto.getIdOfLastEditingUser(),logMessage, LogStatus.COMMENT_DELETE);
+//            logService.addLog(bugId,commentDto.getIdOfLastEditingUser(),logMessage, LogStatus.COMMENT_DELETE);
+            logService.addLog(bugId,1,logMessage, LogStatus.COMMENT_DELETE);
             return ResponseEntity.status(HttpStatus.OK).body("Comment with ID: "+ comment.getId() + " was deleted");
         }
     }

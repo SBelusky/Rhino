@@ -7,6 +7,7 @@ public class BugHasBugDto {
     //Attributes
     private BugHasBugKey id;
     private String status;
+    private Integer idOfLastEditingUser;
 
     private BugDto contains;
 
@@ -55,5 +56,13 @@ public class BugHasBugDto {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getIdOfLastEditingUser() {
+        return idOfLastEditingUser;
+    }
+
+    public void setIdOfLastEditingUser(Integer idOfLastEditingUser) {
+        this.idOfLastEditingUser = idOfLastEditingUser;
     }
 }

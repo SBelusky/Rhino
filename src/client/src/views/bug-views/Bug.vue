@@ -40,11 +40,18 @@
                         </b-table-column>
 
                         <b-table-column field="priority" label="Priorita" sortable v-slot="props">
-                            {{ getSpecificationFromArray(props.row.bugHasSpecifications, "Priority") }}
+                            {{ getSpecificationFromArray(props.row.bugHasSpecifications, "Priority").name }}
                         </b-table-column>
 
                         <b-table-column field="status" label="Status" sortable v-slot="props">
-                            {{ getSpecificationFromArray(props.row.bugHasSpecifications, "Status") }}
+                            <span
+                                class="tag"
+                                :style="{
+                                    backgroundColor: getSpecificationFromArray(props.row.bugHasSpecifications, 'Status').color
+                                }"
+                            >
+                                {{ getSpecificationFromArray(props.row.bugHasSpecifications, "Status").name }}
+                            </span>
                         </b-table-column>
 
                         <b-table-column field="summarize" label="Zhrnutie" sortable v-slot="props">
@@ -55,15 +62,15 @@
                             {{ props.row.category.name }}
                         </b-table-column>
                         <b-table-column field="FoundInVersion" label="Verzia nájdenia" sortable v-slot="props">
-                            {{ getVersionFromArray(props.row.bugHasVersions, "Found in version") }}
+                            {{ getVersionFromArray(props.row.bugHasVersions, "Found in version").name }}
                         </b-table-column>
 
                         <b-table-column field="RepairedInVersion" label="Verzia vyriešenia" sortable v-slot="props">
-                            {{ getVersionFromArray(props.row.bugHasVersions, "Repaired in version") }}
+                            {{ getVersionFromArray(props.row.bugHasVersions, "Repaired in version").name }}
                         </b-table-column>
 
                         <b-table-column field="AssociatedUser" label="Priradený" sortable v-slot="props">
-                            {{ getAssociatedUserFromArray(props.row.bugHasUsers, "Associated user") }}
+                            {{ getAssociatedUserFromArray(props.row.bugHasUsers, "Associated user").name }}
                         </b-table-column>
 
                         <b-table-column field="created_at" label="Vytvorenie" sortable v-slot="props">
@@ -114,19 +121,19 @@ export default {
     methods: {
         getSpecificationFromArray(obj, type) {
             for (let i = 0; i < obj.length; i++) {
-                if (obj[i].specification.type == type) return obj[i].specification.name;
+                if (obj[i].specification.type == type) return obj[i].specification;
             }
             return "";
         },
         getAssociatedUserFromArray(obj, type) {
             for (let i = 0; i < obj.length; i++) {
-                if (obj[i].type == type) return obj[i].user.name;
+                if (obj[i].id.type == type) return obj[i].user;
             }
             return "";
         },
         getVersionFromArray(obj, type) {
             for (let i = 0; i < obj.length; i++) {
-                if (obj[i].type == type) return obj[i].version.name;
+                if (obj[i].id.type == type) return obj[i].version;
             }
             return "";
         }

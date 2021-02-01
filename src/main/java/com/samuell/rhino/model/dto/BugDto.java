@@ -15,6 +15,7 @@ public class BugDto {
     private String description;
     private String additional_info;
     private Integer seek_time;
+    private Integer idOfLastEditingUser;
     private Set<BugHasVersionDto> bugHasVersions;
     private Set<BugHasSpecificationDto> bugHasSpecifications;
     private ProjectDto project;
@@ -145,5 +146,13 @@ public class BugDto {
 
     public void setEdited_at(Timestamp edited_at) {
         this.edited_at = edited_at;
+    }
+
+    public Integer getIdOfLastEditingUser() {
+        return idOfLastEditingUser;
+    }
+
+    public void setIdOfLastEditingUser(Integer idOfLastEditingUser) {
+        this.idOfLastEditingUser = idOfLastEditingUser;
     }
 }

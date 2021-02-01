@@ -2,6 +2,7 @@ package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
+import com.samuell.rhino.model.dto.BugHasUserDto;
 import com.samuell.rhino.model.mapper.BugMapper;
 import com.samuell.rhino.model.status_enum.LogStatus;
 import com.samuell.rhino.repository.BugRepository;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -60,16 +62,24 @@ public class BugController {
     @PostMapping("add/bug")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addBug(@PathVariable("projectId") Integer projectId, @RequestBody BugDto bugDto) {
-        Bug bug = bugService.addBug(projectId, bugDto);
+        Map<String,String> errors = bugService.validateBug(bugDto);
+        Integer authorId = 0;
 
-        if(bug == null){
-            return new ResponseEntity<>("Error while creating bug",HttpStatus.INTERNAL_SERVER_ERROR);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
-            String logMessage = "Bug with id: " + bug.getId();
+            Bug bug = bugService.addBug(projectId, bugDto);
 
-            //Opraviť, aby bol uložený autor bugu
-            logService.addLog(bug.getId(),1,logMessage, LogStatus.BUG_CREATE);
+            for (BugHasUserDto user: bugDto.getBugHasUsers()){
+                if (user.getType().equals("Author"))
+                    authorId = user.getUser().getId();
+            }
+
+            String logMessage = "Bug with id: " + bug.getId();
+            logService.addLog(bug.getId(),authorId,logMessage, LogStatus.BUG_CREATE);
+
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Bug created with ID: "+ bug.getId());
         }
     }
@@ -77,29 +87,32 @@ public class BugController {
     @PostMapping("edit/bug/{bugId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
-        entityManager.clear();
-        Bug oldBug = bugRepository.findById(bugId).orElse(new Bug());
-        Set<BugHasVersion> oldBugHasVersionSet = new HashSet<>(oldBug.getBugHasVersions());
-        Set<BugHasSpecification> oldBugHasSpecificationSet = new HashSet<>(oldBug.getBugHasSpecifications());
-        Set<BugHasBug> oldBugHasBugSet = new HashSet<>(oldBug.getBugHasBugsContains());
-        Set<BugHasUser> oldBugHasUserSet = new HashSet<>(oldBug.getBugHasUsers());
+        Map<String,String> errors = bugService.validateBug(bugDto);
 
-        oldBug = null;
-        entityManager.clear();
-
-        bugRepository.deleteSpecifications(bugId);
-        bugRepository.deleteVersions(bugId);
-        bugRepository.deleteBugHasBug(bugId);
-        bugRepository.deleteUsers(bugId);
-
-        if(bugService.getBugById(projectId,bugId) == null){
-            return new ResponseEntity<>("Bug not found",HttpStatus.PRECONDITION_FAILED);
+        if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
         }
         else {
+            // deleting all data from many-to-many tables
+            entityManager.clear();
+            Bug oldBug = bugRepository.findById(bugId).orElse(new Bug());
+            Set<BugHasVersion> oldBugHasVersionSet = new HashSet<>(oldBug.getBugHasVersions());
+            Set<BugHasSpecification> oldBugHasSpecificationSet = new HashSet<>(oldBug.getBugHasSpecifications());
+            Set<BugHasBug> oldBugHasBugSet = new HashSet<>(oldBug.getBugHasBugsContains());
+            Set<BugHasUser> oldBugHasUserSet = new HashSet<>(oldBug.getBugHasUsers());
+
+            oldBug = null;
+            entityManager.clear();
+
+            bugRepository.deleteSpecifications(bugId);
+            bugRepository.deleteVersions(bugId);
+            bugRepository.deleteBugHasBug(bugId);
+            bugRepository.deleteUsers(bugId);
+            // ----- //
+
             Bug bug = bugService.updateBug(projectId,bugId,bugDto,oldBugHasUserSet, oldBugHasVersionSet, oldBugHasSpecificationSet, oldBugHasBugSet);
             String logMessage = "Bug with id: " + bug.getId();
 
-            //Opraviť, aby bol uložený editor bugu
             logService.addLog(bug.getId(),1,logMessage, LogStatus.BUG_EDIT);
             return ResponseEntity.status(HttpStatus.OK).body("Bug with ID: "+ bug.getId() + " was updated");
         }
@@ -108,7 +121,8 @@ public class BugController {
 
     @DeleteMapping("delete/bug/{bugId}")
     @CrossOrigin(origins = "http://localhost:8081")
-    public ResponseEntity<?> deleteBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
+    public ResponseEntity<?> deleteBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
+
         if(bugService.getBugById(projectId,bugId) == null){
             return new ResponseEntity<>("Bug not found",HttpStatus.NOT_FOUND);
         }

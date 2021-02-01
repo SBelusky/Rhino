@@ -7,6 +7,12 @@
 .back-button-color:hover {
     background-color: hsl(211, 73%, 51%);
 }
+.delete-button-color {
+    background-color: hsl(356, 74%, 65%);
+}
+.delete-button-color:hover {
+    background-color: hsl(356, 74%, 60%);
+}
 /*Nekategorizované (pomocné) štýly*/
 #pm-zero {
     margin: 0 !important;
@@ -22,7 +28,7 @@
     box-shadow: none !important;
 }
 .tag.admin {
-    background-color: #aed6f1;
+    background-color: hsl(204, 71%, 81%);
 }
 .tag.programmer {
     background-color: #82e0aa;
@@ -40,6 +46,13 @@
     text-align: center;
     display: inline-block;
     width: 100%;
+}
+.medium-width-cmb {
+    width: 50%;
+    display: inline-grid;
+}
+.is-6-plus-gap-size {
+    width: calc(50% + 12px) !important;
 }
 /*Prehľadové tabuľky naprieč celou aplikáciou*/
 #data-table .b-table {
@@ -73,6 +86,10 @@
 #data-table .pagination-link.is-current {
     background-color: rgba(65, 88, 110, 0.7);
     border-color: rgba(65, 88, 110, 0.7);
+}
+#data-table .pagination-link:active {
+    border-color: rgba(65, 88, 110, 0.7);
+    box-shadow: none;
 }
 #data-table .data-table-button,
 #account-form .data-table-button {

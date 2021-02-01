@@ -33,7 +33,7 @@
     },
     "prettier": {
         "tabWidth": 4,
-        "printWidth": 130
+        "printWidth": 180
     },
     "browserslist": [
         "> 1%",

@@ -1,14 +1,18 @@
 <template>
     <div id="form-view">
-        <window-title small-title="| pridanie reportu" big-title="Nový záznam" />
+        <window-title :small-title="type == 'detail' ? '| detail reportu' : '| editácia reportu'" :big-title="id" />
         <div class="columns pt-4 pb-4">
             <div class="column is-3 form-info">
                 <p class="form-section-title">Špecidifikácia:</p>
                 <div class="field medium-width-cmb pr-3">
                     <label class="label"><span class="has-text-danger">* </span>Kategória:</label>
                     <multiselect
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.category }"
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit',
+                            'invalid-field': errors.category
+                        }"
+                        :disabled="type == 'detail'"
                         v-model="category"
                         label="name"
                         track-by="id"
@@ -25,16 +29,20 @@
                 <div class="field medium-width-cmb pr-3">
                     <label class="label"><span class="has-text-danger">* </span>Priorita:</label>
                     <multiselect
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit',
+                            'invalid-field': errors.priority
+                        }"
                         v-model="priority"
                         label="name"
                         track-by="id"
+                        :disabled="type == 'detail'"
                         :options="allPriorities"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber priority"
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.priority }"
                     ></multiselect>
                     <div v-if="errors.priority">
                         <p class="help is-danger">{{ this.errors.priority }}</p>
@@ -43,16 +51,20 @@
                 <div class="field medium-width-cmb pr-3">
                     <label class="label"><span class="has-text-danger">* </span>Status:</label>
                     <multiselect
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit',
+                            'invalid-field': errors.status
+                        }"
                         v-model="status"
                         label="name"
                         track-by="id"
+                        :disabled="type == 'detail'"
                         :options="allStatuses"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber statusu"
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.status }"
                     ></multiselect>
                     <div v-if="errors.status">
                         <p class="help is-danger">{{ this.errors.status }}</p>
@@ -61,38 +73,45 @@
                 <div class="field medium-width-cmb pr-3">
                     <label class="label"><span class="has-text-danger">* </span>Reprodukovateľnosť:</label>
                     <multiselect
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit',
+                            'invalid-field': errors.reproducibility
+                        }"
                         v-model="reproducibility"
                         label="name"
                         track-by="id"
+                        :disabled="type == 'detail'"
                         :options="allReproducibility"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber reprod."
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.reproducibility }"
                     ></multiselect>
                     <div v-if="errors.reproducibility">
                         <p class="help is-danger">{{ this.errors.reproducibility }}</p>
                     </div>
                 </div>
             </div>
-
             <div class="column is-3 form-info">
                 <p class="form-section-title">Bližšie informácie:</p>
                 <div class="field medium-width-cmb pr-3">
                     <label class="label"><span class="has-text-danger">* </span>Verzia nájdenia:</label>
                     <multiselect
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit',
+                            'invalid-field': errors.foundInVersion
+                        }"
                         v-model="foundInVersion"
                         label="name"
                         track-by="id"
+                        :disabled="type == 'detail'"
                         :options="allVersions"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber verzie nájdenia"
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.foundInVersion }"
                     ></multiselect>
                     <div v-if="errors.foundInVersion">
                         <p class="help is-danger">{{ this.errors.foundInVersion }}</p>
@@ -101,31 +120,38 @@
                 <div class="field medium-width-cmb pr-3">
                     <label class="label">Verzia vyriešenia:</label>
                     <multiselect
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit'
+                        }"
                         v-model="repairedInVersion"
                         label="name"
                         track-by="id"
+                        :disabled="type == 'detail'"
                         :options="allVersions"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber verzie vyriešenia"
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.repairedInVersion }"
                     ></multiselect>
                 </div>
                 <div class="field medium-width-cmb pr-3">
                     <label class="label"><span class="has-text-danger">* </span>Priradený používateľ:</label>
                     <multiselect
+                        :class="{
+                            'multi-select-detail': type == 'detail',
+                            'multi-select': type == 'edit',
+                            'invalid-field': errors.associatedUser
+                        }"
                         v-model="associatedUser"
                         label="name"
                         track-by="id"
+                        :disabled="type == 'detail'"
                         :options="allUsers"
                         :searchable="false"
                         :close-on-select="true"
                         :show-labels="false"
                         placeholder="Výber pužívateľa"
-                        class="multi-select"
-                        :class="{ 'invalid-field': errors.associatedUser }"
                     ></multiselect>
                     <div v-if="errors.associatedUser">
                         <p class="help is-danger">{{ this.errors.associatedUser }}</p>
@@ -140,6 +166,7 @@
                             type="text"
                             placeholder="65 min"
                             v-model="seekTime"
+                            :disabled="type == 'detail'"
                             maxlength="50"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
                         />
@@ -160,6 +187,7 @@
                             class="input"
                             :class="{ 'invalid-field': errors.summarize }"
                             v-model="summarize"
+                            :disabled="type == 'detail'"
                             type="text"
                             placeholder="Krátky opis reportu"
                             maxlength="100"
@@ -179,9 +207,10 @@
                             class="textarea"
                             :class="{ 'invalid-field': errors.description }"
                             v-model="description"
+                            :disabled="type == 'detail'"
                             placeholder="Popis reportu, postup nasimulovania chyby..."
-                            maxlength="1000"
                             rows="8"
+                            maxlength="1000"
                         ></textarea>
                     </div>
                     <div v-if="errors.description">
@@ -194,6 +223,7 @@
                         <textarea
                             class="textarea"
                             v-model="additional_info"
+                            :disabled="type == 'detail'"
                             placeholder="Opis vzťahov medzi reportami..."
                             maxlength="1000"
                         ></textarea>
@@ -202,11 +232,17 @@
             </div>
         </div>
         <div class="form-view-button pb-2">
-            <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
-            <button class="button is-success" v-on:click="submitForm">
+            <button class="button mr-3" v-on:click="$router.back()">
+                <i v-if="type == 'detail'" class="fas fa-long-arrow-alt-left icon-center"></i>
+                <span v-if="type == 'detail'"> Späť </span>
+                <i v-if="type == 'edit'" class="fas fa-ban icon-center"></i>
+                <span v-if="type == 'edit'"> Zrušiť </span>
+            </button>
+            <button v-if="type == 'edit'" class="button is-success" v-on:click="submitForm">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
             </button>
         </div>
+        <comment-detail disabled />
     </div>
 </template>
 
@@ -214,15 +250,21 @@
 import axios from "axios";
 import WindowTitle from "../../components/WindowTitle.vue";
 import Multiselect from "vue-multiselect";
+import CommentDetail from "@/components/comment/CommentDetail.vue";
 
 export default {
     title: "Reporty | pridanie",
     components: {
         WindowTitle,
-        Multiselect
+        Multiselect,
+        CommentDetail
     },
     data() {
         return {
+            data: [],
+            type: this.$route.params.type,
+            actualProject: this.$store.state.actualProject,
+            id: null,
             allCategories: [],
             category: null,
             priority: null,
@@ -240,7 +282,6 @@ export default {
             summarize: null,
             description: null,
             additional_info: null,
-            actualProject: this.$store.state.actualProject,
             errors: {}
         };
     },
@@ -264,10 +305,47 @@ export default {
         axios
             .get("http://localhost:8080/api/project/" + this.actualProject + "/version")
             .then(response => (this.allVersions = response.data));
+
+        axios
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/detail/bug/" + this.$route.params.id)
+            .then(response => {
+                this.data = response.data;
+                this.id = this.data.id;
+                this.category = this.data.category;
+                this.seekTime = this.data.seek_time;
+                this.summarize = this.data.summarize;
+                this.description = this.data.description;
+                this.additional_info = this.data.additional_info;
+
+                for (let i = 0; i < this.data.bugHasSpecifications.length; i++) {
+                    if (this.data.bugHasSpecifications[i].specification.type == "Status") {
+                        this.status = this.data.bugHasSpecifications[i].specification;
+                    } else if (this.data.bugHasSpecifications[i].specification.type == "Priority") {
+                        this.priority = this.data.bugHasSpecifications[i].specification;
+                    } else if (this.data.bugHasSpecifications[i].specification.type == "Reproducibility") {
+                        this.reproducibility = this.data.bugHasSpecifications[i].specification;
+                    }
+                }
+
+                for (let i = 0; i < this.data.bugHasUsers.length; i++) {
+                    if (this.data.bugHasUsers[i].id.type == "Associated user") {
+                        this.associatedUser = this.data.bugHasUsers[i].user;
+                    }
+                }
+
+                for (let i = 0; i < this.data.bugHasVersions.length; i++) {
+                    if (this.data.bugHasVersions[i].id.type == "Found in version") {
+                        this.foundInVersion = this.data.bugHasVersions[i].version;
+                    } else if (this.data.bugHasVersions[i].id.type == "Repaired in version") {
+                        this.repairedInVersion = this.data.bugHasVersions[i].version;
+                    }
+                }
+            });
     },
     methods: {
         submitForm() {
-            let data = {
+            let editData = {
+                id: this.id,
                 category: this.category,
                 seek_time: this.seekTime,
                 summarize: this.summarize,
@@ -279,23 +357,23 @@ export default {
                 bugHasBugsContains: []
             };
 
-            data.bugHasVersions.push({ version: this.foundInVersion, type: "Found in version" });
+            editData.bugHasVersions.push({ version: this.foundInVersion, type: "Found in version" });
 
             if (this.repairedInVersion != null) {
-                data.bugHasVersions.push({ version: this.repairedInVersion, type: "Repaired in version" });
+                editData.bugHasVersions.push({ version: this.repairedInVersion, type: "Repaired in version" });
             }
 
-            data.bugHasSpecifications.push({ specification: this.status, type: "Status" });
-            data.bugHasSpecifications.push({ specification: this.priority, type: "Priority" });
-            data.bugHasSpecifications.push({ specification: this.reproducibility, type: "Reproducibility" });
+            editData.bugHasSpecifications.push({ specification: this.status, type: "Status" });
+            editData.bugHasSpecifications.push({ specification: this.priority, type: "Priority" });
+            editData.bugHasSpecifications.push({ specification: this.reproducibility, type: "Reproducibility" });
 
-            data.bugHasUsers.push({ user: { id: 1 }, type: "Author" });
-            data.bugHasUsers.push({ user: this.associatedUser, type: "Associated user" });
+            editData.bugHasUsers.push({ user: { id: 1 }, type: "Author" });
+            editData.bugHasUsers.push({ user: this.associatedUser, type: "Associated user" });
 
             axios
-                .post("http://localhost:8080/api/project/" + this.actualProject + "/add/bug", data)
+                .post("http://localhost:8080/api/project/" + this.actualProject + "/edit/bug/" + this.id, editData)
                 .then(response => {
-                    if (response.status == 201) {
+                    if (response.status == 200) {
                         this.$router.back();
                     }
                 })

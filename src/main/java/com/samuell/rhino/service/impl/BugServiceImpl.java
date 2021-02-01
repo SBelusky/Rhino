@@ -1,7 +1,11 @@
 package com.samuell.rhino.service.impl;
 
+import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
+import com.samuell.rhino.model.dto.BugHasSpecificationDto;
+import com.samuell.rhino.model.dto.BugHasUserDto;
+import com.samuell.rhino.model.dto.BugHasVersionDto;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
 import com.samuell.rhino.model.embedded_key.BugHasSpecificationKey;
 import com.samuell.rhino.model.embedded_key.BugHasUserKey;
@@ -102,37 +106,10 @@ public class BugServiceImpl implements BugService {
                     newBugHasVersion.setId(newBugHasVersionKey);
                     newBugHasVersion.setBug(newBug);
                     newBugHasVersion.setVersion(newVersion);
-//                    newBugHasVersion.setType(bugVersion.getType());
 
                     return newBugHasVersion;
                 })
                 .collect(Collectors.toSet()));
-
-//        Set<BugHasVersion> bhv =bugDto.getBugHasVersions()
-//                .stream()
-//                .map(bugVersion -> {
-//                    Bug newBug = bugRepository.findById(bug.getId()).orElse(null);
-//                    Version newVersion = versionRepository.findById(bugVersion.getVersion().getId()).orElse(null);
-//                    BugHasVersionKey newBugHasVersionKey = new BugHasVersionKey(bug.getId(), bugVersion.getVersion().getId());
-//                    BugHasVersion newBugHasVersion = new BugHasVersion();
-//
-//                    newBugHasVersion.setId(newBugHasVersionKey);
-//                    newBugHasVersion.setBug(newBug);
-//                    newBugHasVersion.setVersion(newVersion);
-//                    newBugHasVersion.setType(bugVersion.getType());
-//
-//                    return newBugHasVersion;
-//                })
-//                .collect(Collectors.toSet());
-//
-//        Set<BugHasVersion> xxx = new HashSet<>();
-//        for(BugHasVersion e: bhv){
-//            xxx.add(e);
-//            bug.setBugHasVersions(xxx);
-//            bugRepository.save(bug);
-//            xxx = new HashSet<>();
-//        }
-
 
         bug.setBugHasSpecifications(bugDto.getBugHasSpecifications()
                 .stream()
@@ -289,6 +266,53 @@ public class BugServiceImpl implements BugService {
         bug.setWas_deleted(true);
 
         return bugRepository.save(bug);
+    }
+
+    @Override
+    public Map<String, String> validateBug(BugDto bugDto) {
+        Map<String,String> errors = new HashMap<>();
+        Boolean hasFoundInVersion, hasAssociatedUser, hasStatus, hasPriority, hasReproducibility;
+        hasFoundInVersion = hasAssociatedUser = hasStatus = hasPriority = hasReproducibility = false;
+
+        if(bugDto.getSummarize() == null || !bugDto.getSummarize().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("summarize","Zadajte sumarizáciu");
+
+        if(bugDto.getDescription() == null || !bugDto.getDescription().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("description","Zadajte popis");
+
+        if(bugDto.getCategory() == null)
+            errors.put("category","Vyberte kategóriu");
+
+        for(BugHasSpecificationDto specification : bugDto.getBugHasSpecifications()){
+            if(specification.getType().equals("Status") && specification.getSpecification() != null)
+                hasStatus = true;
+            if(specification.getType().equals("Priority") && specification.getSpecification() != null)
+                hasPriority = true;
+            if(specification.getType().equals("Reproducibility") && specification.getSpecification()!= null)
+                hasReproducibility = true;
+        }
+        if (!hasStatus)
+            errors.put("status","Vyberte status");
+        if (!hasPriority)
+            errors.put("priority","Vyberte prioritu");
+        if (!hasReproducibility)
+            errors.put("reproducibility","Vyberte reprodukovaľnosť");
+
+        for(BugHasVersionDto version : bugDto.getBugHasVersions()){
+            if(version.getType().equals("Found in version") && version.getVersion() != null)
+                hasFoundInVersion = true;
+        }
+        if (!hasFoundInVersion)
+            errors.put("foundInVersion","Vyberte verziu nájdenia");
+
+        for(BugHasUserDto user : bugDto.getBugHasUsers()){
+            if(user.getType().equals("Associated user") && user.getUser() != null)
+                hasAssociatedUser = true;
+        }
+        if (!hasAssociatedUser)
+            errors.put("associatedUser","Vyberte priradeného používateľa");
+
+        return errors;
     }
 
     //Additional methods:

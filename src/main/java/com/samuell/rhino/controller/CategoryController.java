@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/project/{projectId}/")
+@RequestMapping("api/project/{projectId}")
 public class CategoryController {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
@@ -22,7 +22,7 @@ public class CategoryController {
         this.categoryRepository = categoryRepository;
     }
 
-    @GetMapping("category")
+    @GetMapping("/category")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllCategoriesByProjectId(@PathVariable("projectId") Integer projectId) {
         List<CategoryDto> categoryDtoList = categoryService.getAllCategoriesByProjectId(projectId);
@@ -30,7 +30,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
     }
 
-    @GetMapping("detail/category/{categoryId}")
+    @GetMapping("/detail/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getCategoryById(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId) {
         CategoryDto categoryDto = categoryService.getCategoryById(projectId, categoryId);
@@ -43,7 +43,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("add/category")
+    @PostMapping("/add/category")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addCategory(@PathVariable("projectId") Integer projectId, @RequestBody CategoryDto categoryDto) {
         Map<String,String> errors = categoryService.validateCategory(categoryDto);
@@ -58,7 +58,7 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("edit/category/{categoryId}")
+    @PostMapping("/edit/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateCategory(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId, @RequestBody CategoryDto categoryDto) {
         Map<String,String> errors = categoryService.validateCategory(categoryDto);
@@ -73,7 +73,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("delete/category/{categoryId}")
+    @DeleteMapping("/delete/category/{categoryId}")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteCategory(@PathVariable("projectId") Integer projectId,@PathVariable("categoryId") Integer categoryId) {
         if(categoryService.getCategoryById(projectId, categoryId) == null){

@@ -4,6 +4,10 @@ import VueRouter from "vue-router";
 //Bug
 import Bug from "../views/bug-views/Bug.vue";
 import BugAdd from "../views/bug-views/BugAdd.vue";
+import BugDetail from "../views/bug-views/BugDetail.vue";
+
+//Comment
+import CommentEdit from "../components/comment/CommentEdit.vue";
 
 //Account
 import Account from "../views/account-views/Account.vue";
@@ -58,6 +62,15 @@ const routes = [
     {
         path: "/admin/project/:id/add/bug",
         component: BugAdd
+    },
+    {
+        path: "/admin/project/:projectId/:type(detail|edit)/bug/:id",
+        component: BugDetail
+    },
+    //Comment
+    {
+        path: "/admin/project/:projectId/bug/:bugId/edit/comment/:commentId",
+        component: CommentEdit
     },
     //Account
     {

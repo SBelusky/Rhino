@@ -2,11 +2,13 @@ package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.Comment;
 import com.samuell.rhino.model.Project;
+import com.samuell.rhino.model.dto.BugDto;
 import com.samuell.rhino.model.dto.CommentDto;
 import com.samuell.rhino.model.dto.ProjectDto;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommentService {
     @Nullable
@@ -22,5 +24,8 @@ public interface CommentService {
     Comment updateComment(Integer bugId, Integer commentId, CommentDto commentDto);
 
     @Nullable
-    Comment deleteComment(Integer id);
+    Comment deleteComment(Integer commentId);
+
+    @Nullable
+    Map<String,String> validateComment(CommentDto commentDto);
 }
