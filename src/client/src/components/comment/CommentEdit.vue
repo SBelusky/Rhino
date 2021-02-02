@@ -1,12 +1,12 @@
 <template>
     <div id="comment-edit">
-        <window-title small-title="| editácia komentáru" big-title="Report" />
+        <window-title small-title="| editácia komentáru" :big-title="'Report: ' + $route.params.bugId + ' '" />
         <div class="columns">
             <div class="column is-5 ">
                 <article class="media">
                     <div class="media-content">
                         <div class="content">
-                            <textarea class="textarea" :class="{ 'invalid-field': errors.description }" rows="8" placeholder="Pridaj komentár..." v-model="description"> </textarea>
+                            <textarea class="textarea" :class="{ 'invalid-field': errors.description }" rows="6" placeholder="Pridaj komentár..." v-model="description"> </textarea>
                         </div>
                         <div v-if="errors.description">
                             <p class="help is-danger">{{ this.errors.description }}</p>
@@ -62,6 +62,8 @@ export default {
         };
     },
     mounted() {
+        window.scrollTo(0, 0);
+
         axios
             .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.bugId + "/detail/comment/" + this.$route.params.commentId)
             .then(response => {
@@ -107,6 +109,9 @@ export default {
     color: #000;
     border: 0;
     box-shadow: none;
+}
+#comment-edit .button.is-success:hover {
+    background-color: hsl(141, 53%, 43%);
 }
 #comment-edit .field.spend-time {
     margin: 1em 0 0 0 !important;

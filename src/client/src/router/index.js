@@ -9,6 +9,9 @@ import BugDetail from "../views/bug-views/BugDetail.vue";
 //Comment
 import CommentEdit from "../components/comment/CommentEdit.vue";
 
+//Attachment
+import AttachmentUpload from "../components/attachment/AttachmentUpload.vue";
+
 //Account
 import Account from "../views/account-views/Account.vue";
 import AccoutDetail from "../views/account-views/AccoutDetail.vue";
@@ -71,6 +74,11 @@ const routes = [
     {
         path: "/admin/project/:projectId/bug/:bugId/edit/comment/:commentId",
         component: CommentEdit
+    },
+    //Attachment
+    {
+        path: "/admin/project/:projectId/bug/:bugId/upload/attachment",
+        component: AttachmentUpload
     },
     //Account
     {

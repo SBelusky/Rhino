@@ -1,6 +1,6 @@
 <template>
     <div id="form-view">
-        <window-title :small-title="type == 'detail' ? '| detail reportu' : '| editácia reportu'" :big-title="id" />
+        <window-title :small-title="type == 'detail' ? '| detail reportu' : '| editácia reportu'" :big-title="'Report: ' + id + ' '" />
         <div class="columns pt-4 pb-4">
             <div class="column is-3 form-info">
                 <p class="form-section-title">Špecidifikácia:</p>
@@ -220,13 +220,7 @@
                 <div class="field">
                     <label class="label">Dodatočné informácie:</label>
                     <div class="control has-icons-left">
-                        <textarea
-                            class="textarea"
-                            v-model="additional_info"
-                            :disabled="type == 'detail'"
-                            placeholder="Opis vzťahov medzi reportami..."
-                            maxlength="1000"
-                        ></textarea>
+                        <textarea class="textarea" v-model="additional_info" :disabled="type == 'detail'" placeholder="Opis vzťahov medzi reportami..." maxlength="1000"></textarea>
                     </div>
                 </div>
             </div>
@@ -238,11 +232,10 @@
                 <i v-if="type == 'edit'" class="fas fa-ban icon-center"></i>
                 <span v-if="type == 'edit'"> Zrušiť </span>
             </button>
-            <button v-if="type == 'edit'" class="button is-success" v-on:click="submitForm">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
-            </button>
+            <button v-if="type == 'edit'" class="button is-success" v-on:click="submitForm"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
         </div>
-        <comment-detail disabled />
+        <attachment v-if="type == 'detail'" />
+        <comment-detail v-if="type == 'detail'" />
     </div>
 </template>
 
@@ -251,13 +244,15 @@ import axios from "axios";
 import WindowTitle from "../../components/WindowTitle.vue";
 import Multiselect from "vue-multiselect";
 import CommentDetail from "@/components/comment/CommentDetail.vue";
+import Attachment from "@/components/attachment/Attachment.vue";
 
 export default {
     title: "Reporty | pridanie",
     components: {
         WindowTitle,
         Multiselect,
-        CommentDetail
+        CommentDetail,
+        Attachment
     },
     data() {
         return {
@@ -286,61 +281,51 @@ export default {
         };
     },
     mounted() {
-        axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/category")
-            .then(response => (this.allCategories = response.data));
+        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/category").then(response => (this.allCategories = response.data));
 
-        axios
-            .get("http://localhost:8080/api/specification/?type=Priority")
-            .then(response => (this.allPriorities = response.data));
+        axios.get("http://localhost:8080/api/specification/?type=Priority").then(response => (this.allPriorities = response.data));
 
         axios.get("http://localhost:8080/api/specification/?type=Status").then(response => (this.allStatuses = response.data));
 
-        axios
-            .get("http://localhost:8080/api/specification/?type=Reproducibility")
-            .then(response => (this.allReproducibility = response.data));
+        axios.get("http://localhost:8080/api/specification/?type=Reproducibility").then(response => (this.allReproducibility = response.data));
 
         axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
 
-        axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/version")
-            .then(response => (this.allVersions = response.data));
+        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/version").then(response => (this.allVersions = response.data));
 
-        axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/detail/bug/" + this.$route.params.id)
-            .then(response => {
-                this.data = response.data;
-                this.id = this.data.id;
-                this.category = this.data.category;
-                this.seekTime = this.data.seek_time;
-                this.summarize = this.data.summarize;
-                this.description = this.data.description;
-                this.additional_info = this.data.additional_info;
+        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/detail/bug/" + this.$route.params.id).then(response => {
+            this.data = response.data;
+            this.id = this.data.id;
+            this.category = this.data.category;
+            this.seekTime = this.data.seek_time;
+            this.summarize = this.data.summarize;
+            this.description = this.data.description;
+            this.additional_info = this.data.additional_info;
 
-                for (let i = 0; i < this.data.bugHasSpecifications.length; i++) {
-                    if (this.data.bugHasSpecifications[i].specification.type == "Status") {
-                        this.status = this.data.bugHasSpecifications[i].specification;
-                    } else if (this.data.bugHasSpecifications[i].specification.type == "Priority") {
-                        this.priority = this.data.bugHasSpecifications[i].specification;
-                    } else if (this.data.bugHasSpecifications[i].specification.type == "Reproducibility") {
-                        this.reproducibility = this.data.bugHasSpecifications[i].specification;
-                    }
+            for (let i = 0; i < this.data.bugHasSpecifications.length; i++) {
+                if (this.data.bugHasSpecifications[i].specification.type == "Status") {
+                    this.status = this.data.bugHasSpecifications[i].specification;
+                } else if (this.data.bugHasSpecifications[i].specification.type == "Priority") {
+                    this.priority = this.data.bugHasSpecifications[i].specification;
+                } else if (this.data.bugHasSpecifications[i].specification.type == "Reproducibility") {
+                    this.reproducibility = this.data.bugHasSpecifications[i].specification;
                 }
+            }
 
-                for (let i = 0; i < this.data.bugHasUsers.length; i++) {
-                    if (this.data.bugHasUsers[i].id.type == "Associated user") {
-                        this.associatedUser = this.data.bugHasUsers[i].user;
-                    }
+            for (let i = 0; i < this.data.bugHasUsers.length; i++) {
+                if (this.data.bugHasUsers[i].id.type == "Associated user") {
+                    this.associatedUser = this.data.bugHasUsers[i].user;
                 }
+            }
 
-                for (let i = 0; i < this.data.bugHasVersions.length; i++) {
-                    if (this.data.bugHasVersions[i].id.type == "Found in version") {
-                        this.foundInVersion = this.data.bugHasVersions[i].version;
-                    } else if (this.data.bugHasVersions[i].id.type == "Repaired in version") {
-                        this.repairedInVersion = this.data.bugHasVersions[i].version;
-                    }
+            for (let i = 0; i < this.data.bugHasVersions.length; i++) {
+                if (this.data.bugHasVersions[i].id.type == "Found in version") {
+                    this.foundInVersion = this.data.bugHasVersions[i].version;
+                } else if (this.data.bugHasVersions[i].id.type == "Repaired in version") {
+                    this.repairedInVersion = this.data.bugHasVersions[i].version;
                 }
-            });
+            }
+        });
     },
     methods: {
         submitForm() {

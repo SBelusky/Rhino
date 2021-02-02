@@ -17,7 +17,7 @@
                                     <strong>{{ comment.user.name }}</strong> |
                                     <small>{{ comment.created_at | moment("DD. MM. YYYY HH:mm") }}</small>
                                     <br />
-                                    <textarea class="textarea" rows="8" placeholder="Add a comment..." disabled :value="comment.description"> </textarea>
+                                    <textarea class="textarea" rows="6" placeholder="Add a comment..." disabled :value="comment.description"> </textarea>
                                 </div>
                                 <nav class="level is-mobile">
                                     <div class="level-left">
@@ -48,7 +48,7 @@
                             </figure>
                             <div class="media-content">
                                 <div class="content">
-                                    <textarea class="textarea" :class="{ 'invalid-field': errors.description }" rows="8" placeholder="Pridaj komentár..." v-model="description">
+                                    <textarea class="textarea" :class="{ 'invalid-field': errors.description }" rows="6" placeholder="Pridaj komentár..." v-model="description">
                                     </textarea>
                                 </div>
                                 <div v-if="errors.description">
@@ -178,6 +178,9 @@ export default {
 #comments .button.is-success {
     margin: 1em 0 0 5em;
     color: #000;
+}
+#comments .button.is-success:hover {
+    background-color: hsl(141, 53%, 43%);
 }
 #comments .control {
     max-width: 10em;
