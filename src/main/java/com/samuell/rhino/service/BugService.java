@@ -2,6 +2,7 @@ package com.samuell.rhino.service;
 
 import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
+import com.samuell.rhino.model.dto.BugHasBugDto;
 import com.samuell.rhino.model.dto.CommentDto;
 import com.samuell.rhino.model.dto.UserDto;
 import org.springframework.lang.Nullable;
@@ -28,4 +29,10 @@ public interface BugService {
 
     @Nullable
     Map<String,String> validateBug(BugDto bugDto);
+
+    @Nullable
+    Map<String,String> validateRelationBug(BugHasBugDto bugHasBugDto, Integer projectId, Integer bugId);
+
+    @Nullable
+    String formatBugId(Integer bugId);
 }

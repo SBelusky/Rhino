@@ -2,32 +2,37 @@ package com.samuell.rhino.model.status_enum;
 
 public enum LogStatus {
     //Bug status
-    BUG_CREATE("Bug created"),
-    BUG_EDIT("Bug edited"),
-    BUG_DELETE("Bug deleted"),
+    BUG_CREATE("Vytvorenie reportu"),
+    BUG_EDIT("Editácia reportu"),
+    BUG_DELETE("Vymazanie reportu"),
 
     //Attachment status
-    ATTACHMENT_UPLOAD("Attachment uploaded"),
-    ATTACHMENT_DELETE("Attachment deleted"),
+    ATTACHMENT_UPLOAD("Nahratie prílohy"),
+    ATTACHMENT_DELETE("Vymazanie prílohy"),
 
     //Comment status
-    COMMENT_CREATE("Comment created"),
-    COMMENT_EDIT("Comment edited"),
-    COMMENT_DELETE("Comment deleted"),
+    COMMENT_CREATE("Vytvorenie komentára"),
+    COMMENT_EDIT("Editácia komentára"),
+    COMMENT_DELETE("Vymazanie komentára"),
 
     //Specification status
-    STATUS_CHANGE("Status changed"),
-    PRIORITY_CHANGE("Priority changed"),
-    REPRODUCIBILITY_CHANGE("Reproducibility changed"),
+    STATUS_CHANGE("Zmena statusu"),
+    PRIORITY_CHANGE("Zmena priority"),
+    REPRODUCIBILITY_CHANGE("Zmena reprodukovateľnosti"),
+
+    //Relation with other bug status
+    RELATION_CREATE("Vytvorenie vzťahu"),
+    RELATION_DELETE("Vymazanie vzťahu"),
+
     //Version status
-    FOUND_IN_VERSION_CHANGE("Found in version changed"),
-    REPAIRED_IN_VERSION_CHANGE("Repaired in version changed"),
+    FOUND_IN_VERSION_CHANGE("Zmena verzie nájdenia"),
+    REPAIRED_IN_VERSION_CHANGE("Zmena verzie vyriešenia"),
 
     //Category status
-    CATEGORY_CHANGE("Category changed"),
+    CATEGORY_CHANGE("Zmena kategórie"),
 
     //Category status
-    ASSOCIATED_USER_CHANGE("Associated user changed"),
+    ASSOCIATED_USER_CHANGE("Zmena priradeného používateľa"),
 
     //Default if we dont choose from previous attributes
     DEFAULT("DEFAULT");

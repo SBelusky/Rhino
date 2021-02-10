@@ -54,6 +54,9 @@
 .is-6-plus-gap-size {
     width: calc(50% + 12px) !important;
 }
+.is-underline {
+    text-decoration: underline;
+}
 /*Prehľadové tabuľky naprieč celou aplikáciou*/
 #data-table .b-table {
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
@@ -145,7 +148,6 @@
 #form-view input:focus,
 #form-view textarea:focus,
 #form-view .multi-select:focus {
-    /* box-shadow: 0 0 5px rgb(8, 89, 196) !important; */
     box-shadow: none;
     border: 1px solid black !important;
 }
@@ -204,4 +206,50 @@
 }
 #form-view .invalid-field {
     border-color: red !important;
+}
+
+/*Štýly componentov v detaile reportu*/
+.columns .b-table.bug-components {
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+}
+.b-table.bug-components .b-table .is-unselectable,
+.b-table.bug-components .table thead td,
+.b-table.bug-components .table thead th {
+    background-color: rgba(65, 88, 110, 0.7);
+    color: white !important;
+}
+.b-table.bug-components {
+    margin-top: 2em;
+}
+.b-table.bug-components a i {
+    color: black;
+}
+.b-table.bug-components a i:hover {
+    color: #4b85c4;
+}
+.bug-section-title {
+    font-size: 2em;
+    margin: 2em 0 0 0;
+    max-width: 300px;
+    border-bottom: 2px solid black;
+    font-weight: bold;
+}
+.bug-components .table tbody tr:hover {
+    background-color: #e8e8e8 !important;
+}
+.b-table.bug-components a {
+    color: hsl(211, 73%, 51%);
+}
+.bug-components.modal .modal-card {
+    width: inherit;
+    position: absolute !important;
+    top: 50px;
+    max-width: 30em;
+}
+.bug-components.modal .modal-card-body {
+    padding: 2em 1em;
+    text-align: center;
+}
+.bug-components.modal .modal-card-foot {
+    margin: 0;
 }

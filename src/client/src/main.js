@@ -11,9 +11,9 @@ import "@mdi/font/css/materialdesignicons.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import "vue-swatches/dist/vue-swatches.css";
-import titleMixin from "./mixins/titleMixin";
+import tableMixin from "./mixins/tableMixin";
 
-Vue.mixin(titleMixin);
+Vue.mixin(tableMixin);
 Vue.component("downloadExcel", JsonExcel);
 Vue.use(Buefy);
 Vue.use(require("vue-moment"));

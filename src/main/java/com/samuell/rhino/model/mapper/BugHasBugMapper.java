@@ -15,7 +15,7 @@ import org.mapstruct.factory.Mappers;
 public interface BugHasBugMapper {
     BugHasBugMapper INSTANCE = Mappers.getMapper(BugHasBugMapper.class);
 
-    @Mapping(target = "contains", ignore=true)
+   @Mapping(target = "contains", ignore=true)
     BugHasBugDto toBugHasBugDto(BugHasBug bugHasBug);
     BugHasBug toBugHasBug(BugHasBugDto bugHasBugDto);
 

@@ -18,7 +18,7 @@ public class LogController {
         this.logService = logService;
     }
 
-    @GetMapping("{/log")
+    @GetMapping("/log")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllLogsByBugId(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         List<LogDto> logDtoList = logService.getAllLogsByBugId(projectId, bugId);

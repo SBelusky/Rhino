@@ -1,9 +1,9 @@
 <template>
     <div id="attachment">
-        <p class="section-title">Prílohy</p>
+        <p class="bug-section-title">Prílohy</p>
         <div class="columns pt-1">
-            <div class="column is-3">
-                <b-table striped hoverable :data="data" default-sort="id">
+            <div class="column is-4">
+                <b-table striped hoverable :data="data" default-sort="id" class="bug-components">
                     <b-table-column field="id" label="ID" width="40" v-slot="props">
                         {{ props.row.id }}
                     </b-table-column>
@@ -47,12 +47,14 @@
                     </div>
                 </div>
                 <div class="level-item" v-if="fileToUpload != null">
-                    <button class="button is-success" v-on:click="submitFile(fileToUpload)"><i class="fas fa-long-arrow-alt-left icon-center mr-2"></i>Uložiť prílohu</button>
+                    <button class="button is-success" v-on:click="submitFile(fileToUpload)">
+                        <i class="fas fa-long-arrow-alt-left icon-center mr-2"></i>Uložiť prílohu
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="modal" :class="{ 'is-active': showModalFlag }">
+        <div class="bug-components modal" :class="{ 'is-active': showModalFlag }">
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
@@ -73,7 +75,12 @@
                     >
                         Áno
                     </b-button>
-                    <b-button class="bbutton-remove-style button back-button-color has-text-dark" icon-left="ban pl-3" icon-pack="fas" v-on:click="showModal">
+                    <b-button
+                        class="bbutton-remove-style button back-button-color has-text-dark"
+                        icon-left="ban pl-3"
+                        icon-pack="fas"
+                        v-on:click="showModal"
+                    >
                         Nie
                     </b-button>
                 </footer>
@@ -116,9 +123,17 @@ export default {
     methods: {
         dowloadAttachment(attachment) {
             axios
-                .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/download/attachment/" + attachment.id, {
-                    responseType: "blob"
-                })
+                .get(
+                    "http://localhost:8080/api/project/" +
+                        this.$route.params.projectId +
+                        "/bug/" +
+                        this.$route.params.id +
+                        "/download/attachment/" +
+                        attachment.id,
+                    {
+                        responseType: "blob"
+                    }
+                )
                 .then(response => {
                     const blob = new Blob([response.data], { type: attachment.type });
                     const link = document.createElement("a");
@@ -133,7 +148,14 @@ export default {
             this.attachmentToDelete = row;
         },
         deleteRow(row) {
-            axios.delete("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/delete/attachment/" + row.id);
+            axios.delete(
+                "http://localhost:8080/api/project/" +
+                    this.$route.params.projectId +
+                    "/bug/" +
+                    this.$route.params.id +
+                    "/delete/attachment/" +
+                    row.id
+            );
             this.attachmentToDelete.name = null;
             this.$router.go();
         },
@@ -159,11 +181,19 @@ export default {
             formData.append("user.id", 1);
             formData.append("bug.id", this.$route.params.id);
 
-            axios.post("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/upload/attachment", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
+            axios.post(
+                "http://localhost:8080/api/project/" +
+                    this.$route.params.projectId +
+                    "/bug/" +
+                    this.$route.params.id +
+                    "/upload/attachment",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
                 }
-            });
+            );
             this.fileToUpload = null;
             this.$router.go();
         }
@@ -172,50 +202,11 @@ export default {
 </script>
 
 <style lang="scss">
-#attachment .section-title {
-    font-size: 2em;
-    margin: 1em 0 0 0;
-    max-width: 300px;
-    border-bottom: 2px solid black;
-    font-weight: bold;
-}
 #attachment .button.is-success {
     color: #000;
 }
-#attachment .columns .b-table {
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
-}
 #attachment .button.is-success:hover {
     background-color: hsl(141, 53%, 43%);
-}
-
-#attachment .table {
-    margin-top: 2em;
-}
-#attachment .table tbody tr:hover {
-    background-color: #e8e8e8;
-}
-#attachment .table a {
-    color: hsl(211, 73%, 51%);
-}
-#attachment .table a i {
-    color: black;
-}
-#attachment .table a i:hover {
-    color: #4b85c4;
-}
-#attachment .modal-card {
-    width: inherit;
-    position: absolute !important;
-    top: 50px;
-}
-#attachment .modal-card-body {
-    padding: 2em 3em;
-
-    text-align: center;
-}
-#attachment .modal-card-foot {
-    margin: 0;
 }
 #attachment .file-name {
     width: 20em;

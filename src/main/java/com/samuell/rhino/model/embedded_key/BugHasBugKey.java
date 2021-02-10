@@ -9,27 +9,27 @@ import java.util.Objects;
 public class BugHasBugKey implements Serializable {
     //Atributes
     @Column(name = "contains")
-    private int contains;
+    private Integer contains;
 
     @Column(name = "included")
-    private int included;
+    private Integer included;
 
     //Constructors
     public BugHasBugKey() {
     }
 
-    public BugHasBugKey(int contains, int included) {
+    public BugHasBugKey(Integer contains, Integer included) {
         this.contains = contains;
         this.included = included;
     }
 
     //Getters & setters
 
-    public int getContains() {
+    public Integer getContains() {
         return contains;
     }
 
-    public void setContains(int contains) {
+    public void setContains(Integer contains) {
         this.contains = contains;
     }
 
@@ -37,7 +37,7 @@ public class BugHasBugKey implements Serializable {
         return included;
     }
 
-    public void setIncluded(int included) {
+    public void setIncluded(Integer included) {
         this.included = included;
     }
 

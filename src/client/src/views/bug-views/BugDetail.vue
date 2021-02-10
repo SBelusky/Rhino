@@ -1,6 +1,9 @@
 <template>
     <div id="form-view">
-        <window-title :small-title="type == 'detail' ? '| detail reportu' : '| editácia reportu'" :big-title="'Report: ' + id + ' '" />
+        <window-title
+            :small-title="type == 'detail' ? '| detail reportu' : '| editácia reportu'"
+            :big-title="'Report: ' + this.formatBugId(this.$route.params.id) + ' '"
+        />
         <div class="columns pt-4 pb-4">
             <div class="column is-3 form-info">
                 <p class="form-section-title">Špecidifikácia:</p>
@@ -13,7 +16,7 @@
                             'invalid-field': errors.category
                         }"
                         :disabled="type == 'detail'"
-                        v-model="category"
+                        v-model="bug.category"
                         label="name"
                         track-by="id"
                         :options="allCategories"
@@ -34,7 +37,7 @@
                             'multi-select': type == 'edit',
                             'invalid-field': errors.priority
                         }"
-                        v-model="priority"
+                        v-model="bug.priority"
                         label="name"
                         track-by="id"
                         :disabled="type == 'detail'"
@@ -56,7 +59,7 @@
                             'multi-select': type == 'edit',
                             'invalid-field': errors.status
                         }"
-                        v-model="status"
+                        v-model="bug.status"
                         label="name"
                         track-by="id"
                         :disabled="type == 'detail'"
@@ -78,7 +81,7 @@
                             'multi-select': type == 'edit',
                             'invalid-field': errors.reproducibility
                         }"
-                        v-model="reproducibility"
+                        v-model="bug.reproducibility"
                         label="name"
                         track-by="id"
                         :disabled="type == 'detail'"
@@ -103,7 +106,7 @@
                             'multi-select': type == 'edit',
                             'invalid-field': errors.foundInVersion
                         }"
-                        v-model="foundInVersion"
+                        v-model="bug.foundInVersion"
                         label="name"
                         track-by="id"
                         :disabled="type == 'detail'"
@@ -124,7 +127,7 @@
                             'multi-select-detail': type == 'detail',
                             'multi-select': type == 'edit'
                         }"
-                        v-model="repairedInVersion"
+                        v-model="bug.repairedInVersion"
                         label="name"
                         track-by="id"
                         :disabled="type == 'detail'"
@@ -143,7 +146,7 @@
                             'multi-select': type == 'edit',
                             'invalid-field': errors.associatedUser
                         }"
-                        v-model="associatedUser"
+                        v-model="bug.associatedUser"
                         label="name"
                         track-by="id"
                         :disabled="type == 'detail'"
@@ -165,7 +168,7 @@
                             :class="{ 'invalid-field': errors.seekTime }"
                             type="text"
                             placeholder="65 min"
-                            v-model="seekTime"
+                            v-model="bug.seekTime"
                             :disabled="type == 'detail'"
                             maxlength="50"
                             oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');"
@@ -186,7 +189,7 @@
                         <input
                             class="input"
                             :class="{ 'invalid-field': errors.summarize }"
-                            v-model="summarize"
+                            v-model="bug.summarize"
                             :disabled="type == 'detail'"
                             type="text"
                             placeholder="Krátky opis reportu"
@@ -206,7 +209,7 @@
                         <textarea
                             class="textarea"
                             :class="{ 'invalid-field': errors.description }"
-                            v-model="description"
+                            v-model="bug.description"
                             :disabled="type == 'detail'"
                             placeholder="Popis reportu, postup nasimulovania chyby..."
                             rows="8"
@@ -220,7 +223,13 @@
                 <div class="field">
                     <label class="label">Dodatočné informácie:</label>
                     <div class="control has-icons-left">
-                        <textarea class="textarea" v-model="additional_info" :disabled="type == 'detail'" placeholder="Opis vzťahov medzi reportami..." maxlength="1000"></textarea>
+                        <textarea
+                            class="textarea"
+                            v-model="bug.additional_info"
+                            :disabled="type == 'detail'"
+                            placeholder="Opis vzťahov medzi reportami..."
+                            maxlength="1000"
+                        ></textarea>
                     </div>
                 </div>
             </div>
@@ -232,10 +241,14 @@
                 <i v-if="type == 'edit'" class="fas fa-ban icon-center"></i>
                 <span v-if="type == 'edit'"> Zrušiť </span>
             </button>
-            <button v-if="type == 'edit'" class="button is-success" v-on:click="submitForm"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
+            <button v-if="type == 'edit'" class="button is-success" v-on:click="submitForm">
+                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
+            </button>
         </div>
-        <attachment v-if="type == 'detail'" />
-        <comment-detail v-if="type == 'detail'" />
+        <bug-relation-table v-if="type == 'detail'" />
+        <attachment-table v-if="type == 'detail'" />
+        <comment-table v-if="type == 'detail'" />
+        <log v-if="type == 'detail'" />
     </div>
 </template>
 
@@ -243,86 +256,102 @@
 import axios from "axios";
 import WindowTitle from "../../components/WindowTitle.vue";
 import Multiselect from "vue-multiselect";
-import CommentDetail from "@/components/comment/CommentDetail.vue";
-import Attachment from "@/components/attachment/Attachment.vue";
+import CommentTable from "@/components/comment/CommentTable.vue";
+import AttachmentTable from "@/components/attachment/AttachmentTable.vue";
+import BugRelationTable from "@/components/bug-relation/BugRelationTable.vue";
+import Log from "@/components/Log.vue";
 
 export default {
     title: "Reporty | pridanie",
     components: {
         WindowTitle,
         Multiselect,
-        CommentDetail,
-        Attachment
+        CommentTable,
+        AttachmentTable,
+        BugRelationTable,
+        BugRelationTable,
+        Log
     },
     data() {
         return {
             data: [],
             type: this.$route.params.type,
             actualProject: this.$store.state.actualProject,
-            id: null,
+            bug: {
+                id: null,
+                category: null,
+                priority: null,
+                status: null,
+                reproducibility: null,
+                associatedUser: null,
+                foundInVersion: null,
+                repairedInVersion: null,
+                seekTime: null,
+                summarize: null,
+                description: null,
+                additional_info: null,
+                bugRelations: null
+            },
             allCategories: [],
-            category: null,
-            priority: null,
             allPriorities: [],
-            status: null,
             allStatuses: [],
-            reproducibility: null,
             allReproducibility: [],
-            associatedUser: null,
             allUsers: [],
-            foundInVersion: null,
             allVersions: [],
-            repairedInVersion: null,
-            seekTime: null,
-            summarize: null,
-            description: null,
-            additional_info: null,
             errors: {}
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/category").then(response => (this.allCategories = response.data));
+        window.scrollTo(0, 0);
+        axios
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/category")
+            .then(response => (this.allCategories = response.data));
 
         axios.get("http://localhost:8080/api/specification/?type=Priority").then(response => (this.allPriorities = response.data));
 
         axios.get("http://localhost:8080/api/specification/?type=Status").then(response => (this.allStatuses = response.data));
 
-        axios.get("http://localhost:8080/api/specification/?type=Reproducibility").then(response => (this.allReproducibility = response.data));
+        axios
+            .get("http://localhost:8080/api/specification/?type=Reproducibility")
+            .then(response => (this.allReproducibility = response.data));
 
         axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
 
-        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/version").then(response => (this.allVersions = response.data));
+        axios
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/version")
+            .then(response => (this.allVersions = response.data));
 
         axios.get("http://localhost:8080/api/project/" + this.actualProject + "/detail/bug/" + this.$route.params.id).then(response => {
             this.data = response.data;
-            this.id = this.data.id;
-            this.category = this.data.category;
-            this.seekTime = this.data.seek_time;
-            this.summarize = this.data.summarize;
-            this.description = this.data.description;
-            this.additional_info = this.data.additional_info;
+            this.bug.id = this.data.id;
+            this.bug.category = this.data.category;
+            this.bug.seekTime = this.data.seek_time;
+            this.bug.summarize = this.data.summarize;
+            this.bug.description = this.data.description;
+            this.bug.additional_info = this.data.additional_info;
+            this.bug.bugRelations = this.data.bugHasBugsContains;
 
             for (let i = 0; i < this.data.bugHasSpecifications.length; i++) {
                 if (this.data.bugHasSpecifications[i].specification.type == "Status") {
-                    this.status = this.data.bugHasSpecifications[i].specification;
+                    this.bug.status = this.data.bugHasSpecifications[i].specification;
                 } else if (this.data.bugHasSpecifications[i].specification.type == "Priority") {
-                    this.priority = this.data.bugHasSpecifications[i].specification;
+                    this.bug.priority = this.data.bugHasSpecifications[i].specification;
                 } else if (this.data.bugHasSpecifications[i].specification.type == "Reproducibility") {
-                    this.reproducibility = this.data.bugHasSpecifications[i].specification;
+                    this.bug.reproducibility = this.data.bugHasSpecifications[i].specification;
                 }
             }
 
             for (let i = 0; i < this.data.bugHasUsers.length; i++) {
                 if (this.data.bugHasUsers[i].id.type == "Associated user") {
-                    this.associatedUser = this.data.bugHasUsers[i].user;
+                    this.bug.associatedUser = this.data.bugHasUsers[i].user;
                 }
             }
 
             for (let i = 0; i < this.data.bugHasVersions.length; i++) {
                 if (this.data.bugHasVersions[i].id.type == "Found in version") {
-                    this.foundInVersion = this.data.bugHasVersions[i].version;
+                    this.bug.foundInVersion = this.data.bugHasVersions[i].version;
                 } else if (this.data.bugHasVersions[i].id.type == "Repaired in version") {
-                    this.repairedInVersion = this.data.bugHasVersions[i].version;
+                    this.bug.repairedInVersion = this.data.bugHasVersions[i].version;
                 }
             }
         });
@@ -330,33 +359,40 @@ export default {
     methods: {
         submitForm() {
             let editData = {
-                id: this.id,
-                category: this.category,
-                seek_time: this.seekTime,
-                summarize: this.summarize,
-                description: this.description,
-                additional_info: this.additional_info,
+                id: this.bug.id,
+                category: this.bug.category,
+                seek_time: this.bug.seekTime,
+                summarize: this.bug.summarize,
+                description: this.bug.description,
+                additional_info: this.bug.additional_info,
                 bugHasVersions: [],
                 bugHasSpecifications: [],
                 bugHasUsers: [],
                 bugHasBugsContains: []
             };
 
-            editData.bugHasVersions.push({ version: this.foundInVersion, type: "Found in version" });
+            editData.bugHasVersions.push({ version: this.bug.foundInVersion, type: "Found in version" });
 
-            if (this.repairedInVersion != null) {
-                editData.bugHasVersions.push({ version: this.repairedInVersion, type: "Repaired in version" });
+            if (this.bug.repairedInVersion != null) {
+                editData.bugHasVersions.push({ version: this.bug.repairedInVersion, type: "Repaired in version" });
             }
 
-            editData.bugHasSpecifications.push({ specification: this.status, type: "Status" });
-            editData.bugHasSpecifications.push({ specification: this.priority, type: "Priority" });
-            editData.bugHasSpecifications.push({ specification: this.reproducibility, type: "Reproducibility" });
+            editData.bugHasSpecifications.push({ specification: this.bug.status, type: "Status" });
+            editData.bugHasSpecifications.push({ specification: this.bug.priority, type: "Priority" });
+            editData.bugHasSpecifications.push({ specification: this.bug.reproducibility, type: "Reproducibility" });
 
             editData.bugHasUsers.push({ user: { id: 1 }, type: "Author" });
-            editData.bugHasUsers.push({ user: this.associatedUser, type: "Associated user" });
+            editData.bugHasUsers.push({ user: this.bug.associatedUser, type: "Associated user" });
+
+            for (let i = 0; i < this.bug.bugRelations.length; i++) {
+                editData.bugHasBugsContains.push({
+                    included: { id: this.bug.bugRelations[i].id.included },
+                    status: this.bug.bugRelations[i].status
+                });
+            }
 
             axios
-                .post("http://localhost:8080/api/project/" + this.actualProject + "/edit/bug/" + this.id, editData)
+                .post("http://localhost:8080/api/project/" + this.actualProject + "/edit/bug/" + this.bug.id, editData)
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.back();

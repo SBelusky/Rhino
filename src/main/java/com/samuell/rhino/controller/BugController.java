@@ -2,12 +2,14 @@ package com.samuell.rhino.controller;
 
 import com.samuell.rhino.model.*;
 import com.samuell.rhino.model.dto.BugDto;
+import com.samuell.rhino.model.dto.BugHasBugDto;
 import com.samuell.rhino.model.dto.BugHasUserDto;
 import com.samuell.rhino.model.mapper.BugMapper;
 import com.samuell.rhino.model.status_enum.LogStatus;
 import com.samuell.rhino.repository.BugRepository;
 import com.samuell.rhino.service.BugService;
 import com.samuell.rhino.service.LogService;
+import com.samuell.rhino.service.impl.BugServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +25,6 @@ import java.util.Set;
 @RestController
 @RequestMapping("api/project/{projectId}/")
 public class BugController {
-    @Autowired
-    BugMapper bugMapper;
     @PersistenceContext
     EntityManager entityManager;
 
@@ -76,7 +76,7 @@ public class BugController {
                     authorId = user.getUser().getId();
             }
 
-            String logMessage = "Bug with id: " + bug.getId();
+            String logMessage = "Report s ID: " + bugService.formatBugId(bug.getId());
             logService.addLog(bug.getId(),authorId,logMessage, LogStatus.BUG_CREATE);
 
 
@@ -111,7 +111,7 @@ public class BugController {
             // ----- //
 
             Bug bug = bugService.updateBug(projectId,bugId,bugDto,oldBugHasUserSet, oldBugHasVersionSet, oldBugHasSpecificationSet, oldBugHasBugSet);
-            String logMessage = "Bug with id: " + bug.getId();
+            String logMessage = "Report s ID: " + bugService.formatBugId(bug.getId());
 
             logService.addLog(bug.getId(),1,logMessage, LogStatus.BUG_EDIT);
             return ResponseEntity.status(HttpStatus.OK).body("Bug with ID: "+ bug.getId() + " was updated");
@@ -128,10 +128,26 @@ public class BugController {
         }
         else {
             Bug bug = bugService.deleteBug(projectId,bugId);
-            String logMessage = "Bug with id: " + bug.getId();
+            String logMessage = "Report s ID: " +  bugService.formatBugId(bug.getId());
 
             logService.addLog(bugId,1,logMessage, LogStatus.BUG_DELETE);
             return ResponseEntity.status(HttpStatus.OK).body("Bug with ID: "+ bug.getId() + " was deleted");
         }
+    }
+
+    @PostMapping("bug/{bugId}/validate-relation")
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ResponseEntity<?> validateBugRelation(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugHasBugDto bugHasBugDto) {
+        Map<String,String> errors = bugService.validateRelationBug(bugHasBugDto, projectId, bugId);
+
+        if(bugService.getBugById(projectId,bugId) == null){
+            return new ResponseEntity<>("Bug not found",HttpStatus.NOT_FOUND);
+        }
+        else if(errors.size() != 0){
+            return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.OK).body("Added new relation to bug with ID: " + bugId);
+       }
     }
 }

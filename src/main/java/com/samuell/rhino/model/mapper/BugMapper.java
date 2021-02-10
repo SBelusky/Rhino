@@ -82,6 +82,9 @@ public interface BugMapper {
     //BugHasBug
     @Mapping(target="contains", ignore=true)
     @Mapping(target="included", ignore=true)
+    @Mapping(source = "bugHasBug.included.summarize", target="summarize")
+    @Mapping(source = "bugHasBug.included.category.name", target="category")
+    @Mapping(source = "bugHasBug.included.bugHasSpecifications", target="state")
     BugHasBugDto toBugHasBugDto(BugHasBug bugHasBug);
     BugHasBug toBugHasBug(BugHasBugDto bugHasBugDto);
 }

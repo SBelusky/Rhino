@@ -36,7 +36,7 @@
                         </b-table-column>
 
                         <b-table-column field="id" label="ID" sortable v-slot="props">
-                            {{ props.row.id }}
+                            {{ formatBugId(props.row.id) }}
                         </b-table-column>
 
                         <b-table-column field="priority" label="Priorita" sortable v-slot="props">

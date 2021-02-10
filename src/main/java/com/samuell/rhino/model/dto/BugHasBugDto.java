@@ -3,11 +3,16 @@ package com.samuell.rhino.model.dto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
 
+import java.util.Set;
+
 public class BugHasBugDto {
     //Attributes
     private BugHasBugKey id;
     private String status;
     private Integer idOfLastEditingUser;
+    private String summarize;
+    private String category;
+    private Set<BugHasSpecificationDto> state;
 
     private BugDto contains;
 
@@ -25,6 +30,30 @@ public class BugHasBugDto {
     }
 
     //Getters & setters
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Set<BugHasSpecificationDto> getState() {
+        return state;
+    }
+
+    public void setState(Set<BugHasSpecificationDto> state) {
+        this.state = state;
+    }
+
+    public String getSummarize() {
+        return summarize;
+    }
+
+    public void setSummarize(String summarize) {
+        this.summarize = summarize;
+    }
 
     public BugHasBugKey getId() {
         return id;

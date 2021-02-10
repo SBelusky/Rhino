@@ -58,7 +58,7 @@ public class CommentController {
         }
         else {
             Comment comment = commentService.addComment(bugId, commentDto);
-            String logMessage = "Comment with id: " + comment.getId();
+            String logMessage = "Komentár s ID: " + comment.getId();
 
             logService.addLog(bugId,comment.getUser().getId(),logMessage, LogStatus.COMMENT_CREATE);
 
@@ -81,7 +81,7 @@ public class CommentController {
             }
             else {
                 Comment comment = commentService.updateComment(bugId, commentId ,commentDto);
-                String logMessage = "Comment with id: " + comment.getId();
+                String logMessage = "Komentár s ID: " + comment.getId();
 
                 logService.addLog(bugId,1,logMessage, LogStatus.COMMENT_EDIT);
 
@@ -98,7 +98,7 @@ public class CommentController {
         }
         else {
             Comment comment = commentService.deleteComment(commentId);
-            String logMessage = "Comment with id: " + comment.getId();
+            String logMessage = "Komentár s ID: " + comment.getId();
 
 //            logService.addLog(bugId,commentDto.getIdOfLastEditingUser(),logMessage, LogStatus.COMMENT_DELETE);
             logService.addLog(bugId,1,logMessage, LogStatus.COMMENT_DELETE);

@@ -2,10 +2,7 @@ package com.samuell.rhino.service.impl;
 
 import com.samuell.rhino.controller.form_validation.ValidationHelpers;
 import com.samuell.rhino.model.*;
-import com.samuell.rhino.model.dto.BugDto;
-import com.samuell.rhino.model.dto.BugHasSpecificationDto;
-import com.samuell.rhino.model.dto.BugHasUserDto;
-import com.samuell.rhino.model.dto.BugHasVersionDto;
+import com.samuell.rhino.model.dto.*;
 import com.samuell.rhino.model.embedded_key.BugHasBugKey;
 import com.samuell.rhino.model.embedded_key.BugHasSpecificationKey;
 import com.samuell.rhino.model.embedded_key.BugHasUserKey;
@@ -246,7 +243,7 @@ public class BugServiceImpl implements BugService {
                         BugHasSpecification bugSpecificationIt = it.next();
                         if (!bugSpecificationIt.getSpecification().getId().equals(bugSpecification.getSpecification().getId()) && bugSpecificationIt.getSpecification().getType().equals(bugSpecification.getSpecification().getType()))
                         atributesChanges.put(
-                                bugSpecificationIt.getSpecification().getName() + " ->" + bugSpecification.getSpecification().getName(),
+                                bugSpecificationIt.getSpecification().getName() + " -> " + bugSpecification.getSpecification().getName(),
                                 setLogStatusFromString(bugSpecification.getSpecification().getType()));
                     }
 
@@ -315,6 +312,50 @@ public class BugServiceImpl implements BugService {
         return errors;
     }
 
+    @Override
+    public Map<String, String> validateRelationBug(BugHasBugDto bugHasBugDto, Integer projectId, Integer bugId) {
+        Map<String,String> errors = new HashMap<>();
+        Boolean bugExist = false;
+        Bug mainBug = bugRepository.getOne(bugId);
+
+        List<Bug> alllbugs = bugRepository.findAll()
+                .stream()
+                .filter(bug ->
+                        !bug.isWas_deleted() &&
+                        bug.getProject().getId().equals(projectId)
+                )
+                .collect(Collectors.toList());
+
+        if(bugHasBugDto.getStatus() == null || !bugHasBugDto.getStatus().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("status","Zadajte vzťah");
+
+        if (bugHasBugDto.getContains().getId() == null || !bugHasBugDto.getContains().getId().toString().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern())){
+            errors.put("relationBugId","Zadajte ID reportu");
+        }
+        else if (bugHasBugDto.getContains().getId().equals(bugId)){
+            errors.put("relationBugId","Zadané ID patrí pôvodnému reportu");
+        }
+        else if (mainBug.getBugHasBugsContains()
+                .stream()
+                .filter(bugHasBug ->
+                    String.valueOf(bugHasBug.getId().getIncluded()).equals(bugHasBugDto.getContains().getId().toString()))
+                .count() > 0
+                ){
+            errors.put("relationBugId","Zadané ID reportu už tvorí vzťah s pôvodným reportom");
+        }
+        else {
+            for(Bug bug : alllbugs){
+                if (bug.getId().equals(bugHasBugDto.getContains().getId())){
+                        bugExist = true;
+                }
+            }
+            if (!bugExist)
+                errors.put("relationBugId","Report so zadaným ID neexistuje");
+        }
+
+        return errors;
+    }
+
     //Additional methods:
     //-> Method return LogStatus from type in String
     private LogStatus setLogStatusFromString(String type){
@@ -341,6 +382,18 @@ public class BugServiceImpl implements BugService {
         for(Map.Entry<String, LogStatus> entry : atributesChanges.entrySet()) {
             logService.addLog(bugId, idOfLastEditingUser, entry.getKey(), entry.getValue());
         }
+    }
+
+    //-> Format bug ID
+    public String formatBugId(Integer bugId){
+        int numberOfDigits = bugId.toString().length();
+        String zeros = "";
+
+        for (int i = 0; i < (5 - numberOfDigits); i++) {
+            zeros = zeros.concat("0");
+        }
+
+        return ("R" + zeros + bugId);
     }
 }
 

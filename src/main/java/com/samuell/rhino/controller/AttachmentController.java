@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -76,7 +75,7 @@ public class AttachmentController{
             return new ResponseEntity<>("Error while creating attachment",HttpStatus.INTERNAL_SERVER_ERROR);
         }
         else {
-            String logMessage = "Attachment with id: " + attachment.getId();
+            String logMessage = "Príloha s ID: " + attachment.getId();
 
             logService.addLog(bugId,attachment.getUser().getId(),logMessage, LogStatus.ATTACHMENT_UPLOAD);
             return ResponseEntity.status(HttpStatus.CREATED).body("Attachment uploaded with ID: "+ attachment.getId());
@@ -91,7 +90,7 @@ public class AttachmentController{
         }
         else {
             Attachment attachment = attachmentService.deleteAttachment(attachmentId);
-            String logMessage = "Attachment with id: " + attachment.getId();
+            String logMessage = "Príloha s ID: " + attachment.getId();
 
             logService.addLog(bugId,1,logMessage, LogStatus.ATTACHMENT_DELETE);
 

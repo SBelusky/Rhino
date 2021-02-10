@@ -1,6 +1,6 @@
 <template>
     <div id="comments">
-        <p class="section-title">Komentáre</p>
+        <p class="bug-section-title">Komentáre</p>
         <div class="columns">
             <br />
             <div class="column is-5 ">
@@ -83,7 +83,7 @@
                 </ul>
             </div>
         </div>
-        <div class="modal" :class="{ 'is-active': showModalFlag }">
+        <div class="bug-components modal" :class="{ 'is-active': showModalFlag }">
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
@@ -168,13 +168,6 @@ export default {
 #comments .add-comment .content {
     margin-bottom: 0 !important;
 }
-#comments .section-title {
-    font-size: 2em;
-    margin: 1em 0 0 0;
-    max-width: 300px;
-    border-bottom: 2px solid black;
-    font-weight: bold;
-}
 #comments .button.is-success {
     margin: 1em 0 0 5em;
     color: #000;
@@ -198,19 +191,6 @@ export default {
 }
 #comments .level-left .level-item:not(:last-child) {
     margin-right: 0.5em !important;
-}
-#comments .modal-card {
-    width: inherit;
-    position: absolute !important;
-    top: 50px;
-}
-#comments .modal-card-body {
-    padding: 2em 3em;
-
-    text-align: center;
-}
-#comments .modal-card-foot {
-    margin: 0;
 }
 #comments .action-button-container,
 #comments .delete-button {
