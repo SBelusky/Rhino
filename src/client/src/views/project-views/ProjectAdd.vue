@@ -6,13 +6,7 @@
                 <div class="field">
                     <label class="label"><span class="has-text-danger">* </span>Názov:</label>
                     <div class="control has-icons-left">
-                        <input
-                            class="input"
-                            type="text"
-                            placeholder="Netflix"
-                            :class="{ 'invalid-field': errors.name }"
-                            v-model="name"
-                        />
+                        <input class="input" type="text" placeholder="Netflix" :class="{ 'invalid-field': errors.name }" v-model="name" />
                         <span class="icon is-left">
                             <i class="mdi mdi-tag"></i>
                         </span>
@@ -24,8 +18,7 @@
                 <div class="field">
                     <label class="label">Popis:</label>
                     <div class="control has-icons-left">
-                        <textarea class="textarea" placeholder="Bližšie informácie o projekte..." v-model="description">
-                        </textarea>
+                        <textarea class="textarea" placeholder="Bližšie informácie o projekte..." v-model="description"> </textarea>
                     </div>
                 </div>
                 <div>
@@ -51,9 +44,7 @@
         </div>
         <div class="form-view-button pb-2">
             <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
-            <button class="button is-success" v-on:click="submitForm">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
-            </button>
+            <button class="button is-success" v-on:click="submitForm"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
         </div>
     </div>
 </template>
@@ -81,7 +72,13 @@ export default {
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
+        axios
+            .get("http://localhost:8080/api/user/", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allUsers = response.data));
     },
     methods: {
         addTag(newTag) {
@@ -106,7 +103,11 @@ export default {
             }
 
             axios
-                .post("http://localhost:8080/api/add/project", data)
+                .post("http://localhost:8080/api/add/project", data, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 201) {
                         this.$router.back();

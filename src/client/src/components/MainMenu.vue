@@ -2,7 +2,7 @@
     <b-menu id="main-menu" class="has-background-light">
         <img src="../assets/img/user-avatar.png" />
         <div class="user-info">
-            <p>Samuel Beluský</p>
+            <p>{{ loggedUser.name }}</p>
         </div>
         <b-menu-list>
             <router-link id="pm-zero" :to="'/admin/project/' + projectUrl + '/bug'">
@@ -14,7 +14,7 @@
                     label="Reporty"
                 ></b-menu-item>
             </router-link>
-            <b-menu-item icon="user-cog" icon-pack="fas">
+            <b-menu-item icon="user-cog" icon-pack="fas" v-if="loggedUser.role == 'manager' || loggedUser.role == 'programmer'">
                 <template slot="label" slot-scope="props">
                     Programátor
                     <i class="is-pulled-right" id="expand-icon" :class="props.expanded ? 'fas fa-minus' : 'fas fa-plus'"></i>
@@ -39,9 +39,9 @@
                     ></b-menu-item>
                 </router-link>
             </b-menu-item>
-            <b-menu-item icon="user-tie" icon-pack="fas">
+            <b-menu-item icon="user-tie" icon-pack="fas" v-if="loggedUser.role == 'manager'">
                 <template slot="label" slot-scope="props">
-                    Administrátor
+                    Manažér
                     <i class="is-pulled-right" id="expand-icon" :class="props.expanded ? 'fas fa-minus' : 'fas fa-plus'"></i>
                 </template>
                 <router-link id="pm-zero" to="/admin/project">
@@ -105,7 +105,9 @@
             </router-link>
         </b-menu-list>
         <b-menu-list label="Akcie">
-            <b-menu-item icon="sign-out-alt" icon-pack="fas" label="Odhlásiť sa"></b-menu-item>
+            <router-link id="pm-zero" to="/login">
+                <b-menu-item icon="sign-out-alt" icon-pack="fas" label="Odhlásiť sa" @click="loggout()"></b-menu-item>
+            </router-link>
         </b-menu-list>
     </b-menu>
 </template>
@@ -115,17 +117,23 @@ export default {
     data() {
         return {
             selected: this.$store.state.mainMenuSelectedItem,
-            projectUrl: this.$store.state.actualProject
+            projectUrl: this.$store.state.actualProject,
+            loggedUser: this.$store.getters.getLoggedUser
         };
     },
     methods: {
         activeMenuItem(param) {
             this.selected = param;
             this.$store.commit("CHANGE_MAIN_MENU_ITEM", param);
+        },
+        loggout() {
+            localStorage.removeItem("token");
+            this.$store.commit("SET_LOGGED_USER", null);
         }
     },
     updated() {
         this.projectUrl = this.$store.state.actualProject;
+        this.loggedUser = this.$store.getters.getLoggedUser;
     }
 };
 </script>

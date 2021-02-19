@@ -117,7 +117,11 @@ export default {
     },
     mounted() {
         axios
-            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/attachment")
+            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/attachment", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.data = response.data));
     },
     methods: {
@@ -130,6 +134,11 @@ export default {
                         this.$route.params.id +
                         "/download/attachment/" +
                         attachment.id,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    },
                     {
                         responseType: "blob"
                     }
@@ -154,7 +163,12 @@ export default {
                     "/bug/" +
                     this.$route.params.id +
                     "/delete/attachment/" +
-                    row.id
+                    row.id,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
             );
             this.attachmentToDelete.name = null;
             this.$router.go();
@@ -190,6 +204,7 @@ export default {
                 formData,
                 {
                     headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token"),
                         "Content-Type": "multipart/form-data"
                     }
                 }

@@ -1,9 +1,6 @@
 <template>
     <div id="form-view">
-        <window-title
-            :small-title="type == 'detail' ? '| detail používateľa' : '| editácia používateľa'"
-            :big-title="data.name"
-        />
+        <window-title :small-title="type == 'detail' ? '| detail používateľa' : '| editácia používateľa'" :big-title="data.name" />
         <div class="columns pt-1">
             <div class="column is-5 form-info">
                 <div class="field">
@@ -92,19 +89,19 @@
                     <div class="control has-icons-left">
                         <input
                             class="input"
-                            :class="{ 'invalid-field': errors.login_name }"
+                            :class="{ 'invalid-field': errors.username }"
                             type="text"
                             placeholder="login"
                             :disabled="type == 'detail'"
-                            v-model="login_name"
+                            v-model="username"
                             maxlength="50"
                         />
                         <span class="icon is-left">
                             <i class="mdi mdi-lock"></i>
                         </span>
                     </div>
-                    <div v-if="errors.login_name">
-                        <p class="help is-danger">{{ this.errors.login_name }}</p>
+                    <div v-if="errors.username">
+                        <p class="help is-danger">{{ this.errors.username }}</p>
                     </div>
                 </div>
                 <div class="field">
@@ -112,19 +109,19 @@
                     <div class="control has-icons-left">
                         <input
                             class="input"
-                            :class="{ 'invalid-field': errors.login_password }"
+                            :class="{ 'invalid-field': errors.password }"
                             type="password"
                             placeholder="*********"
                             :disabled="type == 'detail'"
-                            v-model="login_password"
+                            v-model="password"
                             maxlength="50"
                         />
                         <span class="icon is-left">
                             <i class="mdi mdi-key"></i>
                         </span>
                     </div>
-                    <div v-if="errors.login_password">
-                        <p class="help is-danger">{{ this.errors.login_password }}</p>
+                    <div v-if="errors.password">
+                        <p class="help is-danger">{{ this.errors.password }}</p>
                     </div>
                 </div>
             </div>
@@ -161,8 +158,8 @@ export default {
             name: null,
             telephone_number: null,
             role: null,
-            login_name: null,
-            login_password: null,
+            username: null,
+            password: null,
             errors: {},
             type: this.$route.params.type,
             options: ["Administrátor", "Programátor", "Tester"]
@@ -176,12 +173,16 @@ export default {
                 name: this.name,
                 telephone_number: this.telephone_number,
                 role: this.role,
-                login_name: this.login_name,
-                login_password: this.login_password
+                username: this.username,
+                password: this.password
             };
 
             axios
-                .post("http://localhost:8080/api/edit/user/" + this.id, editData)
+                .post("http://localhost:8080/api/edit/user/" + this.id, editData, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.back();
@@ -191,19 +192,26 @@ export default {
                     this.errors = null;
                     this.errors = errors.response.data;
                 });
+            /* this.$root.$emit("flash", "Editácia bola úspešná"); */
         }
     },
     mounted() {
-        axios.get("http://localhost:8080/api/detail/user/" + this.$route.params.id).then(response => {
-            this.data = response.data;
-            this.id = this.data.id;
-            this.email = this.data.email;
-            this.name = this.data.name;
-            this.telephone_number = this.data.telephone_number;
-            this.role = this.data.role;
-            this.login_name = this.data.login_name;
-            this.login_password = this.data.login_password;
-        });
+        axios
+            .get("http://localhost:8080/api/detail/user/" + this.$route.params.id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => {
+                this.data = response.data;
+                this.id = this.data.id;
+                this.email = this.data.email;
+                this.name = this.data.name;
+                this.telephone_number = this.data.telephone_number;
+                this.role = this.data.role;
+                this.username = this.data.username;
+                this.password = this.data.password;
+            });
     }
 };
 </script>

@@ -6,7 +6,14 @@
                 <article class="media">
                     <div class="media-content">
                         <div class="content">
-                            <textarea class="textarea" :class="{ 'invalid-field': errors.description }" rows="6" placeholder="Pridaj komentár..." v-model="description"> </textarea>
+                            <textarea
+                                class="textarea"
+                                :class="{ 'invalid-field': errors.description }"
+                                rows="6"
+                                placeholder="Pridaj komentár..."
+                                v-model="description"
+                            >
+                            </textarea>
                         </div>
                         <div v-if="errors.description">
                             <p class="help is-danger">{{ this.errors.description }}</p>
@@ -19,7 +26,12 @@
                             <div class="field spend-time">
                                 <label class="label"><span class="has-text-danger">* </span>Čas hľadania [min]: </label>
                                 <div class="control has-icons-left">
-                                    <input class="input" :class="{ 'invalid-field': errors.spend_time }" v-model="spend_time" type="number" />
+                                    <input
+                                        class="input"
+                                        :class="{ 'invalid-field': errors.spend_time }"
+                                        v-model="spend_time"
+                                        type="number"
+                                    />
                                     <span class="icon is-left">
                                         <i class="mdi mdi-alarm"></i>
                                     </span>
@@ -36,7 +48,9 @@
                                 <i class="fas fa-ban icon-center"></i>
                                 Zrušiť
                             </button>
-                            <button class="button is-success" v-on:click="submitComment"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
+                            <button class="button is-success" v-on:click="submitComment">
+                                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -65,7 +79,19 @@ export default {
         window.scrollTo(0, 0);
 
         axios
-            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.bugId + "/detail/comment/" + this.$route.params.commentId)
+            .get(
+                "http://localhost:8080/api/project/" +
+                    this.$route.params.projectId +
+                    "/bug/" +
+                    this.$route.params.bugId +
+                    "/detail/comment/" +
+                    this.$route.params.commentId,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+            )
             .then(response => {
                 this.data = response.data;
                 this.description = this.data.description;
@@ -83,8 +109,18 @@ export default {
 
             axios
                 .post(
-                    "http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.bugId + "/edit/comment/" + this.$route.params.commentId,
-                    editData
+                    "http://localhost:8080/api/project/" +
+                        this.$route.params.projectId +
+                        "/bug/" +
+                        this.$route.params.bugId +
+                        "/edit/comment/" +
+                        this.$route.params.commentId,
+                    editData,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 )
                 .then(response => {
                     if (response.status == 200) {

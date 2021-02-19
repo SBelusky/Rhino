@@ -52,9 +52,7 @@
         </div>
         <div class="form-view-button pb-2">
             <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
-            <button class="button is-success" v-on:click="submitForm">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
-            </button>
+            <button class="button is-success" v-on:click="submitForm"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
         </div>
     </div>
 </template>
@@ -87,7 +85,11 @@ export default {
                 type: "Status"
             };
             axios
-                .post("http://localhost:8080/api/add/specification", data)
+                .post("http://localhost:8080/api/add/specification", data, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 201) {
                         this.$router.back();

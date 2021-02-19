@@ -40,6 +40,7 @@ export default {
         return {
             selected: this.$store.state.actualProject,
             isPublic: true,
+            loggedUser: this.$store.getters.getLoggedUser,
             projects: []
         };
     },
@@ -53,7 +54,13 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8080/api/project").then(response => (this.projects = response.data));
+        axios
+            .post("http://localhost:8080/api/assign-project", this.loggedUser, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.projects = response.data));
         this.selected = this.$store.state.actualProject;
     },
     updated() {

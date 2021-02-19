@@ -97,7 +97,11 @@ export default {
     methods: {},
     mounted() {
         axios
-            .get("http://localhost:8080/api/project/" + this.projectId + "/version")
+            .get("http://localhost:8080/api/project/" + this.projectId + "/version", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.data = response.data));
     }
 };

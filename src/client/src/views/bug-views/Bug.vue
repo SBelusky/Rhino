@@ -139,7 +139,13 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8080/api/project/" + this.projectId + "/bug").then(response => (this.data = response.data));
+        axios
+            .get("http://localhost:8080/api/project/" + this.projectId + "/bug", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.data = response.data));
     }
 };
 </script>

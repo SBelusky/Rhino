@@ -1,10 +1,10 @@
 <template>
     <div id="account-form">
-        <window-title small-title="| detail účtu" big-title="Samuel Beluský" />
+        <window-title small-title="| detail účtu" :big-title="loggedUser.name" />
         <router-link id="pm-zero" :to="`/admin/detail/account`">
             <b-button
                 class="data-table-button mr-5"
-                icon-left="mdi mdi-sticker-plus-outline icon-center"
+                icon-left="mdi mdi-account-edit-outline icon-center"
                 v-on:click="accountButtonTypeSet('basicInfo')"
             >
                 Editovať účet
@@ -24,7 +24,7 @@
                 <div class="field">
                     <label class="label">E-mail:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="email" placeholder="Extra small" disabled value="samuel.belusky@gmail.com" />
+                        <input class="input" type="email" placeholder="Extra small" disabled :value="loggedUser.email" />
                         <span class="icon is-left">
                             <i class="mdi mdi-at"></i>
                         </span>
@@ -33,7 +33,7 @@
                 <div class="field">
                     <label class="label">Telefónne číslo:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Extra small" disabled value="+421 948 775 092" />
+                        <input class="input" type="text" placeholder="Extra small" disabled :value="loggedUser.email" />
                         <span class="icon is-left">
                             <i class="mdi mdi-cellphone"></i>
                         </span>
@@ -42,7 +42,7 @@
                 <div class="field">
                     <label class="label">Rola:</label>
                     <div class="control has-icons-left">
-                        <input class="input" type="text" placeholder="Extra small" disabled value="Administrátor" />
+                        <input class="input" type="text" placeholder="Extra small" disabled :value="formatUserRole(loggedUser.role)" />
                         <span class="icon is-left">
                             <i class="mdi mdi-account-star-outline"></i>
                         </span>
@@ -59,7 +59,9 @@ import WindowTitle from "../../components/WindowTitle.vue";
 export default {
     title: "Môj účet | prehľad",
     data() {
-        return {};
+        return {
+            loggedUser: this.$store.getters.getLoggedUser
+        };
     },
     components: {
         WindowTitle

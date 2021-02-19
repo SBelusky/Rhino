@@ -23,9 +23,11 @@ public class User {
     @Nullable
     private String telephone_number;
     @NonNull
-    private String login_name;
+    @Column(name="username")
+    private String username;
     @NonNull
-    private String login_password;
+    @Column(name="password")
+    private String password;
     @NonNull
     private String role;
     @Nullable
@@ -64,13 +66,13 @@ public class User {
     public User() {
     }
 
-    public User(@Nullable Integer id, @NonNull String name, @NonNull String email, @Nullable String telephone_number, @NonNull String login_name, @NonNull String login_password, @NonNull String role, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<Attachment> attachments, @Nullable Set<BugHasUser> bugHasUsers, @Nullable Set<UserHasProject> user_has_projects) {
+    public User(@Nullable Integer id, @NonNull String name, @NonNull String email, @Nullable String telephone_number, @NonNull String username, @NonNull String password, @NonNull String role, @Nullable Timestamp created_at, @Nullable Timestamp edited_at, boolean was_deleted, @Nullable Set<Log> logs, @Nullable Set<Comment> comments, @Nullable Set<Attachment> attachments, @Nullable Set<BugHasUser> bugHasUsers, @Nullable Set<UserHasProject> user_has_projects) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.telephone_number = telephone_number;
-        this.login_name = login_name;
-        this.login_password = login_password;
+        this.username = username;
+        this.password = password;
         this.role = role;
         this.created_at = created_at;
         this.edited_at = edited_at;
@@ -119,21 +121,21 @@ public class User {
     }
 
     @NonNull
-    public String getLogin_name() {
-        return login_name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin_name(@NonNull String login_name) {
-        this.login_name = login_name;
+    public void setUsername(@NonNull String username) {
+        this.username = username;
     }
 
     @NonNull
-    public String getLogin_password() {
-        return login_password;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLogin_password(@NonNull String login_password) {
-        this.login_password = login_password;
+    public void setPassword(@NonNull String password) {
+        this.password = password;
     }
 
     @NonNull

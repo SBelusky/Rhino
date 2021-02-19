@@ -76,14 +76,7 @@
                                 {{ props.row.created_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
                         </b-table-column>
-                        <b-table-column
-                            field="edited_at"
-                            label="Editácia"
-                            sortable
-                            v-slot="props"
-                            :searchable="true"
-                            custom-search
-                        >
+                        <b-table-column field="edited_at" label="Editácia" sortable v-slot="props" :searchable="true" custom-search>
                             <span>
                                 {{ props.row.edited_at | moment("DD. MM. YYYY HH:mm") }}
                             </span>
@@ -95,6 +88,7 @@
                 </section>
             </div>
         </div>
+        <flash-message />
     </div>
 </template>
 
@@ -104,12 +98,14 @@ import TableActionButtons from "../../components/TableActionButtons.vue";
 import WindowTitle from "../../components/WindowTitle.vue";
 import ExportDataToXls from "../../components/ExportDataToXls.vue";
 import moment from "moment";
+import FlashMessage from "@/components/FlashMessage.vue";
 
 export default {
     components: {
         TableActionButtons,
         WindowTitle,
-        ExportDataToXls
+        ExportDataToXls,
+        FlashMessage
     },
     data() {
         return {
@@ -144,8 +140,18 @@ export default {
             };
         }
     },
-    mounted() {
-        axios.get("http://localhost:8080/api/user").then(response => (this.data = response.data));
+    created() {
+        axios
+            .get("http://localhost:8080/api/user", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.data = response.data));
+
+        this.$root.$on("beforeFlash", message => {
+            this.$root.$emit("flash", message);
+        });
     }
 };
 </script>

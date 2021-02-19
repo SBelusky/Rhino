@@ -6,16 +6,16 @@ import com.samuell.rhino.model.dto.UserDto;
 import com.samuell.rhino.model.mapper.UserMapper;
 import com.samuell.rhino.repository.UserRepository;
 import com.samuell.rhino.service.UserService;
+import com.samuell.rhino.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EmbeddedId;
+import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,8 +34,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsersForUserDetails() {
+        return userRepository.findAll().stream()
+                .filter(user -> !user.isWas_deleted())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UserDto getUserById(Integer userId) {
         return userMapper.toUserDto(userRepository.findById(userId).orElse(null));
+    }
+
+    @Override
+    public UserDto getUserByUsername(String username) {
+        return  userMapper.toUserDto(userRepository.findByUsername(username));
     }
 
     @Override
@@ -45,8 +57,8 @@ public class UserServiceImpl implements UserService {
 
         if (user.getName() == null ||
             user.getEmail() == null ||
-            user.getLogin_name() == null ||
-            user.getLogin_password() == null ||
+            user.getUsername() == null ||
+            user.getPassword() == null ||
             user.getRole() == null){
             return user;
         }
@@ -60,8 +72,8 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setTelephone_number(userDto.getTelephone_number());
-        user.setLogin_name(userDto.getLogin_name());
-        user.setLogin_password(userDto.getLogin_password());
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
         user.setRole(userDto.getRole());
         user.setEdited_at(Timestamp.from(Instant.now()));
 
@@ -70,8 +82,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User deleteUser(Integer userId) {
+        String pattern = RandomString.digits + "ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx";
         User user = userRepository.findById(userId).orElse(new User());
+
         user.setWas_deleted(true);
+        user.setPassword(new RandomString(10, new SecureRandom(), pattern).toString());
+        user.setUsername(new RandomString(10, new SecureRandom(), pattern).toString());
 
         return userRepository.save(user);
     }
@@ -98,15 +114,15 @@ public class UserServiceImpl implements UserService {
 
         if(userRepository.findAll()
                 .stream()
-                .filter(user -> !user.getId().equals(userDto.getId()) && user.getLogin_name().equals(userDto.getLogin_name()))
+                .filter(user -> !user.getId().equals(userDto.getId()) && user.getUsername().equals(userDto.getUsername()))
                 .count() >= 1){
-            errors.put("login_name","Login je obsadený");
+            errors.put("username","Login je obsadený");
         }
 
-        if(userDto.getLogin_name() == null || !userDto.getLogin_name().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
-            errors.put("login_name","Zadajte login");
-        if(userDto.getLogin_password() == null || !userDto.getLogin_password().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
-            errors.put("login_password","Zadajte heslo");
+        if(userDto.getUsername() == null || !userDto.getUsername().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("username","Zadajte login");
+        if(userDto.getPassword() == null || !userDto.getPassword().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
+            errors.put("password","Zadajte heslo");
         if(userDto.getRole() == null || !userDto.getRole().matches(ValidationHelpers.NOT_BLANK_SPACES.pattern()))
             errors.put("role","Vyberte rolu");
 

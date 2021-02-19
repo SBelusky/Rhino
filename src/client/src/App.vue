@@ -1,18 +1,18 @@
 <template>
     <div id="app">
         <div class="level">
-            <navbar />
+            <navbar v-if="this.$route.path !== '/login'" />
         </div>
         <div class="columns">
             <div class="column is-narrow">
-                <main-menu class="menu-min-height" />
+                <main-menu class="menu-min-height" v-if="this.$route.path !== '/login'" />
             </div>
-            <div class="column is-narrow view">
+            <div class="column is-narrow" :class="classObject">
                 <router-view />
             </div>
         </div>
 
-        <my-footer />
+        <my-footer v-if="this.$route.path !== '/login'" />
     </div>
 </template>
 
@@ -26,6 +26,14 @@ export default {
         MainMenu,
         Navbar,
         MyFooter
+    },
+    computed: {
+        classObject() {
+            return {
+                "view-admin": this.$route.path !== "/login",
+                "view-login": this.$route.path === "/login"
+            };
+        }
     }
 };
 </script>
@@ -50,8 +58,13 @@ body {
 main-menu {
     width: 500px !important;
 }
-.view {
+.view-admin {
     padding: 3em;
+    width: 100%;
+}
+.view-login {
+    padding: 0em;
+    margin: 0;
     width: 100%;
 }
 </style>

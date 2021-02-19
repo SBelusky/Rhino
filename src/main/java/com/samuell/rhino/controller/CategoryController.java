@@ -6,6 +6,7 @@ import com.samuell.rhino.repository.CategoryRepository;
 import com.samuell.rhino.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CategoryController {
     }
 
     @GetMapping("/category")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllCategoriesByProjectId(@PathVariable("projectId") Integer projectId) {
         List<CategoryDto> categoryDtoList = categoryService.getAllCategoriesByProjectId(projectId);
@@ -30,7 +32,17 @@ public class CategoryController {
         return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
     }
 
+    @GetMapping("/bug-category")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ResponseEntity<?> getAllCategoriesByProjectIdForAllRoles(@PathVariable("projectId") Integer projectId) {
+        List<CategoryDto> categoryDtoList = categoryService.getAllCategoriesByProjectId(projectId);
+
+        return new ResponseEntity<>(categoryDtoList, HttpStatus.OK);
+    }
+
     @GetMapping("/detail/category/{categoryId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getCategoryById(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId) {
         CategoryDto categoryDto = categoryService.getCategoryById(projectId, categoryId);
@@ -44,6 +56,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add/category")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addCategory(@PathVariable("projectId") Integer projectId, @RequestBody CategoryDto categoryDto) {
         Map<String,String> errors = categoryService.validateCategory(categoryDto);
@@ -59,6 +72,7 @@ public class CategoryController {
     }
 
     @PostMapping("/edit/category/{categoryId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateCategory(@PathVariable("projectId") Integer projectId, @PathVariable("categoryId") Integer categoryId, @RequestBody CategoryDto categoryDto) {
         Map<String,String> errors = categoryService.validateCategory(categoryDto);
@@ -74,6 +88,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/delete/category/{categoryId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteCategory(@PathVariable("projectId") Integer projectId,@PathVariable("categoryId") Integer categoryId) {
         if(categoryService.getCategoryById(projectId, categoryId) == null){

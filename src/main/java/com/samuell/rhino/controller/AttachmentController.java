@@ -7,6 +7,7 @@ import com.samuell.rhino.service.AttachmentService;
 import com.samuell.rhino.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +27,7 @@ public class AttachmentController{
     }
 
     @GetMapping("/attachment")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllAttachmentsByBugId(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         List<AttachmentDto> attachmentDtoList = attachmentService.getAllAttachmentsByBugId(projectId, bugId);
@@ -40,6 +42,7 @@ public class AttachmentController{
     }
 
     @GetMapping("/detail/attachment/{attachmentId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAttachmentById(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @PathVariable("attachmentId") Integer attachmentId) {
         AttachmentDto attachmentDto = attachmentService.getAttachmentById(projectId, bugId, attachmentId);
@@ -53,6 +56,7 @@ public class AttachmentController{
     }
 
     @RequestMapping(path = "/download/attachment/{attachmentId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> downloadAttachment(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @PathVariable("attachmentId") Integer attachmentId) throws IOException {
         AttachmentDto attachmentDto = attachmentService.getAttachmentById(projectId, bugId, attachmentId);
@@ -66,6 +70,7 @@ public class AttachmentController{
     }
 
     @RequestMapping(path = "/upload/attachment", method = RequestMethod.POST, consumes = {"multipart/form-data"})
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addAttachment(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestParam("file_") MultipartFile file, @ModelAttribute AttachmentDto attachmentDto) throws IOException {
 
@@ -83,6 +88,7 @@ public class AttachmentController{
     }
 
     @DeleteMapping("/delete/attachment/{attachmentId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteAttachment(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @PathVariable("attachmentId") Integer attachmentId) {
         if(attachmentService.getAttachmentById(projectId, bugId, attachmentId) == null){

@@ -12,7 +12,13 @@ public interface UserService{
     List<UserDto> getAllUsers();
 
     @Nullable
+    List<User> getAllUsersForUserDetails();
+
+    @Nullable
     UserDto getUserById(Integer userId);
+
+    @Nullable
+    UserDto getUserByUsername(String username);
 
     @Nullable
     User addUser(UserDto userDto);

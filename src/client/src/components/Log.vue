@@ -39,7 +39,11 @@ export default {
     },
     mounted() {
         axios
-            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/log")
+            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/bug/" + this.$route.params.id + "/log", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.bugLogs = response.data));
     }
 };

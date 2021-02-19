@@ -4,6 +4,7 @@ import com.samuell.rhino.model.dto.LogDto;
 import com.samuell.rhino.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class LogController {
     }
 
     @GetMapping("/log")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllLogsByBugId(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         List<LogDto> logDtoList = logService.getAllLogsByBugId(projectId, bugId);

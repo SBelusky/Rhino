@@ -86,7 +86,12 @@ export default {
                         "/bug/" +
                         this.$route.params.bugId +
                         "/validate-relation",
-                    editData
+                    editData,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 )
                 .then(response => {
                     if (response.status == 200) {
@@ -141,7 +146,12 @@ export default {
             axios
                 .post(
                     "http://localhost:8080/api/project/" + this.$route.params.projectId + "/edit/bug/" + this.$route.params.bugId,
-                    bugWithNewRelation
+                    bugWithNewRelation,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    }
                 )
                 .then(response => {
                     if (response.status == 200) {
@@ -153,7 +163,11 @@ export default {
     },
     mounted() {
         axios
-            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/detail/bug/" + this.$route.params.bugId)
+            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/detail/bug/" + this.$route.params.bugId, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => {
                 this.defaultBug = response.data;
             });

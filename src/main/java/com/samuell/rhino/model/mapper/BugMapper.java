@@ -57,8 +57,8 @@ public interface BugMapper {
         //User
         @Mappings({
                 @Mapping(target = "telephone_number", ignore=true),
-                @Mapping(target = "login_name", ignore=true),
-                @Mapping(target = "login_password", ignore=true),
+                @Mapping(target = "username", ignore=true),
+                @Mapping(target = "password", ignore=true),
                 @Mapping(target = "role", ignore=true),
                 @Mapping(target = "created_at", ignore=true),
         })

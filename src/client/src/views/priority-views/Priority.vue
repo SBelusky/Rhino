@@ -95,7 +95,13 @@ export default {
     },
     methods: {},
     mounted() {
-        axios.get("http://localhost:8080/api/specification/?type=Priority").then(response => (this.data = response.data));
+        axios
+            .get("http://localhost:8080/api/specification/?type=Priority", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.data = response.data));
     }
 };
 </script>

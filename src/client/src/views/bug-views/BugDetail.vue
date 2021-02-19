@@ -304,57 +304,93 @@ export default {
     mounted() {
         window.scrollTo(0, 0);
         axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/category")
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/bug-category", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allCategories = response.data));
 
-        axios.get("http://localhost:8080/api/specification/?type=Priority").then(response => (this.allPriorities = response.data));
-
-        axios.get("http://localhost:8080/api/specification/?type=Status").then(response => (this.allStatuses = response.data));
+        axios
+            .get("http://localhost:8080/api/bug-specification/?type=Priority", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allPriorities = response.data));
 
         axios
-            .get("http://localhost:8080/api/specification/?type=Reproducibility")
+            .get("http://localhost:8080/api/bug-specification/?type=Status", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allStatuses = response.data));
+
+        axios
+            .get("http://localhost:8080/api/bug-specification/?type=Reproducibility", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allReproducibility = response.data));
 
-        axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
+        axios
+            .get("http://localhost:8080/api/bug-user/", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allUsers = response.data));
 
         axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/version")
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/bug-version", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allVersions = response.data));
 
-        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/detail/bug/" + this.$route.params.id).then(response => {
-            this.data = response.data;
-            this.bug.id = this.data.id;
-            this.bug.category = this.data.category;
-            this.bug.seekTime = this.data.seek_time;
-            this.bug.summarize = this.data.summarize;
-            this.bug.description = this.data.description;
-            this.bug.additional_info = this.data.additional_info;
-            this.bug.bugRelations = this.data.bugHasBugsContains;
-
-            for (let i = 0; i < this.data.bugHasSpecifications.length; i++) {
-                if (this.data.bugHasSpecifications[i].specification.type == "Status") {
-                    this.bug.status = this.data.bugHasSpecifications[i].specification;
-                } else if (this.data.bugHasSpecifications[i].specification.type == "Priority") {
-                    this.bug.priority = this.data.bugHasSpecifications[i].specification;
-                } else if (this.data.bugHasSpecifications[i].specification.type == "Reproducibility") {
-                    this.bug.reproducibility = this.data.bugHasSpecifications[i].specification;
+        axios
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/detail/bug/" + this.$route.params.id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
                 }
-            }
+            })
+            .then(response => {
+                this.data = response.data;
+                this.bug.id = this.data.id;
+                this.bug.category = this.data.category;
+                this.bug.seekTime = this.data.seek_time;
+                this.bug.summarize = this.data.summarize;
+                this.bug.description = this.data.description;
+                this.bug.additional_info = this.data.additional_info;
+                this.bug.bugRelations = this.data.bugHasBugsContains;
 
-            for (let i = 0; i < this.data.bugHasUsers.length; i++) {
-                if (this.data.bugHasUsers[i].id.type == "Associated user") {
-                    this.bug.associatedUser = this.data.bugHasUsers[i].user;
+                for (let i = 0; i < this.data.bugHasSpecifications.length; i++) {
+                    if (this.data.bugHasSpecifications[i].specification.type == "Status") {
+                        this.bug.status = this.data.bugHasSpecifications[i].specification;
+                    } else if (this.data.bugHasSpecifications[i].specification.type == "Priority") {
+                        this.bug.priority = this.data.bugHasSpecifications[i].specification;
+                    } else if (this.data.bugHasSpecifications[i].specification.type == "Reproducibility") {
+                        this.bug.reproducibility = this.data.bugHasSpecifications[i].specification;
+                    }
                 }
-            }
 
-            for (let i = 0; i < this.data.bugHasVersions.length; i++) {
-                if (this.data.bugHasVersions[i].id.type == "Found in version") {
-                    this.bug.foundInVersion = this.data.bugHasVersions[i].version;
-                } else if (this.data.bugHasVersions[i].id.type == "Repaired in version") {
-                    this.bug.repairedInVersion = this.data.bugHasVersions[i].version;
+                for (let i = 0; i < this.data.bugHasUsers.length; i++) {
+                    if (this.data.bugHasUsers[i].id.type == "Associated user") {
+                        this.bug.associatedUser = this.data.bugHasUsers[i].user;
+                    }
                 }
-            }
-        });
+
+                for (let i = 0; i < this.data.bugHasVersions.length; i++) {
+                    if (this.data.bugHasVersions[i].id.type == "Found in version") {
+                        this.bug.foundInVersion = this.data.bugHasVersions[i].version;
+                    } else if (this.data.bugHasVersions[i].id.type == "Repaired in version") {
+                        this.bug.repairedInVersion = this.data.bugHasVersions[i].version;
+                    }
+                }
+            });
     },
     methods: {
         submitForm() {
@@ -392,7 +428,11 @@ export default {
             }
 
             axios
-                .post("http://localhost:8080/api/project/" + this.actualProject + "/edit/bug/" + this.bug.id, editData)
+                .post("http://localhost:8080/api/project/" + this.actualProject + "/edit/bug/" + this.bug.id, editData, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.back();

@@ -71,12 +71,18 @@ export default {
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/detail/specification/" + this.$route.params.id).then(response => {
-            this.data = response.data;
-            this.id = this.data.id;
-            this.name = this.data.name;
-            this.description = this.data.description;
-        });
+        axios
+            .get("http://localhost:8080/api/detail/specification/" + this.$route.params.id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => {
+                this.data = response.data;
+                this.id = this.data.id;
+                this.name = this.data.name;
+                this.description = this.data.description;
+            });
     },
     methods: {
         submitForms() {
@@ -87,7 +93,11 @@ export default {
                 type: "Priority"
             };
             axios
-                .post("http://localhost:8080/api/edit/specification/" + this.id, editData)
+                .post("http://localhost:8080/api/edit/specification/" + this.id, editData, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.back();

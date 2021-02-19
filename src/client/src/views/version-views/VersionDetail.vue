@@ -73,7 +73,11 @@ export default {
     },
     mounted() {
         axios
-            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/detail/version/" + this.$route.params.id)
+            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/detail/version/" + this.$route.params.id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => {
                 this.data = response.data;
                 this.id = this.data.id;
@@ -90,10 +94,11 @@ export default {
             };
 
             axios
-                .post(
-                    "http://localhost:8080/api/project/" + this.actualProject + "/edit/version/" + this.$route.params.id,
-                    editData
-                )
+                .post("http://localhost:8080/api/project/" + this.actualProject + "/edit/version/" + this.$route.params.id, editData, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.back();

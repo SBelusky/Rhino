@@ -10,6 +10,7 @@ import com.samuell.rhino.service.CommentService;
 import com.samuell.rhino.service.LogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class CommentController {
 
     @GetMapping("/comment")
     @CrossOrigin(origins = "http://localhost:8081")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     public ResponseEntity<?> getAllCommentsByBugId(@PathVariable("bugId") Integer bugId) {
         List<CommentDto> commentDtoList = commentService.getAllCommentsByBugId(bugId);
 
@@ -36,6 +38,7 @@ public class CommentController {
     }
 
     @GetMapping("/detail/comment/{commentId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getCommentById(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId) {
         CommentDto commentDto = commentService.getCommentById(bugId, commentId);
@@ -49,6 +52,7 @@ public class CommentController {
     }
 
     @PostMapping("/add/comment")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addComment(@PathVariable("bugId") Integer bugId, @RequestBody CommentDto commentDto) {
         Map<String,String> errors = commentService.validateComment(commentDto);
@@ -67,6 +71,7 @@ public class CommentController {
     }
 
     @PostMapping("/edit/comment/{commentId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId, @RequestBody CommentDto commentDto) {
 
@@ -91,6 +96,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete/comment/{commentId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteComment(@PathVariable("bugId") Integer bugId, @PathVariable("commentId") Integer commentId) {
         if(commentService.getCommentById(bugId, commentId) == null){

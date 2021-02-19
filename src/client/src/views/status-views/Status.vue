@@ -100,7 +100,13 @@ export default {
     },
     methods: {},
     mounted() {
-        axios.get("http://localhost:8080/api/specification/?type=Status").then(response => (this.data = response.data));
+        axios
+            .get("http://localhost:8080/api/specification/?type=Status", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.data = response.data));
     }
 };
 </script>

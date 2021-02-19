@@ -8,7 +8,10 @@
                         {{ props.row.id.included }}
                     </b-table-column>
                     <b-table-column field="name" label="Popis" v-slot="props">
-                        <router-link id="pm-zero" :to="`/admin/project/` + $route.params.projectId + `/detail/bug/` + props.row.id.included">
+                        <router-link
+                            id="pm-zero"
+                            :to="`/admin/project/` + $route.params.projectId + `/detail/bug/` + props.row.id.included"
+                        >
                             {{ props.row.summarize }}
                         </router-link>
                     </b-table-column>
@@ -37,7 +40,10 @@
                         Nie sú evidované žiadne záznamy.
                     </td>
                 </b-table>
-                <router-link id="pm-zero" :to="`/admin/project/` + this.$route.params.projectId + `/bug/` + this.$route.params.id + `/add/relation`">
+                <router-link
+                    id="pm-zero"
+                    :to="`/admin/project/` + this.$route.params.projectId + `/bug/` + this.$route.params.id + `/add/relation`"
+                >
                     <b-button
                         class="is-success data-table-button mt-5"
                         icon-left="mdi mdi-sticker-plus-outline icon-center"
@@ -58,14 +64,25 @@
                 </header>
                 <section class="modal-card-body">
                     <p>
-                        Naozaj chcete vymazať vzťah medzi pôvodným reportom a reportom s ID: <span class="has-text-weight-bold">{{ idOfRelationToDelete }}</span> ?
+                        Naozaj chcete vymazať vzťah medzi pôvodným reportom a reportom s ID:
+                        <span class="has-text-weight-bold">{{ idOfRelationToDelete }}</span> ?
                     </p>
                 </section>
                 <footer class="modal-card-foot container">
-                    <b-button class="bbutton-remove-style button delete-button-color has-text-dark" icon-left="trash-alt pl-3" icon-pack="far" v-on:click="deleteRelation()">
+                    <b-button
+                        class="bbutton-remove-style button delete-button-color has-text-dark"
+                        icon-left="trash-alt pl-3"
+                        icon-pack="far"
+                        v-on:click="deleteRelation()"
+                    >
                         Áno
                     </b-button>
-                    <b-button class="bbutton-remove-style button back-button-color has-text-dark" icon-left="ban pl-3" icon-pack="fas" v-on:click="showModal">
+                    <b-button
+                        class="bbutton-remove-style button back-button-color has-text-dark"
+                        icon-left="ban pl-3"
+                        icon-pack="fas"
+                        v-on:click="showModal"
+                    >
                         Nie
                     </b-button>
                 </footer>
@@ -106,7 +123,8 @@ export default {
             }
 
             for (let i = 0; i < maintBugWithoutOneRelation.bugHasSpecifications.length; i++) {
-                maintBugWithoutOneRelation.bugHasSpecifications[i].type = maintBugWithoutOneRelation.bugHasSpecifications[i].specification.type;
+                maintBugWithoutOneRelation.bugHasSpecifications[i].type =
+                    maintBugWithoutOneRelation.bugHasSpecifications[i].specification.type;
             }
 
             for (let i = 0; i < maintBugWithoutOneRelation.bugHasUsers.length; i++) {
@@ -122,12 +140,22 @@ export default {
                 }
             }
 
-            axios.post("http://localhost:8080/api/project/" + this.$route.params.projectId + "/edit/bug/" + this.$route.params.id, maintBugWithoutOneRelation).then(response => {
-                if (response.status == 200) {
-                    this.showModalFlag = !this.showModalFlag;
-                    this.idOfRelationToDelete = null;
-                }
-            });
+            axios
+                .post(
+                    "http://localhost:8080/api/project/" + this.$route.params.projectId + "/edit/bug/" + this.$route.params.id,
+                    maintBugWithoutOneRelation,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                )
+                .then(response => {
+                    if (response.status == 200) {
+                        this.showModalFlag = !this.showModalFlag;
+                        this.idOfRelationToDelete = null;
+                    }
+                });
             this.$router.go();
         },
         showModal(row) {
@@ -143,10 +171,16 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/detail/bug/" + this.$route.params.id).then(response => {
-            this.mainBugData = response.data;
-            this.bugRelations = response.data.bugHasBugsContains;
-        });
+        axios
+            .get("http://localhost:8080/api/project/" + this.$route.params.projectId + "/detail/bug/" + this.$route.params.id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => {
+                this.mainBugData = response.data;
+                this.bugRelations = response.data.bugHasBugsContains;
+            });
     },
     watch: {
         $route: function() {

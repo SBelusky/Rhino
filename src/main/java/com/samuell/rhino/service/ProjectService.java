@@ -15,6 +15,9 @@ public interface ProjectService {
     ProjectDto getProjectById(Integer projectId);
 
     @Nullable
+    List<ProjectDto> getAssignProjectsForUser(String username);
+
+    @Nullable
     Project addProject(ProjectDto projectDto);
 
     @Nullable

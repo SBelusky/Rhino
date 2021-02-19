@@ -17,19 +17,33 @@
                                     <strong>{{ comment.user.name }}</strong> |
                                     <small>{{ comment.created_at | moment("DD. MM. YYYY HH:mm") }}</small>
                                     <br />
-                                    <textarea class="textarea" rows="6" placeholder="Add a comment..." disabled :value="comment.description"> </textarea>
+                                    <textarea
+                                        class="textarea"
+                                        rows="6"
+                                        placeholder="Add a comment..."
+                                        disabled
+                                        :value="comment.description"
+                                    >
+                                    </textarea>
                                 </div>
                                 <nav class="level is-mobile">
                                     <div class="level-left">
                                         <a class="level-item">
                                             <span class="icon is-small">
-                                                <router-link id="pm-zero" :to="`/admin/project/${actualProject}/bug/${$route.params.id}/edit/comment/${comment.id}`">
+                                                <router-link
+                                                    id="pm-zero"
+                                                    :to="
+                                                        `/admin/project/${actualProject}/bug/${$route.params.id}/edit/comment/${comment.id}`
+                                                    "
+                                                >
                                                     <i class="far fa-edit" v-on:click="showModal(comment.id)"></i>
                                                 </router-link>
                                             </span>
                                         </a>
                                         <a class="level-item">
-                                            <span class="icon is-small"><i class="far fa-trash-alt" v-on:click="showModal(comment.id)"></i></span>
+                                            <span class="icon is-small"
+                                                ><i class="far fa-trash-alt" v-on:click="showModal(comment.id)"></i
+                                            ></span>
                                         </a>
                                     </div>
                                     <div class="level-right">
@@ -48,7 +62,13 @@
                             </figure>
                             <div class="media-content">
                                 <div class="content">
-                                    <textarea class="textarea" :class="{ 'invalid-field': errors.description }" rows="6" placeholder="Pridaj komentár..." v-model="description">
+                                    <textarea
+                                        class="textarea"
+                                        :class="{ 'invalid-field': errors.description }"
+                                        rows="6"
+                                        placeholder="Pridaj komentár..."
+                                        v-model="description"
+                                    >
                                     </textarea>
                                 </div>
                                 <div v-if="errors.description">
@@ -62,7 +82,12 @@
                                     <div class="field spend-time">
                                         <label class="label"><span class="has-text-danger">* </span>Čas hľadania [min]: </label>
                                         <div class="control has-icons-left">
-                                            <input class="input" :class="{ 'invalid-field': errors.spend_time }" v-model="spend_time" type="number" />
+                                            <input
+                                                class="input"
+                                                :class="{ 'invalid-field': errors.spend_time }"
+                                                v-model="spend_time"
+                                                type="number"
+                                            />
                                             <span class="icon is-left">
                                                 <i class="mdi mdi-alarm"></i>
                                             </span>
@@ -75,7 +100,9 @@
                             </div>
                             <div class="level-right">
                                 <div class="level-item">
-                                    <button class="button is-success" v-on:click="submitComment"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
+                                    <button class="button is-success" v-on:click="submitComment">
+                                        <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -94,10 +121,20 @@
                     <p>Naozaj chcete vymazať komentár?</p>
                 </section>
                 <footer class="modal-card-foot container">
-                    <b-button class="bbutton-remove-style button delete-button-color has-text-dark" icon-left="trash-alt pl-3" icon-pack="far" v-on:click="deleteComment">
+                    <b-button
+                        class="bbutton-remove-style button delete-button-color has-text-dark"
+                        icon-left="trash-alt pl-3"
+                        icon-pack="far"
+                        v-on:click="deleteComment"
+                    >
                         Áno
                     </b-button>
-                    <b-button class="bbutton-remove-style button back-button-color has-text-dark" icon-left="ban pl-3" icon-pack="fas" v-on:click="showModal">
+                    <b-button
+                        class="bbutton-remove-style button back-button-color has-text-dark"
+                        icon-left="ban pl-3"
+                        icon-pack="fas"
+                        v-on:click="showModal"
+                    >
                         Nie
                     </b-button>
                 </footer>
@@ -122,11 +159,17 @@ export default {
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/project/" + this.actualProject + "/bug/" + this.$route.params.id + "/comment").then(response => {
-            response.data.forEach(comment => {
-                this.comments.push(comment);
+        axios
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/bug/" + this.$route.params.id + "/comment", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => {
+                response.data.forEach(comment => {
+                    this.comments.push(comment);
+                });
             });
-        });
     },
     methods: {
         submitComment() {
@@ -137,7 +180,15 @@ export default {
             };
 
             axios
-                .post("http://localhost:8080/api/project/" + this.actualProject + "/bug/" + this.$route.params.id + "/add/comment", editData)
+                .post(
+                    "http://localhost:8080/api/project/" + this.actualProject + "/bug/" + this.$route.params.id + "/add/comment",
+                    editData,
+                    {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem("token")
+                        }
+                    }
+                )
                 .then(response => {
                     if (response.status == 201) {
                         this.$router.go();
@@ -153,7 +204,19 @@ export default {
             this.commentToDelete = id;
         },
         deleteComment() {
-            axios.delete("http://localhost:8080/api/project/" + this.actualProject + "/bug/" + this.$route.params.id + "/delete/comment/" + this.commentToDelete);
+            axios.delete(
+                "http://localhost:8080/api/project/" +
+                    this.actualProject +
+                    "/bug/" +
+                    this.$route.params.id +
+                    "/delete/comment/" +
+                    this.commentToDelete,
+                {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                }
+            );
 
             this.$router.go();
         }

@@ -9,10 +9,13 @@ import com.samuell.rhino.model.status_enum.LogStatus;
 import com.samuell.rhino.repository.BugRepository;
 import com.samuell.rhino.service.BugService;
 import com.samuell.rhino.service.LogService;
+import com.samuell.rhino.service.UserService;
 import com.samuell.rhino.service.impl.BugServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
@@ -30,15 +33,18 @@ public class BugController {
 
     private final BugService bugService;
     private final LogService logService;
+    private final UserService userService;
     private final BugRepository bugRepository;
 
-    public BugController(BugService bugService, LogService logService, BugRepository bugRepository) {
+    public BugController(BugService bugService, LogService logService, UserService userService, BugRepository bugRepository) {
         this.bugService = bugService;
         this.logService = logService;
+        this.userService = userService;
         this.bugRepository = bugRepository;
     }
 
     @GetMapping("bug")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllBugsByProjectId(@PathVariable("projectId") Integer projectId) {
         List<BugDto> bugDtoList = bugService.getAllBugsByProjectId(projectId);
@@ -47,6 +53,7 @@ public class BugController {
     }
 
     @GetMapping("detail/bug/{bugId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getBugById(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
         BugDto bugDto = bugService.getBugById(projectId,bugId);
@@ -60,9 +67,11 @@ public class BugController {
     }
 
     @PostMapping("add/bug")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addBug(@PathVariable("projectId") Integer projectId, @RequestBody BugDto bugDto) {
         Map<String,String> errors = bugService.validateBug(bugDto);
+//        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal(); -> //vue+spring
         Integer authorId = 0;
 
         if(errors.size() != 0){
@@ -74,10 +83,11 @@ public class BugController {
             for (BugHasUserDto user: bugDto.getBugHasUsers()){
                 if (user.getType().equals("Author"))
                     authorId = user.getUser().getId();
+//                    authorId = userService.getUserById(userDetails.getId()).getId(); //vue+spring
             }
 
             String logMessage = "Report s ID: " + bugService.formatBugId(bug.getId());
-            logService.addLog(bug.getId(),authorId,logMessage, LogStatus.BUG_CREATE);
+            logService.addLog(bug.getId(),0,logMessage, LogStatus.BUG_CREATE);
 
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Bug created with ID: "+ bug.getId());
@@ -85,6 +95,7 @@ public class BugController {
     }
 
     @PostMapping("edit/bug/{bugId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugDto bugDto) {
         Map<String,String> errors = bugService.validateBug(bugDto);
@@ -120,7 +131,8 @@ public class BugController {
     }
 
     @DeleteMapping("delete/bug/{bugId}")
-    @CrossOrigin(origins = "http://localhost:8081")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
+//    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteBug(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId) {
 
         if(bugService.getBugById(projectId,bugId) == null){
@@ -136,6 +148,7 @@ public class BugController {
     }
 
     @PostMapping("bug/{bugId}/validate-relation")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> validateBugRelation(@PathVariable("projectId") Integer projectId, @PathVariable("bugId") Integer bugId, @RequestBody BugHasBugDto bugHasBugDto) {
         Map<String,String> errors = bugService.validateRelationBug(bugHasBugDto, projectId, bugId);

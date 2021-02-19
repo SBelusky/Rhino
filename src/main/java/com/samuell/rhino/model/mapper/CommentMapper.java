@@ -20,8 +20,8 @@ public interface CommentMapper {
     @Mappings({
             @Mapping(target = "email", ignore=true),
             @Mapping(target = "telephone_number", ignore=true),
-            @Mapping(target = "login_name", ignore=true),
-            @Mapping(target = "login_password", ignore=true),
+            @Mapping(target = "username", ignore=true),
+            @Mapping(target = "password", ignore=true),
             @Mapping(target = "role", ignore=true),
     })
     UserDto toUserDto(User user);

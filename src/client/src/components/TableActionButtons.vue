@@ -54,6 +54,7 @@ import axios from "axios";
 export default {
     data() {
         return {
+            abc: localStorage.getItem("token"),
             showModalFlag: false,
             wasDeleting: false
         };
@@ -67,7 +68,12 @@ export default {
                 this.$root.$emit("project-was-deleted", true);
             }
 
-            axios.delete("http://localhost:8080/api/" + this.project + "delete/" + this.resource + "/" + this.id);
+            axios.delete("http://localhost:8080/api/" + this.project + "delete/" + this.resource + "/" + this.id, {
+                headers: {
+                    authorization: "Bearer " + this.abc
+                }
+            });
+
             this.$router.go();
         },
         showModal() {

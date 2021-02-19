@@ -5,6 +5,7 @@ import com.samuell.rhino.model.dto.VersionDto;
 import com.samuell.rhino.service.VersionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class VersionController {
     }
 
     @GetMapping("version")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllVersionsByProjectId(@PathVariable("projectId") Integer projectId) {
         List<VersionDto> versionDtoList = versionService.getAllVersionsByProjectId(projectId);
@@ -28,7 +30,17 @@ public class VersionController {
         return new ResponseEntity<>(versionDtoList, HttpStatus.OK);
     }
 
+    @GetMapping("bug-version")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ResponseEntity<?> getAllVersionsByProjectIdForAllRoles(@PathVariable("projectId") Integer projectId) {
+        List<VersionDto> versionDtoList = versionService.getAllVersionsByProjectId(projectId);
+
+        return new ResponseEntity<>(versionDtoList, HttpStatus.OK);
+    }
+
     @GetMapping("detail/version/{versionId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getVersionById(@PathVariable("projectId") Integer projectId, @PathVariable("versionId") Integer versionId) {
         VersionDto versionDto = versionService.getVersionById(projectId,versionId);
@@ -42,6 +54,7 @@ public class VersionController {
     }
 
     @PostMapping("add/version")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addVersion(@PathVariable("projectId") Integer projectId, @RequestBody VersionDto versionDto) {
         Map<String,String> errors = versionService.validateVersion(projectId,versionDto);
@@ -57,6 +70,7 @@ public class VersionController {
     }
 
     @PostMapping("edit/version/{versionId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateVersion(@PathVariable("projectId") Integer projectId, @PathVariable("versionId") Integer versionId, @RequestBody VersionDto versionDto) {
         Map<String,String> errors = versionService.validateVersion(projectId,versionDto);
@@ -72,6 +86,7 @@ public class VersionController {
     }
 
     @DeleteMapping("delete/version/{versionId}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteVersion(@PathVariable("projectId") Integer projectId,@PathVariable("versionId") Integer versionId) {
         if(versionService.getVersionById(projectId,versionId) == null){

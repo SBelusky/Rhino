@@ -46,6 +46,20 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<ProjectDto> getAssignProjectsForUser(String username) {
+        return projectRepository.findAll()
+                .stream()
+                .filter(project -> !project.isWas_deleted() &&
+                        project.getUser_has_projects().stream()
+                            .filter(userHasProject ->
+                                    userHasProject.getUser().getUsername().equals(username))
+                            .count() > 0
+                        )
+                .map(project -> projectMapper.toProjectDto(project))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Project addProject(ProjectDto projectDto) {
         Project project = new Project();
 

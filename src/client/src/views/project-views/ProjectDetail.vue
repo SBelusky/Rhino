@@ -98,14 +98,26 @@ export default {
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/detail/project/" + this.$route.params.id).then(response => {
-            this.data = response.data;
-            this.id = this.data.id;
-            this.name = this.data.name;
-            this.description = this.data.description;
-            this.pickSelectedUsers();
-        });
-        axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
+        axios
+            .get("http://localhost:8080/api/detail/project/" + this.$route.params.id, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => {
+                this.data = response.data;
+                this.id = this.data.id;
+                this.name = this.data.name;
+                this.description = this.data.description;
+                this.pickSelectedUsers();
+            });
+        axios
+            .get("http://localhost:8080/api/user/", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allUsers = response.data));
     },
     methods: {
         addTag(newTag) {
@@ -137,7 +149,11 @@ export default {
             }
 
             axios
-                .post("http://localhost:8080/api/edit/project/" + this.id, editData)
+                .post("http://localhost:8080/api/edit/project/" + this.id, editData, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 200) {
                         this.$router.back();

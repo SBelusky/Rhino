@@ -9,10 +9,19 @@ export default new Vuex.Store({
         actualProject: 1,
         mainMenuSelectedItem: "bug",
         accountButtonType: null,
-        componentKey: 0
+        componentKey: 0,
+        user: {}
+    },
+    getters: {
+        getLoggedUser(state) {
+            return state.user;
+        }
     },
     plugins: [createPersistedState()],
     mutations: {
+        SET_LOGGED_USER(state, user) {
+            state.user = user;
+        },
         //hodnota sa zmení keď nastane zmena projektu v navbare
         CHANGE_PROJECT(state, projectId) {
             state.actualProject = projectId;
@@ -25,6 +34,5 @@ export default new Vuex.Store({
             state.accountButtonType = type;
         }
     },
-    actions: {},
-    modules: {}
+    actions: {}
 });

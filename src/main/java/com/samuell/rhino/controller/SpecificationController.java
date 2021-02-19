@@ -5,6 +5,7 @@ import com.samuell.rhino.model.dto.SpecificationDto;
 import com.samuell.rhino.service.SpecificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class SpecificationController {
     }
 
     @GetMapping("specification")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getAllSpecifications(@RequestParam(required = false) String type) {
         List<SpecificationDto> specificationDtoList = specificationService.getAllSpecificationByType(type);
@@ -26,7 +28,17 @@ public class SpecificationController {
         return new ResponseEntity<>(specificationDtoList, HttpStatus.OK);
     }
 
+    @GetMapping("bug-specification")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER','ROLE_PROGRAMMER','ROLE_TESTER')")
+    @CrossOrigin(origins = "http://localhost:8081")
+    public ResponseEntity<?> getAllSpecificationsForAllRoles(@RequestParam(required = false) String type) {
+        List<SpecificationDto> specificationDtoList = specificationService.getAllSpecificationByType(type);
+
+        return new ResponseEntity<>(specificationDtoList, HttpStatus.OK);
+    }
+
     @GetMapping("detail/specification/{specificationId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> getSpecificationById(@PathVariable("specificationId") Integer specificationId) {
         SpecificationDto specificationDto = specificationService.getSpecificationById(specificationId);
@@ -40,6 +52,7 @@ public class SpecificationController {
     }
 
     @PostMapping("add/specification")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> addSpecification(@RequestBody SpecificationDto specificationDto) {
         Map<String,String> errors = specificationService.validateSpecification(specificationDto);
@@ -55,6 +68,7 @@ public class SpecificationController {
     }
 
     @PostMapping("edit/specification/{specificationId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> updateSpecification(@PathVariable("specificationId") Integer specificationId,@RequestBody SpecificationDto specificationDto) {
         Map<String,String> errors = specificationService.validateSpecification(specificationDto);
@@ -70,6 +84,7 @@ public class SpecificationController {
     }
 
     @DeleteMapping("delete/specification/{specificationId}")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<?> deleteSpecification(@PathVariable("specificationId") Integer specificationId) {
         if(specificationService.getSpecificationById(specificationId) == null){

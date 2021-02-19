@@ -86,18 +86,18 @@
                     <div class="control has-icons-left">
                         <input
                             class="input"
-                            :class="{ 'invalid-field': errors.login_name }"
+                            :class="{ 'invalid-field': errors.username }"
                             type="text"
                             placeholder="login"
-                            v-model="login_name"
+                            v-model="username"
                             maxlength="50"
                         />
                         <span class="icon is-left">
                             <i class="mdi mdi-lock"></i>
                         </span>
                     </div>
-                    <div v-if="errors.login_name">
-                        <p class="help is-danger">{{ this.errors.login_name }}</p>
+                    <div v-if="errors.username">
+                        <p class="help is-danger">{{ this.errors.username }}</p>
                     </div>
                 </div>
                 <div class="field">
@@ -105,27 +105,25 @@
                     <div class="control has-icons-left">
                         <input
                             class="input"
-                            :class="{ 'invalid-field': errors.login_password }"
+                            :class="{ 'invalid-field': errors.password }"
                             type="password"
                             placeholder="*********"
-                            v-model="login_password"
+                            v-model="password"
                             maxlength="50"
                         />
                         <span class="icon is-left">
                             <i class="mdi mdi-key"></i>
                         </span>
                     </div>
-                    <div v-if="errors.login_password">
-                        <p class="help is-danger">{{ this.errors.login_password }}</p>
+                    <div v-if="errors.password">
+                        <p class="help is-danger">{{ this.errors.password }}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-view-button pb-2">
             <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
-            <button class="button is-success" v-on:click="submitForm">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
-            </button>
+            <button class="button is-success" v-on:click="submitForm"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
         </div>
     </div>
 </template>
@@ -147,8 +145,8 @@ export default {
             name: null,
             telephone_number: null,
             role: null,
-            login_name: null,
-            login_password: null,
+            username: null,
+            password: null,
             errors: {},
             options: ["Administrátor", "Programátor", "Tester"]
         };
@@ -160,12 +158,16 @@ export default {
                 name: this.name,
                 telephone_number: this.telephone_number,
                 role: this.role,
-                login_name: this.login_name,
-                login_password: this.login_password
+                username: this.username,
+                password: this.password
             };
 
             axios
-                .post("http://localhost:8080/api/add/user", data)
+                .post("http://localhost:8080/api/add/user", data, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 201) {
                         this.$router.back();

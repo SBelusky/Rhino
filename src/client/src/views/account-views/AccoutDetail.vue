@@ -1,6 +1,6 @@
 <template>
     <div id="form-view">
-        <window-title :small-title="type == 'basicInfo' ? '| editácia účtu' : '| zmena hesla'" :big-title="data.name" />
+        <window-title :small-title="type == 'basicInfo' ? '| editácia účtu' : '| zmena hesla'" :big-title="loggedUser.name" />
         <div class="columns pt-1">
             <div class="column is-5 form-info">
                 <div class="field" v-if="type == 'basicInfo'">
@@ -78,19 +78,19 @@
                     <div class="control has-icons-left">
                         <input
                             class="input"
-                            :class="{ 'invalid-field': errors.login_name }"
+                            :class="{ 'invalid-field': errors.username }"
                             type="text"
                             placeholder="login"
                             :disabled="type == 'detail'"
-                            v-model="login_name"
+                            v-model="username"
                             maxlength="50"
                         />
                         <span class="icon is-left">
                             <i class="mdi mdi-lock"></i>
                         </span>
                     </div>
-                    <div v-if="errors.login_name">
-                        <p class="help is-danger">{{ this.errors.login_name }}</p>
+                    <div v-if="errors.username">
+                        <p class="help is-danger">{{ this.errors.username }}</p>
                     </div>
                 </div>
                 <div class="field" v-if="type == 'password'">
@@ -98,26 +98,26 @@
                     <div class="control has-icons-left">
                         <input
                             class="input"
-                            :class="{ 'invalid-field': errors.login_password }"
+                            :class="{ 'invalid-field': errors.password }"
                             type="password"
                             placeholder="*********"
                             :disabled="type == 'detail'"
-                            v-model="login_password"
+                            v-model="password"
                             maxlength="50"
                         />
                         <span class="icon is-left">
                             <i class="mdi mdi-key"></i>
                         </span>
                     </div>
-                    <div v-if="errors.login_password">
-                        <p class="help is-danger">{{ this.errors.login_password }}</p>
+                    <div v-if="errors.password">
+                        <p class="help is-danger">{{ this.errors.password }}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-view-button pb-2">
             <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
-            <button class="button is-success" v-on:click="submitForms">
+            <button class="button is-success" v-on:click="submitForms()">
                 <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
             </button>
         </div>
@@ -143,24 +143,22 @@ export default {
             email: null,
             telephone_number: null,
             role: null,
-            login_name: null,
-            login_password: null,
+            username: null,
+            password: null,
             errors: {},
             options: ["Administrátor", "Programátor", "Tester"],
+            loggedUser: this.$store.getters.getLoggedUser,
             type: this.$store.state.accountButtonType
         };
     },
     mounted() {
-        axios.get("http://localhost:8080/api/detail/user/1").then(response => {
-            this.data = response.data;
-            this.id = this.data.id;
-            this.name = this.data.name;
-            this.email = this.data.email;
-            this.telephone_number = this.data.telephone_number;
-            this.role = this.data.role;
-            this.login_name = this.data.login_name;
-            this.login_password = this.data.login_password;
-        });
+        this.id = this.loggedUser.id;
+        this.name = this.loggedUser.name;
+        this.email = this.loggedUser.email;
+        this.telephone_number = this.loggedUser.telephone_number;
+        this.role = this.formatUserRole(this.loggedUser.role);
+        this.username = this.loggedUser.username;
+        this.password = this.loggedUser.password;
     },
     methods: {
         submitForms() {
@@ -169,15 +167,19 @@ export default {
                 name: this.name,
                 email: this.email,
                 telephone_number: this.telephone_number,
-                role: this.role,
-                login_name: this.login_name,
-                login_password: this.login_password
+                role: this.formatUserRoleForDB(this.role),
+                username: this.username,
+                password: this.password
             };
-
             axios
-                .post("http://localhost:8080/api/edit/user/" + this.id, editData)
+                .post("http://localhost:8080/api/edit/logged-user/" + this.id, editData, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 200) {
+                        this.$store.commit("SET_LOGGED_USER", editData);
                         this.$router.back();
                     }
                 })

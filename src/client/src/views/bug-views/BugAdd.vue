@@ -203,9 +203,7 @@
         </div>
         <div class="form-view-button pb-2">
             <button class="button mr-3" v-on:click="$router.back()"><i class="fas fa-ban icon-center"></i>Zrušiť</button>
-            <button class="button is-success" v-on:click="submitForm">
-                <i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť
-            </button>
+            <button class="button is-success" v-on:click="submitForm"><i class="fas fa-long-arrow-alt-left icon-center"></i>Uložiť</button>
         </div>
     </div>
 </template>
@@ -241,28 +239,57 @@ export default {
             description: null,
             additional_info: null,
             actualProject: this.$store.state.actualProject,
+            loggedUser: this.$store.getters.getLoggedUser,
             errors: {}
         };
     },
     mounted() {
         axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/category")
+            .get("http://localhost:8080/api/project/" + this.actualProject + "/bug-category", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allCategories = response.data));
 
         axios
-            .get("http://localhost:8080/api/specification/?type=Priority")
+            .get("http://localhost:8080/api/bug-specification/?type=Priority", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allPriorities = response.data));
 
-        axios.get("http://localhost:8080/api/specification/?type=Status").then(response => (this.allStatuses = response.data));
+        axios
+            .get("http://localhost:8080/api/bug-specification/?type=Status", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allStatuses = response.data));
 
         axios
-            .get("http://localhost:8080/api/specification/?type=Reproducibility")
+            .get("http://localhost:8080/api/bug-specification/?type=Reproducibility", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allReproducibility = response.data));
 
-        axios.get("http://localhost:8080/api/user/").then(response => (this.allUsers = response.data));
+        axios
+            .get("http://localhost:8080/api/bug-user", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
+            .then(response => (this.allUsers = response.data));
 
         axios
-            .get("http://localhost:8080/api/project/" + this.actualProject + "/version")
+            .get("http://localhost:8080/api/bug-project" + this.actualProject + "/version", {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token")
+                }
+            })
             .then(response => (this.allVersions = response.data));
     },
     methods: {
@@ -289,11 +316,15 @@ export default {
             data.bugHasSpecifications.push({ specification: this.priority, type: "Priority" });
             data.bugHasSpecifications.push({ specification: this.reproducibility, type: "Reproducibility" });
 
-            data.bugHasUsers.push({ user: { id: 1 }, type: "Author" });
+            data.bugHasUsers.push({ user: { id: this.loggedUser.id }, type: "Author" });
             data.bugHasUsers.push({ user: this.associatedUser, type: "Associated user" });
 
             axios
-                .post("http://localhost:8080/api/project/" + this.actualProject + "/add/bug", data)
+                .post("http://localhost:8080/api/project/" + this.actualProject + "/add/bug", data, {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("token")
+                    }
+                })
                 .then(response => {
                     if (response.status == 201) {
                         this.$router.back();
